@@ -1,0 +1,55 @@
+[build-system]
+requires = ["setuptools>=75.0", "wheel"]
+build-backend = "setuptools.backends._legacy:_Backend"
+
+[project]
+name = "autonomize-healthcare-ai-demo"
+version = "0.1.0"
+description = "AI-Driven Prior Authorization Demo — event-driven PA automation with FastAPI, Kafka, FHIR R4, and Amazon Bedrock"
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.12"
+authors = [
+    { name = "Paul Prae", email = "paul@paulprae.com" },
+]
+
+dependencies = [
+    "fastapi>=0.115.0",
+    "uvicorn>=0.32.0",
+    "confluent-kafka>=2.6.0",
+    "psycopg2-binary>=2.9.0",
+    "boto3>=1.35.0",
+    "anthropic>=0.40.0",
+    "pydantic>=2.9.0",
+    "httpx>=0.28.0",
+    "jinja2>=3.1.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+    "pytest-asyncio>=0.24.0",
+    "ruff>=0.8.0",
+    "mypy>=1.13.0",
+]
+
+[project.scripts]
+dev = "uvicorn src.main:app --reload --port 8000"
+
+[tool.setuptools.packages.find]
+include = ["src*"]
+
+[tool.ruff]
+target-version = "py312"
+line-length = 120
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "W", "UP"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
