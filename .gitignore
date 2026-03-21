@@ -42,3 +42,4 @@ Thumbs.db
 
 # Claude Code
 .claude/todos/
+*.egg-info/
