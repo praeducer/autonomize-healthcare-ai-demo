@@ -1,0 +1,17 @@
+{
+  "recommendations": [
+    "ms-python.python",
+    "ms-python.vscode-pylance",
+    "ms-python.mypy-type-checker",
+    "charliermarsh.ruff",
+    "ms-azuretools.vscode-docker",
+    "amazonwebservices.aws-toolkit-vscode",
+    "jeppeandersen.vscode-kafka",
+    "ckolkman.vscode-postgres",
+    "humao.rest-client",
+    "bierner.markdown-mermaid",
+    "tamasfe.even-better-toml",
+    "redhat.vscode-yaml",
+    "anthropic.claude-code"
+  ]
+}
