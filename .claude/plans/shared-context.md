@@ -126,6 +126,29 @@ class ClinicalReviewResult(BaseModel):
 - Anthropic SDK tool use: `tools` and `messages` params need `# type: ignore[arg-type]` for mypy strict mode (SDK type stubs are looser than strict mypy expects).
 - `polyfactory` cannot auto-generate valid FHIR models. Pre-build a `ClaimResponse` and assign as class attribute override on the factory.
 
+## Step 2 Implementation Notes
+
+- `httpx.ASGITransport` does NOT reliably trigger FastAPI lifespan events. Use lazy initialization (`_ensure_initialized()`) for module-level state like settings and audit store.
+- HAPI FHIR image pinned to `v7.6.0` (not `:latest`) for reproducibility. Uses H2 file-based storage.
+- FHIR data loader uses PUT (not POST) with explicit resource IDs for idempotent loading.
+- Synthea data loads in dependency order: Organization → Practitioner → Patient → everything else.
+- Audit store uses `aiosqlite.Row` row factory for `dict(row)` conversion. Set in `init_db()`.
+- The `retrieve_fhir_clinical_data()` function catches ALL exceptions (including `httpx.HTTPError`) and returns empty dict — CLI works without Docker.
+- E2E tests use result caching (`_result_cache` dict) to avoid redundant API calls. One Claude call per case.
+
+## Stakeholder Review Protocol
+
+After each build step, simulate critical feedback from interview personas before proceeding:
+
+| Persona | Focus Area | Key Questions |
+|---------|-----------|---------------|
+| **VP Engineering** | Architecture, scalability, code quality | "Does this architecture scale? Is the code production-grade?" |
+| **Chief Medical Officer** | Clinical accuracy, safety, compliance | "Are the determinations clinically appropriate? What about auto-denial risk?" |
+| **CISO** | Security, PHI, audit trail | "Where is PHI? Is the audit trail tamper-proof? Any injection vectors?" |
+| **Product Manager** | Demo quality, user experience | "Can I present this to a client? Does it tell a compelling story?" |
+
+Address their feedback in the plan before starting the next step. See `docs/plans/human-tasks.md` for Paul's pre-interview checklist.
+
 ## Healthcare Service Contracts
 
 ### Real Services
