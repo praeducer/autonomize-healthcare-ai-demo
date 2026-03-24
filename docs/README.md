@@ -61,11 +61,6 @@
 | [stakeholder-profiles.md](inputs/stakeholder-profiles.md) | Panel profiles — Kris Nair, Suresh Gopalakrishnan, Ujjwal Rajbhandari |
 | [job-description.md](inputs/job-description.md) | Solutions Architect job description — Autonomize AI |
 
-### Technical Decisions
-| File | Description |
-|------|-------------|
-| [decisions.md](architecture/decisions.md) | Technical decisions to review before presenting |
-
 ### Plans
 | File | Description |
 |------|-------------|

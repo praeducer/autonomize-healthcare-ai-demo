@@ -36,7 +36,7 @@ flowchart LR
     PA_COPILOT -->|"Status Updates<br/>Portal / Fax"| PROV
 ```
 
-The full enterprise architecture covers 10 components across 5 layers — ingestion, integration, AI engine, human review, and response — all on Azure-native services with HIPAA/HITRUST compliance.
+The full enterprise architecture covers 10 components across 5 layers — ingestion, integration, AI engine, human review, and response — all on HIPAA-compliant Azure-native services.
 
 - [Solution Architecture](docs/architecture/solution-architecture.md) — master reference
 - [Presentation Deck](docs/architecture/presentation.md) — 11 slides, priority-tiered

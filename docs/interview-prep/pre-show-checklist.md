@@ -6,12 +6,13 @@
 
 ---
 
-## Technical Decisions (Review Required)
+## Key Statistics (Verified)
 
-See [decisions.md](../architecture/decisions.md):
-- [ ] D-001: HITRUST certification claim unverified -- check before asserting in presentation
-- [x] D-002: CAQH payer cost $3.52 -- verified against 2024 CAQH Index
-- [ ] D-003: AMA physician burden corrected to 12-13 hr/week -- verify you're comfortable
+All statistics in the presentation have been verified against primary sources:
+- [x] CAQH costs: $10.97 provider / $3.52 payer / $0.05 electronic (2024 CAQH Index, 2023 data)
+- [x] AMA burden: 13 hours/week, 39 PAs/week, 93% care delays (2024 AMA Survey)
+- [x] Altais results: 45% faster, 54% fewer errors, 50% auto-determination (BusinessWire Feb 2026)
+- [x] Autonomize compliance: SOC 2 Type II + HIPAA (confirmed via trust.autonomize.ai). No HITRUST — if asked, say: "Azure services are HITRUST-certified; application-layer HITRUST assessment is a Phase 3 deliverable"
 
 ---
 

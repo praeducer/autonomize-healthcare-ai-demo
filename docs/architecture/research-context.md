@@ -211,7 +211,7 @@ Source: [BusinessWire Leadership Hires](https://www.businesswire.com/news/home/2
 | Metric | Value | Source |
 |--------|-------|--------|
 | PA requests per physician/week | 39 | [AMA Survey](https://www.ama-assn.org/system/files/prior-authorization-survey.pdf) |
-| Weekly time on PA | 12-13 hours | Same |
+| Weekly time on PA | 13 hours | Same |
 | PA causes care delays | 93% of physicians | Same |
 | PA increases burnout | 89% of physicians | Same |
 | Serious adverse events from PA | 23% report | Same |

@@ -159,6 +159,7 @@ These are questions a thorough SA would ask before committing to implementation.
 13. What is the regulatory/legal position on AI-assisted auto-denial?
 14. How should the system behave during Autonomize platform outages?
 15. What SLAs does the Payer Core System API guarantee?
+16. Is HITRUST CSF certification required for the application layer? (Azure services are HITRUST-certified; custom application code requires a separate assessment.)
 
 ---
 
@@ -173,11 +174,11 @@ These are questions a thorough SA would ask before committing to implementation.
 
 > **CAQH methodology**: Costs are weighted average **labor costs** (salaries + wages + benefits + overhead) per transaction, measured via annual provider/plan survey. Excludes technology/system costs and time spent gathering information. The $10.97 provider figure and $3.52 payer figure reflect the same methodology applied to each side of the transaction.
 >
-> **Data vintage**: Per-transaction costs are from the **2024 CAQH Index** (2023 data) — the most recent with publicly verifiable per-transaction figures. The **[2025 CAQH Index](https://www.caqh.org/blog/2025-caqh-index-shows-u.s.-healthcare-avoided-258-billion-and-accelerated-automation-interoperability-and-ai-adoption)** (Feb 2026) estimates $515M annual PA savings opportunity but moved per-transaction data behind Index Pro paywall.
+> **Data vintage**: Per-transaction costs are from the **2024 CAQH Index** (2023 data) — the most recent with publicly verifiable per-transaction figures. The **[2025 CAQH Index](https://www.caqh.org/blog/2025-caqh-index-shows-u.s.-healthcare-avoided-258-billion-and-accelerated-automation-interoperability-and-ai-adoption)** (Feb 2026, 2024 data) estimates **$515M annual PA savings opportunity**, reports providers save **14 minutes per authorization** through automation, and finds **50%+ of health plans** now use AI in administrative workflows. Per-transaction cost breakdown moved behind Index Pro paywall.
 | Review time reduction (Altais) | 45% | [BusinessWire Feb 2026](https://www.businesswire.com/news/home/20260224376992/en/Altais-Cuts-Prior-Authorization-Review-Time-by-45-and-Reduces-Manual-Errors-by-54-with-Autonomize-AI) |
 | Error reduction (Altais) | 54% | Same |
 | Auto-approval rate (Altais) | 50% | Same |
-| Physician PA burden | 12-13 hours/week | [AMA 2024 Survey](https://www.ama-assn.org/system/files/prior-authorization-survey.pdf) |
+| Physician PA burden | 13 hours/week | [AMA 2024 Survey](https://www.ama-assn.org/system/files/prior-authorization-survey.pdf) |
 | PA requests per physician/week | 39 | Same |
 | PA causes care delays | 93% of physicians | Same |
 | CMS-0057-F Phase 1 | Live Jan 1, 2026 | [CMS Fact Sheet](https://www.cms.gov/newsroom/fact-sheets/cms-interoperability-prior-authorization-final-rule-cms-0057-f) |

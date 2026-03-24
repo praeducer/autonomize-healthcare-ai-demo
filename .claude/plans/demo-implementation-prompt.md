@@ -89,6 +89,7 @@ The demo supports the slide deck narrative at these points:
 - Production security hardening (Phase 1)
 - Auto-denial without human review (enterprise policy decision)
 - Connect to Autonomize PA Copilot or Genesis Platform (Phase 1)
+- HITRUST CSF certification for the application layer (Phase 3 — Azure services are already HITRUST-certified)
 
 ---
 
