@@ -72,13 +72,15 @@ src/prior_auth_demo/
 | 4 | Docker + Azure deployment | v0.4.0 |
 | 5 | Azure-native services | v0.5.0 |
 
-## Claude Code Commands
+## Claude Code Skills
 
-| Command | Description |
-|---------|-------------|
+| Skill | Description |
+|-------|-------------|
 | `/cases` | List the 5 sample PA cases with diagnoses and expected outcomes |
 | `/review <case>` | Review a PA case by number (1-5) or name (e.g., "keytruda") |
 | `/review-all` | Review all 5 cases and show a summary table |
+
+Skills are defined in `.claude/skills/` using the modern SKILL.md format with YAML frontmatter.
 
 ## Reference Documents
 
