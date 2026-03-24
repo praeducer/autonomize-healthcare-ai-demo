@@ -39,6 +39,14 @@ make lint              # Ruff check + format check + mypy
 make download-synthea  # Download Synthea FHIR patients
 ```
 
+## CI/CD
+
+GitHub Actions CI is **manual-only** during Steps 1-3 (rapid development). No automatic triggers on push or PR.
+
+- **To run CI**: GitHub repo → Actions tab → "CI" workflow → "Run workflow" button
+- **Config**: `.github/workflows/ci.yml` — runs lint, mypy, unit tests
+- **Automated triggers**: Will be enabled in Step 4 (Azure deploy) with push/PR hooks
+
 ## Project Structure
 
 ```
