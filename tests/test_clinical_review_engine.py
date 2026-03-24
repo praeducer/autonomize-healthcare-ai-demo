@@ -319,6 +319,20 @@ class TestRetrieveClinicalData:
 
 
 @pytest.mark.unit
+class TestFhirServerEnrichment:
+    """Tests for optional FHIR server clinical data retrieval."""
+
+    async def test_returns_empty_on_connection_error(self) -> None:
+        """Calling with unreachable URL returns empty dict (graceful fallback)."""
+        from prior_auth_demo.clinical_review_engine import retrieve_fhir_clinical_data
+
+        result = await retrieve_fhir_clinical_data("nonexistent-patient", "http://localhost:99999/fhir")
+        assert isinstance(result, dict)
+        assert result.get("fhir_conditions", []) == []
+        assert result.get("fhir_observations", []) == []
+
+
+@pytest.mark.unit
 class TestCliModule:
     """Tests for command_line_demo module."""
 

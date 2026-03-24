@@ -168,6 +168,40 @@ def retrieve_clinical_data(bundle: Bundle) -> dict[str, Any]:
     return result
 
 
+async def retrieve_fhir_clinical_data(
+    patient_id: str,
+    fhir_server_url: str,
+) -> dict[str, Any]:
+    """Retrieve clinical data from a FHIR server for a patient.
+
+    This is an ADDITIONAL data source that supplements bundle-embedded data.
+    Returns empty collections on any error — the engine works without it.
+    """
+    result: dict[str, Any] = {
+        "fhir_conditions": [],
+        "fhir_observations": [],
+        "fhir_procedures": [],
+    }
+    try:
+        import httpx
+
+        async with httpx.AsyncClient(base_url=fhir_server_url, timeout=10.0) as client:
+            for resource_type, key in [
+                ("Condition", "fhir_conditions"),
+                ("Observation", "fhir_observations"),
+                ("Procedure", "fhir_procedures"),
+            ]:
+                resp = await client.get(f"/{resource_type}", params={"patient": patient_id, "_count": "50"})
+                if resp.status_code == 200:
+                    bundle_data = resp.json()
+                    for entry in bundle_data.get("entry", []):
+                        if "resource" in entry:
+                            result[key].append(entry["resource"])
+    except Exception:
+        logger.debug("FHIR server unavailable at %s — using bundle data only", fhir_server_url)
+    return result
+
+
 # --- Confidence Routing ---
 
 

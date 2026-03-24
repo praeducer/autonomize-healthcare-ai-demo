@@ -1,20 +1,20 @@
-# Build Step 1: Core Clinical Review Engine — Implementation Plan
+# Build Step 2: REST API + FHIR Server + Audit Trail — Implementation Plan
 
 > **For Claude:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task.
 
-**Goal:** Build a CLI-based prior authorization review engine that uses Claude with tool use to evaluate 5 PA cases and produce structured clinical determinations.
+**Goal:** Add a FastAPI REST API with Swagger docs, HAPI FHIR server (Docker) with Synthea patients, SQLite audit trail, and mock eligibility service — all while preserving CLI independence.
 
-**Architecture:** Anthropic SDK tool use loop — the engine sends a FHIR Claim Bundle to Claude with 4 tools (NPI validation, ICD-10 lookup, CMS coverage criteria, clinical data retrieval). Claude calls tools iteratively, then returns a structured determination. The engine applies confidence routing and wraps the result in a FHIR ClaimResponse.
+**Architecture:** The API is a thin wrapper around the existing engine. Three independent components (audit store, eligibility mock, FHIR loader) can be built in parallel. The engine gains optional FHIR server enrichment that falls back gracefully.
 
-**Tech Stack:** Python 3.12+, Anthropic SDK (direct), fhir.resources R4B, pydantic-settings, polyfactory (tests)
+**Tech Stack:** FastAPI, uvicorn, httpx (async FHIR client), aiosqlite, HAPI FHIR (Docker), Synthea NDJSON data
 
 ---
 
 ## Context
 
-This is Build Step 1 of a progressive demo for an Autonomize AI interview. It proves the core AI determination works via CLI. Later steps add REST API (Step 2), web dashboard (Step 3), and Azure deployment (Steps 4-5). Each step is independently demo-able.
+Step 1 (v0.1.0) delivered a working CLI engine with 60 tests. Step 2 wraps it in a REST API and adds real FHIR data, an audit trail, and a mock eligibility service. The API is demo-able via Swagger UI at `localhost:8000/docs`.
 
-The repo scaffolding exists (pyproject.toml, Makefile, conftest.py, __init__.py stubs, ICD-10 reference data with 131 codes). No implementation code or PA case files exist yet.
+**Critical constraint:** The CLI (`make review`, `make review-all`) must continue to work exactly as before — with or without Docker running. The engine is the shared core; the API and CLI are independent entry points.
 
 ---
 
@@ -22,327 +22,225 @@ The repo scaffolding exists (pyproject.toml, Makefile, conftest.py, __init__.py 
 
 | File | Purpose |
 |------|---------|
-| `src/prior_auth_demo/application_settings.py` | Pydantic BaseSettings (env vars) |
-| `src/prior_auth_demo/clinical_review_engine.py` | Core AI engine: model, tools, Claude loop, routing |
-| `src/prior_auth_demo/command_line_demo.py` | CLI entry point (argparse, color output) |
-| `data/reference/cms_coverage_criteria.json` | Local coverage criteria for 5 demo procedures |
-| `data/sample_pa_cases/01_lumbar_mri_clear_approval.json` | PA case: APPROVED |
-| `data/sample_pa_cases/02_cosmetic_rhinoplasty_denial.json` | PA case: DENIED |
-| `data/sample_pa_cases/03_spinal_fusion_complex_review.json` | PA case: PENDED_FOR_REVIEW |
-| `data/sample_pa_cases/04_humira_missing_documentation.json` | PA case: PENDED_MISSING_INFO |
-| `data/sample_pa_cases/05_keytruda_urgent_oncology.json` | PA case: APPROVED (urgent) |
-| `tests/test_data_quality.py` | FHIR bundle validation tests |
-| `tests/test_clinical_review_engine.py` | Engine unit tests (~25 tests) |
-| `tests/test_e2e_clinical_review.py` | E2E tests with real Claude API (~15 tests) |
+| `docker-compose.yml` | HAPI FHIR server container |
+| `src/prior_auth_demo/mock_healthcare_services/load_fhir_data.py` | Load Synthea NDJSON into HAPI FHIR |
+| `src/prior_auth_demo/determination_audit_store.py` | SQLite append-only audit trail |
+| `src/prior_auth_demo/mock_healthcare_services/member_eligibility.py` | Mock eligibility FastAPI router |
+| `src/prior_auth_demo/healthcare_api_server.py` | FastAPI REST API |
+| `tests/test_determination_audit_store.py` | Audit store unit tests |
+| `tests/test_healthcare_api_server.py` | API tests (unit + integration) |
+| `tests/test_fhir_server_integration.py` | FHIR server integration tests |
+| `tests/test_e2e_api_review.py` | Full API flow E2E tests |
 
-## Existing Files to Reuse
+## Files to Modify
 
-| File | What it provides |
-|------|-----------------|
-| `data/reference/icd10cm_codes_2026.tsv` | 131 ICD-10-CM codes (all 5 cases' codes verified present) |
-| `tests/conftest.py` | `sample_cases_dir` and `reference_data_dir` fixtures |
-| `pyproject.toml` | Dependencies, pytest config (asyncio_mode=auto, markers) |
-| `Makefile` | All make targets already defined |
-| `.env.example` | Config template (ANTHROPIC_API_KEY, thresholds, model ID) |
+| File | Change |
+|------|--------|
+| `src/prior_auth_demo/clinical_review_engine.py` | Add `retrieve_fhir_clinical_data()` — optional FHIR server enrichment with graceful fallback |
+
+## Existing Files to Reuse (DO NOT MODIFY unless specified)
+
+| File | Reuse |
+|------|-------|
+| `clinical_review_engine.py` | `review_prior_auth_request()`, `ClinicalReviewResult` — API calls these directly |
+| `application_settings.py` | `fhir_server_url` field already exists |
+| `data/synthea_fhir_patients/raw/*.ndjson` | 13 patients, already downloaded |
+| `pyproject.toml` | Dependencies already include fastapi, uvicorn, httpx, aiosqlite |
+| `Makefile` | `up`, `down`, `dev`, `load-fhir-data` targets already defined |
 
 ---
 
 ## Key Design Decisions
 
-1. **CMS coverage criteria = local JSON file** (not runtime MCP calls). MCP servers are a Claude Code protocol, not available to the Python app at runtime. A curated JSON file with criteria for our 5 procedures ensures demo reliability and deterministic behavior.
-
-2. **NPI validation = local Luhn-10 check**. No API call needed — validates format and check digit per CMS 45 CFR 162.406.
-
-3. **Bundle type = "collection"** (not "transaction"). We're reading from files, not POSTing to a FHIR server.
-
-4. **Claude drives all analysis via tool use loop**. The engine dispatches tool calls and returns results. Claude reasons iteratively until producing a final structured JSON determination.
-
-5. **Confidence routing preserves explicit clinical determinations**. DENIED, PENDED_MISSING_INFO, PENDED_FOR_REVIEW are always preserved. Only APPROVED is subject to confidence thresholds (>= 0.85 auto-approve, else route to human review). Never auto-deny.
-
-6. **Three-layer JSON parsing fallback** for Claude responses: code-block JSON → raw JSON regex → brace-matching → safe default (PENDED_FOR_REVIEW).
+1. **Audit store is a class** (`DeterminationAuditStore`) with `init_db()`, `store_determination()`, `get_determination()`, `list_determinations()`. No update/delete methods exist.
+2. **FastAPI lifespan** initializes settings and audit store. Module-level state avoids circular imports.
+3. **Health endpoint** checks FHIR server connectivity via `GET /fhir/metadata` with a 5s timeout. Returns `"unavailable"` if Docker isn't running — not an error.
+4. **API tests use `httpx.ASGITransport`** — no server startup needed for unit/integration tests.
+5. **FHIR enrichment is opt-in**: New `retrieve_fhir_clinical_data(patient_id, fhir_server_url)` function tries FHIR server, returns empty dict on failure. Engine merges with bundle data.
+6. **Eligibility mock** is a FastAPI router mounted at `/mock/eligibility`. Returns FHIR `CoverageEligibilityResponse`. All 5 demo members are eligible.
+7. **FHIR data loader** reads NDJSON, POSTs to HAPI FHIR in dependency order (Organization → Patient → everything else).
 
 ---
 
-## Task 1: Application Settings
+## Task 1: Docker Compose + FHIR Data Loader
 
 **Files:**
-- Create: `src/prior_auth_demo/application_settings.py`
-- Create: `tests/test_clinical_review_engine.py` (initial file with settings tests)
+- Create: `docker-compose.yml`
+- Create: `src/prior_auth_demo/mock_healthcare_services/load_fhir_data.py`
 
-**Step 1:** Write failing tests in `tests/test_clinical_review_engine.py`:
-- `TestApplicationSettings.test_settings_loads_defaults` — construct with `ANTHROPIC_API_KEY="test-key"`, assert `claude_model_id == "claude-sonnet-4-6"`, thresholds 0.85/0.60, log_level "INFO"
-- `TestApplicationSettings.test_settings_requires_api_key` — construct with no args, expect `ValidationError`
+**Step 1:** Create `docker-compose.yml` with HAPI FHIR service (port 8080, JSON encoding).
 
-**Step 2:** Run: `pytest tests/test_clinical_review_engine.py::TestApplicationSettings -v`
-Expected: FAIL (ImportError)
+**Step 2:** Verify: `docker compose up -d && curl http://localhost:8080/fhir/metadata | head -5`
 
-**Step 3:** Implement `application_settings.py`:
-- `BaseSettings` with `SettingsConfigDict(env_file=".env", case_sensitive=False)`
-- `anthropic_api_key: SecretStr` (required, never logged)
-- `claude_model_id: str` (default: `claude-sonnet-4-6`)
-- `log_level: str` (default: `INFO`)
-- `auto_approve_confidence_threshold: float` (default: 0.85, ge=0.0, le=1.0)
-- `human_review_confidence_threshold: float` (default: 0.60, ge=0.0, le=1.0)
-- `fhir_server_url: str` (default: `http://localhost:8080/fhir`)
+**Step 3:** Create `load_fhir_data.py` — async script that reads `data/synthea_fhir_patients/raw/*.ndjson`, skips `log.ndjson`, POSTs each resource to HAPI FHIR. Uses `httpx.AsyncClient`. Loads in dependency order. Reports counts.
 
-**Step 4:** Run: `pytest tests/test_clinical_review_engine.py::TestApplicationSettings -v`
-Expected: PASS (2 tests)
+**Step 4:** Verify: `python -m prior_auth_demo.mock_healthcare_services.load_fhir_data` loads resources. `curl http://localhost:8080/fhir/Patient?_summary=count` shows count.
 
-**Step 5:** Commit: `feat: add application settings with pydantic-settings`
+**Step 5:** Commit: `feat: add docker-compose and FHIR data loader`
 
 ---
 
-## Task 2: ClinicalReviewResult Model
+## Task 2: Audit Store
 
 **Files:**
-- Create: `src/prior_auth_demo/clinical_review_engine.py` (stub with model only)
-- Modify: `tests/test_clinical_review_engine.py`
+- Create: `src/prior_auth_demo/determination_audit_store.py`
+- Create: `tests/test_determination_audit_store.py`
 
-**Step 1:** Add tests to `tests/test_clinical_review_engine.py`:
-- `TestClinicalReviewResultModel.test_model_validates_with_all_fields` — construct with valid ClaimResponse
-- `TestClinicalReviewResultModel.test_model_rejects_invalid_determination` — "MAYBE" → ValidationError
-- `TestClinicalReviewResultModel.test_model_rejects_confidence_out_of_range` — 1.5 → ValidationError
-- `TestClinicalReviewResultModel.test_model_with_polyfactory` — ModelFactory builds valid instance (pre-build ClaimResponse since polyfactory can't auto-generate FHIR models)
+**Step 1:** Write tests (`@pytest.mark.unit`, all use `tmp_path` for temp SQLite):
+- `test_init_creates_database_file` — init_db creates file + table
+- `test_store_and_retrieve_by_id` — store returns UUID, get returns matching record
+- `test_list_returns_stored_results` — list_determinations returns all stored, newest first
+- `test_list_supports_pagination` — limit and offset work correctly
+- `test_no_update_or_delete_methods` — class has no update/delete attrs (append-only guarantee)
 
-**Step 2:** Run: `pytest tests/test_clinical_review_engine.py::TestClinicalReviewResultModel -v`
-Expected: FAIL (ImportError)
+**Step 2:** Run tests — all FAIL (module doesn't exist)
 
-**Step 3:** Create `clinical_review_engine.py` with:
-```python
-class ClinicalReviewResult(BaseModel):
-    determination: Literal["APPROVED", "DENIED", "PENDED_FOR_REVIEW", "PENDED_MISSING_INFO"]
-    confidence_score: float = Field(ge=0.0, le=1.0)
-    clinical_rationale: str
-    guideline_citations: list[str]
-    missing_documentation: list[str] | None = None
-    fhir_claim_response: ClaimResponse
-    review_duration_seconds: float = Field(ge=0.0)
-```
+**Step 3:** Implement `DeterminationAuditStore` class:
+- `__init__(db_path)` — defaults to `data/audit_trail.db`
+- `init_db()` — creates table with: id (TEXT PK), created_at, case_name, determination, confidence_score, clinical_rationale, guideline_citations (JSON string), processing_time_seconds, full_request_json, full_response_json
+- `store_determination(...)` — INSERT, returns UUID
+- `get_determination(id)` — SELECT by id, returns dict
+- `list_determinations(limit, offset)` — SELECT ORDER BY created_at DESC
+- `close()` — close connection
+- NO update or delete methods
 
-**Step 4:** Run: `pytest tests/test_clinical_review_engine.py::TestClinicalReviewResultModel -v`
-Expected: PASS (4 tests)
+**Step 4:** Run tests — all PASS
 
-**Step 5:** Commit: `feat: add ClinicalReviewResult pydantic model`
+**Step 5:** Verify existing tests still pass: `pytest tests/ -m unit -q --tb=no`
+
+**Step 6:** Commit: `feat: add SQLite audit store (append-only)`
 
 ---
 
-## Task 3: ICD-10 Lookup Function
+## Task 3: Mock Eligibility Service
+
+**Files:**
+- Create: `src/prior_auth_demo/mock_healthcare_services/member_eligibility.py`
+
+**Step 1:** Implement FastAPI router:
+- `POST /check` — accepts `{"member_id": str}`, returns FHIR CoverageEligibilityResponse
+- All 5 demo member IDs (MBR-2026-001 through MBR-2026-005) return eligible
+- Unknown members return eligible with generic PPO (demo always approves eligibility)
+- ~30-40 lines. Keep minimal.
+
+**Step 2:** Commit: `feat: add mock member eligibility service`
+
+---
+
+## Task 4: FastAPI Server
+
+**Files:**
+- Create: `src/prior_auth_demo/healthcare_api_server.py`
+- Create: `tests/test_healthcare_api_server.py`
+
+**Step 1:** Write tests (`tests/test_healthcare_api_server.py`). Use `httpx.ASGITransport(app=app)` for in-process testing:
+
+Unit tests (no Docker needed):
+- `test_health_returns_200` — GET /health → 200 with status, version, fhir_server fields
+- `test_sample_cases_returns_5` — GET /api/v1/prior-auth/sample-cases → 5 filenames
+- `test_sample_case_returns_valid_json` — GET /api/v1/prior-auth/sample-cases/01_lumbar_mri_clear_approval.json → valid FHIR Bundle JSON
+- `test_sample_case_not_found_returns_404` — GET /api/v1/prior-auth/sample-cases/nonexistent.json → 404
+- `test_invalid_review_input_returns_422` — POST /api/v1/prior-auth/review with `{"bad": "data"}` → 422
+- `test_swagger_docs_accessible` — GET /docs → 200
+
+**Step 2:** Run tests — FAIL (module doesn't exist)
+
+**Step 3:** Implement `healthcare_api_server.py`:
+- FastAPI app with lifespan (init settings + audit store)
+- `GET /health` — checks FHIR server connectivity, returns status/version
+- `GET /api/v1/prior-auth/sample-cases` — lists JSON files from `data/sample_pa_cases/`
+- `GET /api/v1/prior-auth/sample-cases/{name}` — returns case JSON
+- `POST /api/v1/prior-auth/review` — accepts FHIR Bundle JSON, calls `review_prior_auth_request()`, stores in audit, returns result
+- `GET /api/v1/prior-auth/determinations` — lists from audit store
+- `GET /api/v1/prior-auth/determinations/{id}` — gets single determination
+- Include eligibility router: `app.include_router(eligibility_router, prefix="/mock/eligibility")`
+
+**Step 4:** Run tests — PASS
+
+**Step 5:** Verify CLI still works: `make review` (should work identically to Step 1)
+
+**Step 6:** Commit: `feat: add FastAPI REST API with Swagger docs`
+
+---
+
+## Task 5: Engine FHIR Server Enrichment
 
 **Files:**
 - Modify: `src/prior_auth_demo/clinical_review_engine.py`
-- Modify: `tests/test_clinical_review_engine.py`
 
-**Step 1:** Add tests:
-- `TestIcd10Lookup.test_lookup_returns_correct_description` — M54.5 → "Low back pain"
-- `TestIcd10Lookup.test_lookup_returns_none_for_invalid_code` — ZZ99.99 → None
-- `TestIcd10Lookup.test_lookup_finds_oncology_code` — C34.11 → "upper lobe"
-- `TestIcd10Lookup.test_lookup_finds_rheumatoid_arthritis_code` — M05.79 → "rheumatoid"
+**Step 1:** Add unit test to `tests/test_clinical_review_engine.py`:
+- `test_retrieve_fhir_clinical_data_returns_empty_on_connection_error` — calling with unreachable URL returns empty dict (graceful fallback)
 
-Uses `reference_data_dir` fixture from conftest.py.
+**Step 2:** Run test — FAIL
 
-**Step 2:** Run: `pytest tests/test_clinical_review_engine.py::TestIcd10Lookup -v`
-Expected: FAIL (ImportError)
+**Step 3:** Add `retrieve_fhir_clinical_data(patient_id, fhir_server_url)` function:
+- Uses `httpx.AsyncClient` to GET Conditions, Observations, Procedures for patient
+- Returns dict with `fhir_conditions`, `fhir_observations`, `fhir_procedures` lists
+- On ANY httpx error → returns empty dict (graceful fallback)
+- Update `_dispatch_tool()` to merge FHIR server data into `retrieve_clinical_data` response when available
 
-**Step 3:** Add `lookup_icd10_code(code, tsv_path)` to engine. Reads TSV with csv.DictReader, returns `{"code": ..., "description": ...}` or None.
+**Step 4:** Run ALL tests — PASS (existing 60 + new ones). CLI still works.
 
-**Step 4:** Run: `pytest tests/test_clinical_review_engine.py::TestIcd10Lookup -v`
-Expected: PASS (4 tests)
-
-**Step 5:** Commit: `feat: add ICD-10 code lookup from local TSV`
+**Step 5:** Commit: `feat: add optional FHIR server clinical data enrichment`
 
 ---
 
-## Task 4: CMS Coverage Criteria Reference Data
+## Task 6: FHIR Server Integration Tests
 
 **Files:**
-- Create: `data/reference/cms_coverage_criteria.json`
+- Create: `tests/test_fhir_server_integration.py`
 
-**Step 1:** Create JSON file with coverage criteria for 5 procedure codes: `72148` (MRI lumbar), `30400` (rhinoplasty), `22612` (spinal fusion), `J0135` (adalimumab), `J9271` (pembrolizumab).
+All tests `@pytest.mark.integration` — skip if FHIR server not reachable.
 
-Each entry has: `procedure_code`, `procedure_description`, `coding_system`, `coverage_requirements[]`, `auto_approve_criteria[]`, `denial_criteria[]`, `references[]`.
+**Step 1:** Write tests:
+- `test_fhir_server_is_reachable` — GET /fhir/metadata returns 200
+- `test_synthea_patients_loaded` — GET /fhir/Patient returns count > 0
+- `test_fhir_conditions_queryable` — GET /fhir/Condition returns entries
+- `test_fhir_observations_queryable` — GET /fhir/Observation returns entries
 
-References use real CMS LCD/NCD identifiers (L35028, NCD 160.16, L37950, L33822, NCD 110.17) and clinical guideline sources (ACR, NASS, ACR, NCCN).
+**Step 2:** Run with Docker: `make up && make load-fhir-data && pytest tests/test_fhir_server_integration.py -v`
 
-**Step 2:** Validate: `python -c "import json; json.load(open('data/reference/cms_coverage_criteria.json')); print('Valid JSON')"`
-
-**Step 3:** Commit: `feat: add CMS coverage criteria reference data`
+**Step 3:** Commit: `test: add FHIR server integration tests`
 
 ---
 
-## Task 5: Five PA Case FHIR Bundles
+## Task 7: E2E API Tests
 
 **Files:**
-- Create: 5 JSON files in `data/sample_pa_cases/`
+- Create: `tests/test_e2e_api_review.py`
 
-Each is a FHIR Bundle (type: "collection") with entries: Claim (use: "preauthorization"), Patient, Practitioner (with NPI), Coverage, Condition(s).
+All tests `@pytest.mark.e2e` — skip if no API key or FHIR server.
 
-| Case | Expected | Key Clinical Signal |
-|------|----------|-------------------|
-| 01 | APPROVED | Conservative tx failure + radiculopathy |
-| 02 | DENIED | Cosmetic + L57.0/30400 dx-procedure mismatch |
-| 03 | PENDED_FOR_REVIEW | Only 8 PT sessions (below 12), no ESI, A1C 8.2%, BMI 34 |
-| 04 | PENDED_MISSING_INFO | "Failed methotrexate" but no dose/duration/labs/DAS28 |
-| 05 | APPROVED (urgent) | PD-L1 >= 50%, no EGFR/ALK, ECOG 1, NCCN Category 1 |
+**Step 1:** Write tests:
+- `test_full_review_flow_via_api` — POST case 1 → APPROVED → GET determinations → verify stored
+- `test_all_5_cases_via_api` — POST all 5 cases, verify expected determinations
+- `test_audit_trail_contains_all_reviewed_cases` — after reviewing cases, all appear in GET /determinations
 
-NPI values must pass Luhn-10 validation. Verify each with the algorithm before writing.
+**Step 2:** Run: `pytest tests/test_e2e_api_review.py -v --timeout=300`
 
-All ICD-10 codes confirmed present in `icd10cm_codes_2026.tsv`: M54.5, M54.41, L57.0, M47.816, M48.06, E11.9, M05.79, C34.11, C77.1.
-
-**Step 1:** Create all 5 JSON files with valid FHIR structure
-
-**Step 2:** Validate each parses: `python -c "from fhir.resources.R4B.bundle import Bundle; import json; Bundle.model_validate(json.load(open('data/sample_pa_cases/01_lumbar_mri_clear_approval.json')))"`
-
-**Step 3:** Commit: `feat: add 5 sample PA cases as FHIR R4 Bundles`
+**Step 3:** Commit: `test: add E2E API review flow tests`
 
 ---
 
-## Task 6: Data Quality Tests
-
-**Files:**
-- Create: `tests/test_data_quality.py`
-
-**Step 1:** Write tests (all @pytest.mark.unit):
-- `TestAllSampleCasesExist.test_all_case_files_present` — 5 files exist
-- `TestFhirBundleValidity.test_all_sample_cases_parse_as_valid_fhir_bundles` — all parse as Bundle
-- `TestFhirBundleValidity.test_all_bundles_are_collection_type`
-- `TestClaimPreauthorization.test_all_claims_have_preauthorization_use`
-- `TestDiagnosisCodes.test_all_diagnosis_codes_are_valid_icd10` — cross-validates against TSV
-- `TestRequiredResources.test_all_bundles_contain_required_resources` — Claim, Patient, Practitioner, Coverage, Condition
-- `TestNoPhiInData.test_no_phi_in_data_files` — scan for SSN patterns (NNN-NN-NNNN)
-- `TestNpiFormat.test_all_practitioners_have_valid_npi_format` — 10-digit numeric NPI
-
-**Step 2:** Run: `pytest tests/test_data_quality.py -v`
-Expected: PASS (8 tests)
-
-**Step 3:** Commit: `test: add FHIR data quality tests for PA cases`
-
----
-
-## Task 7: Clinical Review Engine (Core AI)
-
-**Files:**
-- Modify: `src/prior_auth_demo/clinical_review_engine.py` (add full implementation)
-- Modify: `tests/test_clinical_review_engine.py` (add routing + NPI tests)
-
-**Step 1:** Add tests:
-
-`TestConfidenceRouting` (6 tests):
-- 0.90 APPROVED → APPROVED (auto-approve)
-- 0.95 DENIED → DENIED (preserved)
-- 0.70 APPROVED → PENDED_FOR_REVIEW (below threshold)
-- 0.40 APPROVED → PENDED_FOR_REVIEW (never auto-deny)
-- 0.90 PENDED_MISSING_INFO → PENDED_MISSING_INFO (preserved)
-- 0.85 APPROVED → APPROVED (exact threshold)
-
-`TestNpiValidation` (4 tests):
-- "1234567893" → valid
-- "1234567890" → invalid check digit
-- "12345" → wrong length
-- "123456789A" → non-numeric
-
-`TestCmsCoverageLookup` (3 tests):
-- "72148" → found with requirements
-- "99999" → None
-- "J9271" → found, references include "NCCN"
-
-`TestRetrieveClinicalData` (2 tests):
-- Bundle extraction finds patients, conditions, supporting_info
-- Claim details have use="preauthorization"
-
-**Step 2:** Run: `pytest tests/test_clinical_review_engine.py -v -m unit` (new tests fail)
-
-**Step 3:** Implement in `clinical_review_engine.py`:
-- `validate_npi(npi: str) -> dict` — Luhn-10 with 80840 prefix
-- `check_cms_coverage(procedure_code, json_path) -> dict | None` — reads local JSON
-- `retrieve_clinical_data(bundle: Bundle) -> dict` — extracts resources from Bundle
-- `apply_confidence_routing(raw_determination, confidence, thresholds) -> str`
-- `TOOL_DEFINITIONS` — 4 tool schemas for Claude
-- `SYSTEM_PROMPT` — clinical reviewer instructions
-- `review_prior_auth_request(bundle, settings) -> ClinicalReviewResult` — main async function with tool use loop
-- `_dispatch_tool()`, `_parse_determination()`, `_build_claim_response()` — helpers
-
-**Step 4:** Run: `pytest tests/test_clinical_review_engine.py -v -m unit`
-Expected: PASS (~25 tests)
-
-**Step 5:** Commit: `feat: implement clinical review engine with Claude tool use`
-
----
-
-## Task 8: CLI Demo
-
-**Files:**
-- Create: `src/prior_auth_demo/command_line_demo.py`
-
-**Step 1:** Add basic tests:
-- `TestCliModule.test_module_is_importable`
-- `TestCliModule.test_format_determination_badge` — APPROVED/DENIED/PENDED produce correct strings
-
-**Step 2:** Implement CLI:
-- `--case <path>` (single case) and `--all` (all 5 cases) via argparse mutually exclusive group
-- `format_determination_badge()` — ANSI color codes (green/red/yellow)
-- `print_result()` — pretty-print determination, confidence, rationale, citations, missing docs, timing
-- `review_single_case()` / `review_all_cases()` — async functions
-- `main()` — entry point using `asyncio.run()`
-- Summary table after `--all` run
-
-**Step 3:** Run: `pytest tests/test_clinical_review_engine.py::TestCliModule -v -m unit`
-Expected: PASS
-
-**Step 4:** Commit: `feat: add CLI demo with color-coded output`
-
----
-
-## Task 9: E2E Tests
-
-**Files:**
-- Create: `tests/test_e2e_clinical_review.py`
-
-All tests marked `@pytest.mark.e2e`, skip if no ANTHROPIC_API_KEY.
-
-**Step 1:** Write E2E tests:
-
-Per-case tests:
-- Case 1: determination == APPROVED, confidence >= 0.70, rationale mentions conservative/radiculopathy
-- Case 2: determination == DENIED, rationale mentions cosmetic/mismatch
-- Case 3: determination in (PENDED_FOR_REVIEW, PENDED_MISSING_INFO)
-- Case 4: determination in (PENDED_MISSING_INFO, PENDED_FOR_REVIEW), missing_documentation >= 2 items if PENDED_MISSING_INFO
-- Case 5: determination == APPROVED, rationale mentions NCCN/PD-L1/oncology
-
-Cross-cutting parametrized tests (all 5 cases):
-- `test_all_cases_return_within_60_seconds`
-- `test_all_cases_have_nonempty_guideline_citations`
-- `test_all_cases_have_valid_fhir_claim_response`
-
-**Step 2:** Run: `pytest tests/test_e2e_clinical_review.py -v --timeout=300`
-Expected: ~90%+ pass (AI non-determinism)
-
-**Step 3:** Commit: `test: add E2E tests for all 5 PA cases`
-
----
-
-## Task 10: Verification & Commit Gate
+## Task 8: Verification & Commit Gate
 
 **Step 1:** Run full verification:
 ```bash
-make lint
-make test-data-quality
-make test-unit
-make test-e2e
+ruff check src/ tests/ && mypy src/prior_auth_demo/
+pytest tests/ -m unit -v
+make up && make load-fhir-data
+pytest tests/ -m integration -v
+pytest tests/ -m e2e -v --timeout=300
+make review          # CLI still works
+make review-all      # CLI still works
 ```
 
-**Step 2:** Fix any failures
+**Step 2:** Update `pyproject.toml` version to `0.2.0`
 
-**Step 3:** Manual UAT:
+**Step 3:** Commit gate:
 ```bash
-make review      # Case 1: green APPROVED
-make review-all  # All 5 cases with expected determinations
-```
-
-**Step 4:** Commit gate:
-```bash
-git add -A && git commit -m "Step 1: Core clinical review engine with CLI demo"
-git tag -a v0.1.0 -m "Step 1: Core clinical review engine — CLI demo-able"
-git checkout -b release/step-1-core-engine
+git tag -a v0.2.0 -m "Step 2: REST API — demo-able via Swagger UI"
+git checkout -b release/step-2-api-service
 git checkout main
 ```
 
@@ -350,32 +248,32 @@ git checkout main
 
 ## Verification
 
-After all tasks complete:
-
 | Command | Expected |
 |---------|----------|
-| `make lint` | Clean (ruff check + format + mypy) |
-| `make test-data-quality` | 8 tests pass |
-| `make test-unit` | ~25 tests pass |
-| `make test-e2e` | ~15 tests pass (needs ANTHROPIC_API_KEY) |
-| `make review` | Case 1: APPROVED, confidence >= 80%, mentions conservative treatment |
-| `make review-all` | 5 cases: 2 approved, 1 denied, 2 pended |
+| `make lint` | Clean |
+| `make test-unit` | All pass (Step 1 + audit store + API unit tests) |
+| `make test-integration` | All pass (FHIR server + API endpoints) |
+| `make test-e2e` | All pass (CLI E2E + API E2E) |
+| `make review` | CLI works exactly as Step 1 |
+| `make review-all` | CLI works exactly as Step 1 |
+| `http://localhost:8000/docs` | Swagger UI with all endpoints |
+| `http://localhost:8080` | HAPI FHIR welcome page |
 
-## User Stories Coverage
+## Regression Checks
 
-| US | Story | Covered By |
-|----|-------|-----------|
-| US-1.1 | Submit PA → get determination within 60s | E2E: `test_all_cases_return_within_60_seconds` |
-| US-1.2 | Evidence-backed reasoning | E2E: `test_all_cases_have_nonempty_guideline_citations` + rationale tests |
-| US-1.3 | Ambiguous cases route to review | Unit: `TestConfidenceRouting` (6 tests) |
-| US-1.4 | Denials include reasons | E2E: `TestCase02.test_rationale_mentions_cosmetic_or_mismatch` |
-| US-1.5 | Missing-info lists what's needed | E2E: `TestCase04.test_missing_documentation_is_nonempty` |
+| Check | Why |
+|-------|-----|
+| `make review` works without Docker | CLI independence |
+| `make down && make review` | Engine falls back to bundle data |
+| All 60 Step 1 tests still pass | No breaking changes |
+| `/get-pa-cases` skill still works | Skills unaffected |
 
-## Test Summary
+## Execution Batches
 
-| Test File | Marker | Count | API Key? |
-|-----------|--------|-------|----------|
-| `test_data_quality.py` | unit | ~8 | No |
-| `test_clinical_review_engine.py` | unit | ~25 | No |
-| `test_e2e_clinical_review.py` | e2e | ~15 | Yes |
-| **Total** | | **~48** | |
+| Batch | Tasks | Parallelizable? |
+|-------|-------|----------------|
+| 1 | Tasks 1-3 (infra, audit, eligibility) | Yes — all independent |
+| 2 | Task 4 (API server) | Sequential — depends on 2, 3 |
+| 3 | Task 5 (engine enrichment) | Sequential — depends on 1 |
+| 4 | Tasks 6-7 (integration + E2E tests) | Yes — independent test files |
+| 5 | Task 8 (verification + commit gate) | Sequential |

@@ -1,0 +1,39 @@
+services:
+  fhir-server:
+    image: hapiproject/hapi:v7.6.0
+    container_name: hapi-fhir-demo
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      hapi.fhir.default_encoding: json
+      hapi.fhir.allow_multiple_delete: "true"
+      hapi.fhir.allow_external_references: "true"
+      # Use H2 in-memory for fast demo startup (no DB setup needed)
+      spring.datasource.url: "jdbc:h2:file:/data/hapi/h2;DB_CLOSE_ON_EXIT=FALSE"
+      spring.datasource.username: sa
+      spring.datasource.password: ""
+      spring.jpa.properties.hibernate.dialect: ca.uhn.fhir.jpa.model.dialect.HapiFhirH2Dialect
+      # Performance tuning for demo workload
+      hapi.fhir.bulk_export_enabled: "false"
+      hapi.fhir.narrative_enabled: "false"
+    volumes:
+      - fhir-data:/data/hapi
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8080/fhir/metadata || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    deploy:
+      resources:
+        limits:
+          memory: 2g
+          cpus: "2.0"
+        reservations:
+          memory: 512m
+          cpus: "0.5"
+
+volumes:
+  fhir-data:
+    name: autonomize-demo-fhir-data

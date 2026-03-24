@@ -1,0 +1,40 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# Git
+.git/
+.gitignore
+
+# Claude Code
+.claude/
+
+# Data (mounted separately, not baked into image)
+data/synthea_fhir_patients/raw/
+data/audit_trail.db
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Docs
+docs/
+*.md
+!requirements*.md
