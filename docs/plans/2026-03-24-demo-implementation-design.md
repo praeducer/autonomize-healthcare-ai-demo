@@ -5,7 +5,7 @@
 ## Summary
 
 This design document captures the validated architecture and phased implementation plan for the AI-driven PA demo. The full implementation specification is at:
-`C:\dev\solutions-architecture-agent\outputs\eng-2026-004-v2\plans\demo-implementation-prompt.md`
+`.claude/plans/demo-implementation-prompt.md`
 
 ## Key Design Decisions
 
