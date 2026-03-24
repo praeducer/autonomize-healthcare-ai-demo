@@ -72,8 +72,19 @@ src/prior_auth_demo/
 | 4 | Docker + Azure deployment | v0.4.0 |
 | 5 | Azure-native services | v0.5.0 |
 
+## Claude Code Commands
+
+| Command | Description |
+|---------|-------------|
+| `/cases` | List the 5 sample PA cases with diagnoses and expected outcomes |
+| `/review <case>` | Review a PA case by number (1-5) or name (e.g., "keytruda") |
+| `/review-all` | Review all 5 cases and show a summary table |
+
 ## Reference Documents
 
+- **User guide**: `docs/user-guide.md` — how to use all interfaces (CLI, Claude Code, API, Dashboard)
+- **User stories**: `docs/user-stories.md` — canonical user story reference
+- **UAT guide**: `docs/uat-guide.md` — manual acceptance testing organized by user story
 - **Build step plans**: `.claude/plans/shared-context.md` + `step-1-core-engine.md` through `step-5-managed-services.md`
 - **Design doc**: `docs/plans/2026-03-24-demo-implementation-design.md` — design decisions & data flow
 - **Solution architecture**: `docs/architecture/solution-architecture.md` — full enterprise vision
