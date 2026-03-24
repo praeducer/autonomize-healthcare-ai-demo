@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "autonomize-healthcare-ai-demo"
 version = "0.1.0"
-description = "AI-Driven Prior Authorization Demo — event-driven PA automation with FastAPI, Kafka, FHIR R4, and Amazon Bedrock"
+description = "AI-Driven Prior Authorization Demo"
 readme = "README.md"
 license = "MIT"
 requires-python = ">=3.12"
@@ -16,15 +16,9 @@ authors = [
 dependencies = [
     "fastapi>=0.115.0",
     "uvicorn>=0.32.0",
-    "confluent-kafka>=2.6.0",
-    "psycopg2-binary>=2.9.0",
-    "boto3>=1.35.0",
     "anthropic>=0.40.0",
     "pydantic>=2.9.0",
     "httpx>=0.28.0",
-    "jinja2>=3.1.0",
-    "fhir.resources>=7.1.0",
-    "pydantic-settings>=2.6.0",
 ]
 
 [project.optional-dependencies]

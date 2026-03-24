@@ -1,10 +1,4 @@
-.PHONY: up down install dev test clean lint format check
-
-up:
-	docker compose up -d
-
-down:
-	docker compose down
+.PHONY: install dev test clean lint format check
 
 install:
 	pip install -e ".[dev]"
@@ -16,7 +10,6 @@ test:
 	pytest -v
 
 clean:
-	docker compose down -v
 	find . -type d -name __pycache__ -exec rm -rf {} + 2>/dev/null || true
 	rm -rf .pytest_cache .mypy_cache .ruff_cache *.egg-info dist build
 

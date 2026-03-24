@@ -3,7 +3,6 @@
 ## FHIR R4
 
 - All clinical data structures follow FHIR R4 specification
-- Use `fhir.resources` Pydantic models when available (Patient, Condition, Observation, Claim, Coverage)
 - Resource IDs follow FHIR format: `{ResourceType}/{id}`
 - Bundles use `resourceType: "Bundle"` with `type: "searchset"` for search results
 - Include `meta.lastUpdated` on all resources
