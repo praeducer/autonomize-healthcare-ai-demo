@@ -355,3 +355,100 @@ Operational Procedures      -> A-11 (reviewer workflow), A-14 (Payer Core SLA), 
 | PA Copilot accuracy | 95%+ on complex cases | GlobeNewswire Apr 2025 |
 | Cohere Health PA volume | 12M+ PAs/year | Cohere Health |
 | Industry electronic PA pledge | 80% real-time by 2027 | MedCity Dec 2025 |
+
+---
+
+## 5. Vocabulary Flashcards
+
+> Cover the right column and quiz yourself. Focus on the terms that *don't* explain themselves.
+
+### Cryptic Regulatory Codes & Rules
+
+These are the ones that look like serial numbers. You **will** be expected to know them.
+
+| Term | What It Stands For | One-Liner to Memorize |
+|---|---|---|
+| **CMS-0057-F** | CMS Interoperability and Prior Authorization Final Rule | The rule forcing payers to expose FHIR APIs for PA. Phase 1 live Jan 1 2026, Phase 2 Jan 1 2027. The "F" = Final (as opposed to Proposed). |
+| **42 CFR Part 2** | Title 42, Code of Federal Regulations, Part 2 | Federal privacy rules for substance abuse treatment records — stricter than HIPAA. Relevant when PA involves behavioral health. |
+| **X12 278** | ASC X12 Transaction Set 278 | The EDI format for submitting and responding to PA requests electronically. The "278" is just a transaction set number — memorize it. |
+| **X12 837** | ASC X12 Transaction Set 837 | EDI format for submitting healthcare claims (not PA — claims). "837 = claims, 278 = PA." |
+| **X12 270/271** | ASC X12 Transaction Sets 270 and 271 | 270 = eligibility inquiry, 271 = eligibility response. Always a pair. |
+| **X12 835** | ASC X12 Transaction Set 835 | Electronic Remittance Advice — the electronic explanation of payment. "835 = money back." |
+| **STU 2.0.1** | Standard for Trial Use, version 2.0.1 | HL7/FHIR maturity level. STU = ballot-ready, near-final spec. Da Vinci PAS IG is at STU 2.0.1. Not "Standard" — it's "Trial Use," meaning it can still change. |
+| **R4 / R4B** | FHIR Release 4 / Release 4B | R4 = the current stable FHIR spec. R4B = R4 with ballot updates. The `fhir.resources` Python library uses R4B imports. R5 exists but is not yet widely adopted. |
+| **SOC 2 Type II** | Service Organization Control 2, Type II | Security audit standard. Type I = controls exist at a point in time. Type II = controls verified *over a period* (6-12 months). Type II is the one that matters. |
+| **BAA** | Business Associate Agreement | HIPAA-required contract between a covered entity (health plan) and any vendor touching PHI. No BAA = no legal right to handle PHI. |
+| **CMS-1500** | CMS claim form 1500 | Paper/electronic form for professional (physician) claims. Not a regulation — a form number. |
+| **UB-04 / CMS-1450** | Uniform Billing form, 4th revision | Claim form for institutional (hospital) claims. UB-04 is the common name; CMS-1450 is the form number. |
+
+### Standards & Specifications That Sound Like Brands
+
+| Term | What It Stands For | One-Liner to Memorize |
+|---|---|---|
+| **FHIR** | Fast Healthcare Interoperability Resources | HL7's modern API standard for health data exchange. Pronounced "fire." Uses REST + JSON. Replaced HL7 v2 messages and CDA documents. |
+| **Da Vinci** | HL7 Da Vinci Project | Not a person — an HL7 initiative creating FHIR Implementation Guides for payer/provider data exchange. Da Vinci PAS = PA-specific IG. |
+| **SMART on FHIR** | Substitutable Medical Applications, Reusable Technologies on FHIR | OAuth 2.0 authorization framework specifically for FHIR APIs. The "SMART" is a backronym. Enables apps to authenticate against EHRs. |
+| **Synthea** | Synthetic Patient Generator | Open-source tool that generates realistic (but fake) FHIR patient records. Used for testing when you can't use real PHI. Not a company. |
+| **HAPI FHIR** | HL7 API FHIR Reference Implementation | Open-source Java-based FHIR server. "HAPI" is the project name (originally "HL7 Application Programming Interface"). Production-grade. |
+| **InterQual** | (Proprietary name, no expansion) | Clinical decision support criteria owned by Change Healthcare. Payers use it to determine medical necessity. Competitor to MCG. |
+| **MCG** | Milliman Care Guidelines | Clinical guidelines product from Milliman (actuarial firm). Payers use MCG or InterQual — rarely both. |
+| **CAQH** | Council for Affordable Quality Healthcare | Industry consortium that publishes PA operating rules (CAQH CORE) and the annual cost index everyone cites. |
+| **CAQH CORE** | CAQH Committee on Operating Rules for Information Exchange | The operating rules arm of CAQH — defines how PA transactions should work electronically. |
+| **NUCC** | National Uniform Claim Committee | Maintains healthcare provider taxonomy codes (specialty classification). Feeds into NPI Registry data. |
+
+### Commonly Confused Pairs
+
+| Term A | Term B | How to Tell Them Apart |
+|---|---|---|
+| **EHR** (Electronic Health Record) | **EMR** (Electronic Medical Record) | EHR = enterprise-wide, interoperable, follows the patient. EMR = single clinic's internal record. In practice, people use them interchangeably — but EHR is the correct term for systems like Epic. |
+| **NCD** (National Coverage Determination) | **LCD** (Local Coverage Determination) | NCD = CMS issues it nationally, applies to all of Medicare. LCD = a regional MAC issues it, applies only to that MAC's jurisdiction. LCDs fill gaps where no NCD exists. |
+| **MAC** (Medicare Administrative Contractor) | **CMS** (Centers for Medicare & Medicaid Services) | CMS makes the rules. MACs are private companies CMS contracts to *process claims and write LCDs* in specific regions. Think: CMS = federal, MAC = regional contractor. |
+| **CPT** (Current Procedural Terminology) | **HCPCS** (Healthcare Common Procedure Coding System) | CPT = Level I of HCPCS. Covers physician procedures (e.g., 97110). HCPCS Level II = non-physician codes starting with letters (J-codes for drugs, G-codes for services). CPT is a subset of HCPCS. |
+| **ICD-10-CM** (Clinical Modification) | **ICD-10-PCS** (Procedure Coding System) | CM = diagnosis codes (e.g., M54.5 for back pain). PCS = inpatient procedure codes. Outpatient procedures use CPT, not PCS. Two completely different code sets that share the "ICD-10" prefix. |
+| **J-code** (HCPCS Level II, J series) | **CPT code** (Level I HCPCS) | J-codes = injectable/infusible drugs administered by providers (e.g., J9271 = Keytruda). CPT = procedures. A Keytruda infusion has both: a J-code for the drug and a CPT for the administration. |
+| **PHI** (Protected Health Information) | **PII** (Personally Identifiable Information) | PHI = health-specific (diagnosis, treatment, billing + identifier). PII = general (name, SSN, address). All PHI contains PII, but not all PII is PHI. HIPAA governs PHI specifically. |
+| **HIPAA** (Health Insurance Portability and Accountability Act) | **HITRUST** (Health Information Trust Alliance) | HIPAA = the federal law. HITRUST = a private certification framework that helps you *prove* HIPAA compliance (plus other standards). HIPAA is mandatory; HITRUST is voluntary but widely expected. |
+| **PA** (Prior Authorization) | **UM** (Utilization Management) | PA = one specific UM activity (pre-approval before service). UM = the broader category that includes PA, concurrent review, and retrospective review. PA is a subset of UM. |
+| **Step therapy** | **Prior authorization** | Step therapy = must try Drug A before insurer approves Drug B. PA = any pre-approval requirement. Step therapy is a *type* of PA requirement, not a separate process. |
+| **Auto-approval** | **Auto-denial** | Auto-approval = AI approves without human review (enabled in Phase 1). Auto-denial = AI denies without human review (explicitly **NOT** enabled — all denials require human review). The asymmetry is intentional: denying care has higher stakes. |
+| **MLOps** | **LLMOps** | MLOps = retrain models, monitor feature drift, manage datasets. LLMOps = monitor output quality, manage prompts, evaluate reasoning chains. You don't retrain Claude — you monitor its *behavior*. |
+
+### Healthcare IT Acronyms Worth Drilling
+
+| Term | Expansion | What It Actually Is |
+|---|---|---|
+| **NPI** | National Provider Identifier | 10-digit number assigned to every US healthcare provider. Two types: NPI-1 (individual), NPI-2 (organization). Validated via Luhn check digit. |
+| **EDI** | Electronic Data Interchange | The umbrella term for all X12 transactions (278, 837, 270/271, 835). "EDI" = structured electronic healthcare data exchange, not a specific format. |
+| **DME** | Durable Medical Equipment | Wheelchairs, CPAP machines, oxygen equipment — physical devices covered by Medicare Part B. Governed by NCDs/LCDs. |
+| **LOB** | Line of Business | An insurance product line: Commercial, Medicare Advantage, Medicaid, Exchange. One payer can have 20+ LOBs with different PA rules. |
+| **RBAC** | Role-Based Access Control | Access permissions assigned by role (e.g., "clinical reviewer" can see PA queue, "admin" can change thresholds). Implemented via Entra ID in this architecture. |
+| **RAG** | Retrieval-Augmented Generation | Pattern where the LLM retrieves external documents (clinical guidelines, coverage policies) before generating a response. Not a product — a design pattern. |
+| **OCR** | Optical Character Recognition | Converting fax images (TIFF/PDF) to machine-readable text. First step in the fax ingestion pipeline. Azure AI Document Intelligence does this. |
+| **MCP** | Model Context Protocol | Anthropic's protocol for connecting Claude to external tools and data sources. This project uses MCP for CMS Coverage DB and NPI Registry lookups. |
+| **NDJSON** | Newline-Delimited JSON | One JSON object per line. Used for bulk FHIR data exports (Synthea output format). Not the same as a JSON array. |
+| **ASGI** | Asynchronous Server Gateway Interface | Python's async web server standard. FastAPI runs on ASGI via Uvicorn. If someone says "ASGI server" they mean Uvicorn/Daphne/Hypercorn. |
+| **ABN** | Advance Beneficiary Notice | Form given to Medicare patients warning that a service may not be covered. If the patient signs it, they agree to pay out-of-pocket. |
+| **EOB** | Explanation of Benefits | Document sent to the patient after a claim is processed, showing what insurance paid and what the patient owes. Not a bill. |
+| **ERA** | Electronic Remittance Advice | The electronic version of the EOB, sent to the provider (not the patient). Maps to X12 835. |
+| **HEDIS** | Healthcare Effectiveness Data and Information Set | Quality measures maintained by NCQA. Health plans are scored on HEDIS metrics. Not directly PA-related but comes up in payer conversations. |
+| **NCQA** | National Committee for Quality Assurance | Accredits health plans and maintains HEDIS quality measures. If someone says "NCQA accredited" they mean the plan passed quality review. |
+
+### Regulation & Compliance Deep Cuts
+
+| Term | What You Need to Know |
+|---|---|
+| **CMS-0057-F** | The most important regulation for this project. Requires payers to implement FHIR-based PA APIs. Phase 1 (Jan 2026): FHIR Patient Access API, Provider Access API. Phase 2 (Jan 2027): Prior Auth API with real-time decision support. First metrics due March 31, 2026. |
+| **Gold carding** | State-level provisions that exempt high-performing providers from PA requirements. Texas HB 3459 and several other states have gold carding laws. Means the PA system must track provider approval rates and auto-exempt qualifying providers. |
+| **NaviHealth ruling (Feb 2024)** | Federal judge ruled against UnitedHealth for using AI (NaviHealth) to deny claims without adequate human oversight. Sets legal precedent: AI-assisted denial without human review = legal risk. This is why auto-denial is disabled in Phase 1. |
+| **Minimum necessary standard** | HIPAA principle: only access the minimum PHI needed for the task. The clinical data aggregation service should only pull FHIR resources for the specific member in the PA request — not broader queries. |
+| **Immutable audit trail** | Not a regulation name, but a compliance pattern. CMS-0057-F and HIPAA both require tamper-proof records of PA decisions. Azure Blob Storage immutable policies + append-only SQLite implement this. 7-year retention. |
+
+### Autonomize-Specific Vocabulary
+
+| Term | What It Is |
+|---|---|
+| **PA Copilot** | Autonomize's prior authorization product. AI agent that reviews PA requests against clinical guidelines and produces determinations. 95%+ accuracy on complex cases, 45-60 days to deploy. |
+| **Genesis Platform** | Autonomize's compound AI foundation. The substrate that all copilots (PA, UM, care management) run on. Think of it as the "operating system" for Autonomize agents. |
+| **AI Studio** | Autonomize's low-code workflow builder. Clinical operations teams use it to customize agent behavior without engineering. |
+| **Agents Marketplace** | Autonomize's library of 100+ pre-built healthcare AI agents. Covers UM, care management, claims, and more. |
+| **Pegasus Program** | Microsoft startup accelerator program. Autonomize is enrolled — means they get Azure credits, technical enablement, and go-to-market support. |
