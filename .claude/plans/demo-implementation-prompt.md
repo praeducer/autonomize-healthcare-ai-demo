@@ -2,7 +2,9 @@
 ## AI-Driven Prior Authorization — Autonomize Healthcare AI Demo
 ### March 24, 2026
 
-> **For Claude Code**: This document is a phased implementation specification. Execute one phase at a time. Each phase ends with a verification gate — run the verification commands, confirm they pass, then commit, tag, and create a release branch before starting the next phase. Do not proceed past a failed gate.
+> **For Claude Code**: This document is a build-step implementation specification. Execute one build step at a time. Each build step ends with a verification gate — run the verification commands, confirm they pass, then commit, tag, and create a release branch before starting the next build step. Do not proceed past a failed gate.
+>
+> **Terminology**: "Build Step" (1-5) = this demo's progressive build milestones (CLI → API → Dashboard → Docker → Azure). "Phase" (0-3) = the enterprise delivery roadmap in the presentation slides (Demo → MVP → Scale → Enterprise). This entire demo is **Phase 0** of the enterprise roadmap.
 
 ---
 
@@ -12,13 +14,13 @@
 
 **Who**: Paul Prae, Principal AI Engineer & Architect candidate at Autonomize AI
 **What**: Build a working proof-of-concept of AI-driven prior authorization review
-**When**: March 24, 2026. Presentation is this afternoon.
+**When**: March 24, 2026. Presentation is March 25th, 2026.
 **Where**: Repository at `C:\dev\autonomize-healthcare-ai-demo`
 **Why**: Prove that the enterprise solution architecture (presented in slides) is implementable. Demonstrate AI engineering skill and architectural judgment. Show how Autonomize could leverage Claude for PA automation.
 
 **The demo succeeds when:**
 1. All 5 PA test cases produce clinically appropriate determinations with evidence-backed reasoning
-2. The system is demo-able at any phase checkpoint (CLI, API, web dashboard, or cloud URL)
+2. The system is demo-able at any build step checkpoint (CLI, API, web dashboard, or cloud URL)
 3. A non-technical executive can watch the demo and understand what the AI is doing and why
 4. A solutions architect (ex-Elevance Health) recognizes the integration patterns as realistic
 5. A VP of engineering (ex-Google Cloud) sees clean architecture and proper engineering practices
@@ -34,9 +36,9 @@ This demo is Phase 0 of the implementation roadmap presented in the slide deck. 
 | Part 1.2: Integration Design — Clinical Data | Clinical data is retrieved from a FHIR R4 server (HAPI FHIR) |
 | Part 1.3: Security & Compliance | Audit trail captures every determination with full reasoning chain |
 | Part 2.1: Executive Summary | Working demo validates the business case: AI reviews PA requests in seconds, not days |
-| Part 2.2: Implementation Phases | This demo IS Phase 0 — progressive delivery from CLI to cloud |
+| Part 2.2: Implementation Phases | This demo IS Phase 0 — build steps progress from CLI to cloud |
 | Part 3.1: AI/ML Strategy | Confidence-based routing demonstrates the human-in-the-loop pattern |
-| Part 3.2: Future State Scaling | Phase 5 shows migration path to Azure managed services |
+| Part 3.2: Future State Scaling | Build Step 5 shows migration path to Azure managed services |
 
 **Full assignment**: `docs/inputs/assignment.md`
 **Full solution architecture**: `docs/architecture/solution-architecture.md`
@@ -80,19 +82,19 @@ The demo supports the slide deck narrative at these points:
 - Presents results in a web dashboard
 
 **What this demo does NOT do (and the enterprise architecture covers):**
-- Fax ingestion / OCR (enterprise Phase 2)
-- X12 278 EDI processing (enterprise Phase 2)
-- Legacy database connectors (enterprise Phase 2)
-- Multi-LOB configuration (enterprise Phase 3)
-- Production security hardening (enterprise Phase 1)
+- Fax ingestion / OCR (Phase 2)
+- X12 278 EDI processing (Phase 2)
+- Legacy database connectors (Phase 2)
+- Multi-LOB configuration (Phase 3)
+- Production security hardening (Phase 1)
 - Auto-denial without human review (enterprise policy decision)
-- Connect to Autonomize PA Copilot or Genesis Platform (enterprise Phase 1)
+- Connect to Autonomize PA Copilot or Genesis Platform (Phase 1)
 
 ---
 
 # Part 2: Architecture and Technical Decisions
 
-## 2.1 Final-State Demo Architecture (Phase 3 Complete)
+## 2.1 Final-State Demo Architecture (Build Step 3 Complete)
 
 ```mermaid
 flowchart LR
@@ -201,9 +203,9 @@ autonomize-healthcare-ai-demo/
 │   └── demo_vs_production_architecture.md    # Maps demo components to enterprise architecture
 ├── pyproject.toml
 ├── Makefile                                  # make install, make dev, make test, make docker
-├── Dockerfile                                # Phase 4: single-stage python:3.12-slim
-├── docker-compose.yml                        # Phase 2+: app + HAPI FHIR
-├── .github/workflows/deploy-azure.yml        # Phase 4: GitHub Actions → ACR → App Service
+├── Dockerfile                                # Build Step 4: single-stage python:3.12-slim
+├── docker-compose.yml                        # Build Step 2+: app + HAPI FHIR
+├── .github/workflows/deploy-azure.yml        # Build Step 4: GitHub Actions → ACR → App Service
 ├── .env.example
 ├── CLAUDE.md
 └── README.md
@@ -280,12 +282,12 @@ This is a thin FastAPI router (~30 lines) that returns a realistic FHIR response
 
 ### Testing Pyramid
 
-Every phase follows this test sequence. **All automated tests must pass before Paul does any human review.** Claude Code runs the automated suite; Paul runs the human UAT.
+Every build step follows this test sequence. **All automated tests must pass before Paul does any human review.** Claude Code runs the automated suite; Paul runs the human UAT.
 
 ```
 ┌─────────────────────────────────────┐
 │  5. HUMAN UAT (Paul)                │  ← Paul walks through checklist
-│     Manual demo walkthrough         │     ~10 min per phase
+│     Manual demo walkthrough         │     ~10 min per build step
 ├─────────────────────────────────────┤
 │  4. AI ARCHITECTURE REVIEW          │  ← Claude Code self-review
 │     Code quality, security, FHIR    │     Runs as subagent
@@ -294,7 +296,7 @@ Every phase follows this test sequence. **All automated tests must pass before P
 │     Submit case → get determination  │     Requires ANTHROPIC_API_KEY
 ├─────────────────────────────────────┤
 │  2. INTEGRATION TESTS               │  ← Service connectivity
-│     FHIR server, audit store, API    │     Requires Docker (Phase 2+)
+│     FHIR server, audit store, API    │     Requires Docker (Build Step 2+)
 ├─────────────────────────────────────┤
 │  1. UNIT TESTS                      │  ← Pure logic, no network
 │     Models, thresholds, lookups      │     Fast, no API key needed
@@ -332,7 +334,7 @@ lint:
 
 ### Data Quality Tests (`tests/test_data_quality.py`)
 
-Run on every phase. Validate that all sample PA cases and reference data are well-formed:
+Run on every build step. Validate that all sample PA cases and reference data are well-formed:
 
 - Each file in `data/sample_pa_cases/` parses as a valid FHIR Bundle via `fhir.resources.R4B`
 - Each Bundle contains exactly one Claim with `use: "preauthorization"`
@@ -341,7 +343,7 @@ Run on every phase. Validate that all sample PA cases and reference data are wel
 - Each Bundle includes Patient, Practitioner, Coverage supporting resources
 - No real PHI exists in any data file (scan for SSN patterns, real names from census data, etc.)
 
-### AI Architecture Review (Automated, Per Phase)
+### AI Architecture Review (Automated, Per Build Step)
 
 After implementation and before human UAT, Claude Code runs a self-review as a subagent. The review checks:
 
@@ -353,7 +355,7 @@ After implementation and before human UAT, Claude Code runs a self-review as a s
 ### Paul's Human UAT Process
 
 **Before each UAT session** (2 minutes):
-1. Read the user stories for this phase (listed in each phase section below)
+1. Read the user stories for this build step (listed in each phase section below)
 2. Read the "What Changed" summary to understand what was built
 3. Confirm all automated tests passed (`make test-all` shows green)
 
@@ -364,45 +366,45 @@ After implementation and before human UAT, Claude Code runs a self-review as a s
 4. If everything passes: approve and proceed to commit gate
 
 **After UAT** (1 minute):
-1. Confirm you're satisfied with the phase
+1. Confirm you're satisfied with the build step
 2. Claude Code runs the commit gate (tag + branch)
 
 ---
 
-# Part 3: Phased Implementation
+# Part 3: Build Steps
 
 ## Version Control Strategy
 
-Each phase produces a tagged release and a release branch. If a later phase fails, revert to the last working release.
+Each build step produces a tagged release and a release branch. If a later build step fails, revert to the last working release.
 
-| Phase | Git Tag | Release Branch | Fallback Demo |
+| Build Step | Git Tag | Release Branch | Fallback Demo |
 |---|---|---|---|
-| Phase 1 | `v0.1.0` | `release/phase-1-core-engine` | CLI terminal demo |
-| Phase 2 | `v0.2.0` | `release/phase-2-api-service` | Swagger UI in browser |
-| Phase 3 | `v0.3.0` | `release/phase-3-web-dashboard` | Polished web dashboard (local) |
-| Phase 4 | `v0.4.0` | `release/phase-4-azure-deploy` | Live cloud URL |
-| Phase 5 | `v0.5.0` | `release/phase-5-managed-services` | Enterprise-aligned cloud |
+| Step 1 | `v0.1.0` | `release/step-1-core-engine` | CLI terminal demo |
+| Step 2 | `v0.2.0` | `release/step-2-api-service` | Swagger UI in browser |
+| Step 3 | `v0.3.0` | `release/step-3-web-dashboard` | Polished web dashboard (local) |
+| Step 4 | `v0.4.0` | `release/step-4-azure-deploy` | Live cloud URL |
+| Step 5 | `v0.5.0` | `release/step-5-managed-services` | Enterprise-aligned cloud |
 
-**Commit gate commands** (run at the end of every phase):
+**Commit gate commands** (run at the end of every build step):
 ```bash
 git add -A
-git commit -m "Phase N: <description>"
-git tag -a v0.N.0 -m "Phase N: <description>"
-git checkout -b release/phase-N-<name>
+git commit -m "Step N: <description>"
+git tag -a v0.N.0 -m "Step N: <description>"
+git checkout -b release/step-N-<name>
 git checkout main
 git push origin main --tags
-git push origin release/phase-N-<name>
+git push origin release/step-N-<name>
 ```
 
 ---
 
-## Phase 1: Core Clinical Review Engine
+## Build Step 1: Core Clinical Review Engine
 
-**Tag**: `v0.1.0` | **Branch**: `release/phase-1-core-engine`
+**Tag**: `v0.1.0` | **Branch**: `release/step-1-core-engine`
 **Dependencies**: `anthropic`, `fhir.resources`
 **Demo mode**: CLI terminal
 
-### Phase 1 Architecture
+### Build Step 1 Architecture
 
 ```mermaid
 flowchart LR
@@ -414,7 +416,7 @@ flowchart LR
     CASES["data/sample_pa_cases/<br/>5 FHIR Claim JSONs"] --> CLI
 ```
 
-### Phase 1 Implementation
+### Build Step 1 Implementation
 
 **Step 1.1: Project scaffolding**
 
@@ -511,7 +513,7 @@ Download the ICD-10-CM 2026 code descriptions from CDC FTP. Create a curated sub
   - Tool: `validate_npi` — calls NPI Registry MCP or validates format locally
   - Tool: `lookup_icd10_code` — validates diagnosis code against CDC data, returns description
   - Tool: `check_cms_coverage` — looks up coverage criteria from CMS Coverage Database via MCP
-  - Tool: `retrieve_clinical_data` — fetches patient records from FHIR server (Phase 2+; in Phase 1, reads from the supporting resources in the Claim bundle)
+  - Tool: `retrieve_clinical_data` — fetches patient records from FHIR server (Build Step 2+; in Build Step 1, reads from the supporting resources in the Claim bundle)
 - Claude receives the PA case + tool results and produces a structured determination
 - Use structured output (JSON mode or tool_use response) to ensure parseable results
 - Apply confidence thresholds: ≥0.85 auto-approve, 0.60-0.84 human review, <0.60 pend
@@ -540,7 +542,7 @@ Download the ICD-10-CM 2026 code descriptions from CDC FTP. Create a curated sub
 
 Create these test files:
 
-`tests/test_data_quality.py` (data quality — run on every phase):
+`tests/test_data_quality.py` (data quality — run on every build step):
 - `test_all_sample_cases_parse_as_valid_fhir_bundles` — load each JSON, parse with `Bundle.model_validate()`
 - `test_all_claims_have_preauthorization_use` — verify `claim.use == "preauthorization"`
 - `test_all_diagnosis_codes_are_valid_icd10` — cross-reference against reference data
@@ -567,7 +569,7 @@ Mark unit tests: `@pytest.mark.unit`
 - `test_all_cases_have_nonempty_guideline_citations` — guideline_citations list len > 0
 Mark all: `@pytest.mark.e2e`
 
-### Phase 1 User Stories
+### Build Step 1 User Stories
 
 | ID | User Story | Acceptance Criteria |
 |---|---|---|
@@ -577,7 +579,7 @@ Mark all: `@pytest.mark.e2e`
 | US-1.4 | As a **compliance officer**, I want denied cases to always include a specific reason, so that we meet CMS-0057-F requirements. | WHEN determination is DENIED THEN clinical_rationale explains the specific clinical reason for denial. |
 | US-1.5 | As a **provider**, I want missing documentation cases to list exactly what is needed, so that I can respond efficiently. | WHEN determination is PENDED_MISSING_INFO THEN missing_documentation list is non-empty with specific items. |
 
-### Phase 1 Automated Test Suite
+### Build Step 1 Automated Test Suite
 
 Run in this order. All must pass before Paul's UAT.
 
@@ -599,7 +601,7 @@ make test-e2e
 # no hardcoded secrets, FHIR model usage, and architecture alignment.
 ```
 
-### Phase 1 — Paul's UAT Checklist
+### Build Step 1 — Paul's UAT Checklist
 
 **What Changed**: A CLI tool that takes PA case JSON files and returns AI-generated clinical determinations using Claude. Five sample cases with real ICD-10/CPT codes. FHIR R4B data models. ICD-10 validation from CDC data.
 
@@ -619,11 +621,11 @@ make test-e2e
 **If all 8 steps pass**: Tell Claude Code to proceed with the commit gate.
 **If any step fails**: Describe what you expected vs what you saw. Claude Code will fix and re-run the automated suite before you re-test.
 
-### Phase 1 Commit Gate
+### Build Step 1 Commit Gate
 
 After all verifications pass:
 ```bash
-git add -A && git commit -m "Phase 1: Core clinical review engine with CLI demo
+git add -A && git commit -m "Step 1: Core clinical review engine with CLI demo
 
 - Anthropic SDK + Claude tool use for PA clinical review
 - 5 realistic PA cases with real ICD-10/CPT codes (Da Vinci PAS aligned)
@@ -631,21 +633,21 @@ git add -A && git commit -m "Phase 1: Core clinical review engine with CLI demo
 - CLI with color-coded output
 - ICD-10 validation from CDC 2026 data
 - Confidence-based determination routing"
-git tag -a v0.1.0 -m "Phase 1: Core clinical review engine — CLI demo-able"
-git checkout -b release/phase-1-core-engine
+git tag -a v0.1.0 -m "Step 1: Core clinical review engine — CLI demo-able"
+git checkout -b release/step-1-core-engine
 git checkout main
 ```
 
 ---
 
-## Phase 2: REST API with Real FHIR Server
+## Build Step 2: REST API with Real FHIR Server
 
-**Tag**: `v0.2.0` | **Branch**: `release/phase-2-api-service`
+**Tag**: `v0.2.0` | **Branch**: `release/step-2-api-service`
 **New dependencies**: `fastapi`, `uvicorn`, `httpx`, `aiosqlite`
 **New infrastructure**: HAPI FHIR Server (Docker), SQLite
 **Demo mode**: Swagger UI in browser
 
-### Phase 2 Architecture
+### Build Step 2 Architecture
 
 ```mermaid
 flowchart LR
@@ -658,7 +660,7 @@ flowchart LR
     API --> AUDIT["determination_audit_store.py<br/>(SQLite)"]
 ```
 
-### Phase 2 Implementation
+### Build Step 2 Implementation
 
 **Step 2.1: Add dependencies to pyproject.toml**
 
@@ -800,7 +802,7 @@ Mark: `@pytest.mark.integration`
 - `test_audit_trail_contains_all_reviewed_cases` — after 5 reviews, GET /determinations returns 5 entries
 Mark: `@pytest.mark.e2e`
 
-### Phase 2 User Stories
+### Build Step 2 User Stories
 
 | ID | User Story | Acceptance Criteria |
 |---|---|---|
@@ -810,7 +812,7 @@ Mark: `@pytest.mark.e2e`
 | US-2.4 | As a **developer**, I want auto-generated API documentation, so that I can understand the available endpoints without reading source code. | WHEN I visit /docs THEN Swagger UI renders with all endpoints documented, including request/response schemas. |
 | US-2.5 | As an **operations engineer**, I want a health check endpoint, so that I can monitor service availability. | WHEN I GET /health THEN I receive JSON with status, fhir_server connectivity, and version number. |
 
-### Phase 2 Automated Test Suite
+### Build Step 2 Automated Test Suite
 
 ```bash
 # 1. Start infrastructure
@@ -837,7 +839,7 @@ make test-e2e
 # no SQL injection, proper async patterns, OpenAPI schema completeness.
 ```
 
-### Phase 2 — Paul's UAT Checklist
+### Build Step 2 — Paul's UAT Checklist
 
 **What Changed**: FastAPI REST API wrapping the engine. HAPI FHIR server with 10 Synthea patients. SQLite audit trail. Mock eligibility service. Swagger docs.
 
@@ -858,10 +860,10 @@ make test-e2e
 
 **If all 10 steps pass**: Approve for commit gate.
 
-### Phase 2 Commit Gate
+### Build Step 2 Commit Gate
 
 ```bash
-git add -A && git commit -m "Phase 2: REST API with HAPI FHIR server and audit trail
+git add -A && git commit -m "Step 2: REST API with HAPI FHIR server and audit trail
 
 - FastAPI REST API with Swagger documentation
 - HAPI FHIR server (Docker) with 10 Synthea patients loaded
@@ -869,20 +871,20 @@ git add -A && git commit -m "Phase 2: REST API with HAPI FHIR server and audit t
 - SQLite audit trail (append-only)
 - Mock member eligibility service (FHIR CoverageEligibilityResponse)
 - Sample case browser endpoints"
-git tag -a v0.2.0 -m "Phase 2: REST API — demo-able via Swagger UI"
-git checkout -b release/phase-2-api-service
+git tag -a v0.2.0 -m "Step 2: REST API — demo-able via Swagger UI"
+git checkout -b release/step-2-api-service
 git checkout main
 ```
 
 ---
 
-## Phase 3: Web Dashboard and Presentation Polish
+## Build Step 3: Web Dashboard and Presentation Polish
 
-**Tag**: `v0.3.0` | **Branch**: `release/phase-3-web-dashboard`
+**Tag**: `v0.3.0` | **Branch**: `release/step-3-web-dashboard`
 **New dependencies**: `jinja2`, `python-multipart`
 **Demo mode**: Polished web dashboard at `localhost:8000`
 
-### Phase 3 Architecture
+### Build Step 3 Architecture
 
 ```mermaid
 flowchart LR
@@ -897,7 +899,7 @@ flowchart LR
     DASH --> AUDIT
 ```
 
-### Phase 3 Implementation
+### Build Step 3 Implementation
 
 **Step 3.1: Add template dependencies**
 
@@ -964,7 +966,7 @@ Mark: `@pytest.mark.integration`
 - `test_all_5_cases_via_api_with_audit_trail` — submit all 5, verify 5 audit entries
 Mark: `@pytest.mark.e2e`
 
-### Phase 3 User Stories
+### Build Step 3 User Stories
 
 | ID | User Story | Acceptance Criteria |
 |---|---|---|
@@ -974,7 +976,7 @@ Mark: `@pytest.mark.e2e`
 | US-3.4 | As a **demo presenter**, I want the dashboard readable on a projector at 1920x1080, so that the back row can follow along. | WHEN the dashboard is displayed at 1920x1080 THEN all text is readable, badges are visible, and no horizontal scrolling is required. |
 | US-3.5 | As a **developer** visiting /docs, I want Swagger UI to still work alongside the dashboard, so that technical audience members can explore the API. | WHEN I visit /docs THEN Swagger UI renders correctly, unaffected by the dashboard. |
 
-### Phase 3 Automated Test Suite
+### Build Step 3 Automated Test Suite
 
 ```bash
 # 1. Start infrastructure
@@ -1002,7 +1004,7 @@ make test-e2e
 # no inline JavaScript (HTMX attributes only).
 ```
 
-### Phase 3 — Paul's UAT Checklist
+### Build Step 3 — Paul's UAT Checklist
 
 **What Changed**: Web dashboard at localhost:8000 with case selector, results panel, determination history. Jinja2 + HTMX + Pico CSS. Dashboard is the interview demo surface.
 
@@ -1025,30 +1027,30 @@ make test-e2e
 **If all 11 steps pass**: This is your interview demo. Approve for commit gate.
 **Special note on step 11**: This is your dress rehearsal. If any case takes >45 seconds or produces an unexpected determination, run it again — LLM outputs can vary. If a case is consistently wrong, tell Claude Code which case and what's wrong.
 
-### Phase 3 Commit Gate
+### Build Step 3 Commit Gate
 
 ```bash
-git add -A && git commit -m "Phase 3: Web dashboard with HTMX for interview demo
+git add -A && git commit -m "Step 3: Web dashboard with HTMX for interview demo
 
 - Jinja2 + HTMX + Pico CSS dashboard (no npm, no build step)
 - Case selector with 5 realistic PA scenarios
 - Color-coded determination display with confidence visualization
 - Auto-refreshing determination history panel
 - Presentation-optimized layout"
-git tag -a v0.3.0 -m "Phase 3: Web dashboard — interview-ready local demo"
-git checkout -b release/phase-3-web-dashboard
+git tag -a v0.3.0 -m "Step 3: Web dashboard — interview-ready local demo"
+git checkout -b release/step-3-web-dashboard
 git checkout main
 ```
 
 ---
 
-## Phase 4: Azure Cloud Deployment
+## Build Step 4: Azure Cloud Deployment
 
-**Tag**: `v0.4.0` | **Branch**: `release/phase-4-azure-deploy`
+**Tag**: `v0.4.0` | **Branch**: `release/step-4-azure-deploy`
 **New files**: `Dockerfile`, `.github/workflows/deploy-azure.yml`
 **Demo mode**: Live public URL on Azure
 
-### Phase 4 Architecture
+### Build Step 4 Architecture
 
 ```mermaid
 flowchart LR
@@ -1064,9 +1066,9 @@ flowchart LR
     ACR --> AZURE_APP
 ```
 
-### Phase 4 Implementation — Risk Minimization
+### Build Step 4 Implementation — Risk Minimization
 
-This phase is structured as 4 independently verifiable sub-steps. If any sub-step fails, the previous sub-steps still work. Phase 3 (local demo) remains the safe fallback.
+This build step is structured as 4 independently verifiable sub-steps. If any sub-step fails, the previous sub-steps still work. Build Step 3 (local demo) remains the safe fallback.
 
 **Step 4.1: Create Dockerfile (verify locally)**
 
@@ -1155,15 +1157,15 @@ This is a single-line configuration change, not a rewrite.
 
 `.github/workflows/deploy-azure.yml` — only if manual deployment worked first. This automates future pushes. 15 lines: login → build+push → deploy.
 
-### Phase 4 User Stories
+### Build Step 4 User Stories
 
 | ID | User Story | Acceptance Criteria |
 |---|---|---|
-| US-4.1 | As a **developer**, I want the app to run identically in a Docker container as it does locally, so that I have confidence the container is correct before deploying. | WHEN I run `docker compose up --build` THEN the dashboard and API work exactly as in Phase 3 — same endpoints, same behavior. |
+| US-4.1 | As a **developer**, I want the app to run identically in a Docker container as it does locally, so that I have confidence the container is correct before deploying. | WHEN I run `docker compose up --build` THEN the dashboard and API work exactly as in Build Step 3 — same endpoints, same behavior. |
 | US-4.2 | As a **demo presenter**, I want a public URL I can share with the interview panel, so that they can access the demo from their own machines. | WHEN the app is deployed to Azure App Service THEN the public URL serves the dashboard AND all 5 cases produce determinations. |
 | US-4.3 | As an **operations engineer**, I want the deployment to be reproducible via a single CI/CD pipeline, so that future deployments are automated. | WHEN I push to main THEN GitHub Actions builds the container, pushes to ACR, and deploys to App Service. |
 
-### Phase 4 Automated Test Suite
+### Build Step 4 Automated Test Suite
 
 ```bash
 # 1. Lint
@@ -1193,7 +1195,7 @@ curl -X POST http://localhost:8000/api/v1/prior-auth/review \
 docker compose down
 ```
 
-### Phase 4 — Paul's UAT Checklist
+### Build Step 4 — Paul's UAT Checklist
 
 **What Changed**: Dockerfile, docker-compose.yml for full stack, Azure deployment scripts. App runs in containers. Optionally deployed to a public Azure URL.
 
@@ -1202,41 +1204,41 @@ docker compose down
 | Step | Action | Expected Result | Pass? |
 |---|---|---|---|
 | 1 | Run `docker compose up --build` | Both containers start (app + HAPI FHIR). No error messages. Logs show "Application startup complete." | |
-| 2 | Open `http://localhost:8000` in browser | Dashboard loads identically to Phase 3. Same layout, same case selector, same behavior. | |
-| 3 | Submit Case 1 via the dashboard | APPROVED determination appears. Same quality as Phase 3. Container didn't break anything. | |
+| 2 | Open `http://localhost:8000` in browser | Dashboard loads identically to Build Step 3. Same layout, same case selector, same behavior. | |
+| 3 | Submit Case 1 via the dashboard | APPROVED determination appears. Same quality as Build Step 3. Container didn't break anything. | |
 | 4 | Open `http://localhost:8080` | HAPI FHIR is accessible as a sidecar container. | |
 | 5 | Run `docker compose down` then `docker compose up` | App restarts cleanly. Previous audit trail data may be gone (ephemeral volume) — that's expected for a demo. | |
 | 6 | **(Azure only)** Run the Azure deployment commands from Step 4.3 and 4.4 | Commands complete without errors. Azure portal shows the web app running. | |
 | 7 | **(Azure only)** Open the Azure public URL in browser | Dashboard loads. Submit Case 1. APPROVED determination appears (may take up to 90 seconds on cold start). | |
 | 8 | **(Azure only)** Test from a different device (phone, or ask a friend) | URL is publicly accessible. No VPN required. | |
 
-**If steps 1-5 pass**: Phase 4 is complete for local Docker. Azure (steps 6-8) is a bonus.
-**If Azure steps fail**: Phase 3 (local demo) is your fallback. Present from your laptop with `make dev`.
+**If steps 1-5 pass**: Build Step 4 is complete for local Docker. Azure (steps 6-8) is a bonus.
+**If Azure steps fail**: Build Step 3 (local demo) is your fallback. Present from your laptop with `make dev`.
 
-### Phase 4 Commit Gate
+### Build Step 4 Commit Gate
 
 ```bash
-git add -A && git commit -m "Phase 4: Docker containerization and Azure App Service deployment
+git add -A && git commit -m "Step 4: Docker containerization and Azure App Service deployment
 
 - Single-stage Dockerfile (python:3.12-slim)
 - Docker Compose for full local stack (app + HAPI FHIR)
 - Azure App Service deployment via ACR
 - GitHub Actions CI/CD workflow"
-git tag -a v0.4.0 -m "Phase 4: Azure deployment — live cloud URL"
-git checkout -b release/phase-4-azure-deploy
+git tag -a v0.4.0 -m "Step 4: Azure deployment — live cloud URL"
+git checkout -b release/step-4-azure-deploy
 git checkout main
 ```
 
 ---
 
-## Phase 5: Azure Managed Healthcare Services
+## Build Step 5: Azure Managed Healthcare Services
 
-**Tag**: `v0.5.0` | **Branch**: `release/phase-5-managed-services`
+**Tag**: `v0.5.0` | **Branch**: `release/step-5-managed-services`
 **Demo mode**: Enterprise-aligned Azure architecture
 
-This phase is stretch-only. It migrates from open-source Docker services to Azure managed equivalents, aligning the demo with the enterprise architecture.
+This build step is stretch-only. It migrates from open-source Docker services to Azure managed equivalents, aligning the demo with the enterprise architecture.
 
-### Phase 5 Architecture
+### Build Step 5 Architecture
 
 ```mermaid
 flowchart LR
@@ -1249,9 +1251,9 @@ flowchart LR
     APP --> PG["Azure Database<br/>for PostgreSQL"]
 ```
 
-### Phase 5 Migration Steps
+### Build Step 5 Migration Steps
 
-| Component | Phase 4 (Open Source) | Phase 5 (Azure Managed) | Migration Effort |
+| Component | Build Step 4 (Open Source) | Build Step 5 (Azure Managed) | Migration Effort |
 |---|---|---|---|
 | FHIR Server | HAPI FHIR (Docker) | Azure Health Data Services FHIR | Swap URL + add Azure auth |
 | LLM | Anthropic API (direct) | Claude via Azure AI Foundry | Swap base_url + API key |
@@ -1261,46 +1263,46 @@ flowchart LR
 
 Each migration is an independent config change. No architectural refactoring required.
 
-### Phase 5 User Stories
+### Build Step 5 User Stories
 
 | ID | User Story | Acceptance Criteria |
 |---|---|---|
 | US-5.1 | As a **solutions architect**, I want the demo to use Azure-managed healthcare services, so that I can show the architecture aligns with Autonomize's Azure-native platform. | WHEN the app is running THEN clinical data comes from Azure Health Data Services FHIR AND LLM calls go through Azure AI Foundry. |
 | US-5.2 | As an **operations engineer**, I want production-grade observability, so that I can monitor the system's health and performance. | WHEN the app is running THEN traces are visible in Azure Monitor AND request metrics appear in App Insights. |
 
-### Phase 5 Automated Test Suite
+### Build Step 5 Automated Test Suite
 
 ```bash
-# Same test suite as Phase 4, but pointed at Azure services
+# Same test suite as Build Step 4, but pointed at Azure services
 # Set environment variables to Azure endpoints, then:
 make test-integration   # Verify Azure FHIR, Azure AI Foundry connectivity
 make test-e2e           # Full review flow through Azure services
 ```
 
-### Phase 5 — Paul's UAT Checklist
+### Build Step 5 — Paul's UAT Checklist
 
 **What Changed**: Backend services swapped from open-source Docker to Azure-managed. Same frontend, same API, different infrastructure.
 
 | Step | Action | Expected Result | Pass? |
 |---|---|---|---|
 | 1 | Check Azure Health Data Services in Azure Portal | FHIR service is running. Synthea patients are loaded. | |
-| 2 | Submit Case 1 via the dashboard (pointing at Azure) | APPROVED — same as Phase 3/4. Response time may differ. | |
+| 2 | Submit Case 1 via the dashboard (pointing at Azure) | APPROVED — same as Build Step 3/4. Response time may differ. | |
 | 3 | Check Azure Monitor | Request traces visible for the review API call. | |
 | 4 | Check App Insights | Request count, latency metrics, and any errors are visible. | |
 
-**If Azure services are not set up in time**: Skip Phase 5. Phase 4 is sufficient.
+**If Azure services are not set up in time**: Skip Build Step 5. Build Step 4 is sufficient.
 
-### Phase 5 Commit Gate
+### Build Step 5 Commit Gate
 
 ```bash
-git add -A && git commit -m "Phase 5: Azure managed healthcare services integration
+git add -A && git commit -m "Step 5: Azure managed healthcare services integration
 
 - Azure Health Data Services FHIR (replaces HAPI FHIR)
 - Claude via Azure AI Foundry
 - Azure Database for PostgreSQL (replaces SQLite)
 - Azure Monitor + App Insights observability"
-git tag -a v0.5.0 -m "Phase 5: Azure managed services — enterprise-aligned"
-git checkout -b release/phase-5-managed-services
+git tag -a v0.5.0 -m "Step 5: Azure managed services — enterprise-aligned"
+git checkout -b release/step-5-managed-services
 git checkout main
 ```
 
@@ -1335,14 +1337,14 @@ git checkout main
 
 # Part 5: Constraints (Repeated for Emphasis)
 
-These constraints apply to ALL phases. They are the non-negotiables.
+These constraints apply to ALL build steps. They are the non-negotiables.
 
-1. **Do not over-engineer.** Each phase should be the minimum code needed for a working, demo-able system. If in doubt, leave it out. Three similar lines are better than a premature abstraction.
+1. **Do not over-engineer.** Each build step should be the minimum code needed for a working, demo-able system. If in doubt, leave it out. Three similar lines are better than a premature abstraction.
 2. **Use `fhir.resources.R4B` models.** Do not invent custom data models for FHIR resources. Use the standard Pydantic models.
 3. **Anthropic SDK only.** No LangChain, no LlamaIndex, no unnecessary AI frameworks.
 4. **Azure-only for cloud hosting.** No Vercel, no Heroku, no AWS deployment.
 5. **No real PHI anywhere.** All patient data is synthetic (Synthea) or fictional.
 6. **No auto-deny in the demo.** Denial determinations are always flagged as requiring human review.
 7. **Every determination gets an audit trail entry.** Append-only. No updates. No deletes.
-8. **Commit and tag after each phase.** Do not proceed to the next phase if the current phase's verification commands fail.
+8. **Commit and tag after each build step.** Do not proceed to the next build step if the current build step's verification commands fail.
 9. **When uncertain between two approaches, choose the simpler one.** This demo must work by this afternoon.

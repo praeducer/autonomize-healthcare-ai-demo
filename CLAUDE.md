@@ -59,10 +59,12 @@ src/prior_auth_demo/
         └── review_dashboard.html     # HTMX + Pico CSS
 ```
 
-## Implementation Phases
+## Demo Build Steps
 
-| Phase | Deliverable | Tag |
-|-------|------------|-----|
+> "Build Step" = demo build milestones below. "Phase" = enterprise delivery roadmap in the slides (Phase 0: Demo → Phase 1: MVP → Phase 2: Scale → Phase 3: Enterprise). This entire demo is Phase 0.
+
+| Step | Deliverable | Tag |
+|------|------------|-----|
 | 0 | Repo prep (this state) | v0.0.1 |
 | 1 | CLI review engine + 5 PA cases | v0.1.0 |
 | 2 | FastAPI + HAPI FHIR + audit store | v0.2.0 |
@@ -72,7 +74,7 @@ src/prior_auth_demo/
 
 ## Reference Documents
 
-- **Implementation spec**: `.claude/plans/demo-implementation-prompt.md` — the Phase 1 build prompt
+- **Implementation spec**: `.claude/plans/demo-implementation-prompt.md` — the Build Step 1 prompt
 - **Design doc**: `docs/plans/2026-03-24-demo-implementation-design.md` — design decisions & data flow
 - **Solution architecture**: `docs/architecture/solution-architecture.md` — full enterprise vision
 - **PA case definitions**: `data/sample_pa_cases/README.md` — 5 test cases with expected outcomes

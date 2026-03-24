@@ -48,7 +48,7 @@ The full enterprise architecture covers 10 components across 5 layers — ingest
 make install        # Install dependencies + pre-commit hooks
 make review         # Run a single PA case through AI review (CLI)
 make review-all     # Run all 5 PA cases
-make dev            # Start the FastAPI server (Phase 2+)
+make dev            # Start the FastAPI server (Build Step 2+)
 ```
 
 ## Tech Stack
@@ -77,10 +77,12 @@ src/prior_auth_demo/
 └── web_dashboard/                    # Jinja2 + HTMX dashboard
 ```
 
-## Implementation Phases
+## Demo Build Steps
 
-| Phase | Deliverable | Tag |
-|-------|------------|-----|
+> "Build Step" = demo build milestones. "Phase" = enterprise delivery roadmap (see [Progressive Delivery](docs/architecture/presentation.md#slide-9-progressive-delivery)). This entire demo is Phase 0.
+
+| Step | Deliverable | Tag |
+|------|------------|-----|
 | 0 | Repo preparation | v0.0.1 |
 | 1 | CLI review engine + 5 PA cases | v0.1.0 |
 | 2 | FastAPI + HAPI FHIR + audit store | v0.2.0 |
@@ -88,7 +90,7 @@ src/prior_auth_demo/
 | 4 | Docker + Azure deployment | v0.4.0 |
 | 5 | Azure-native services | v0.5.0 |
 
-Each phase is independently demo-able. Decision gates between phases use real performance data.
+Each build step is independently demo-able. Decision gates between steps use real performance data.
 
 ## Documentation
 
@@ -99,7 +101,7 @@ All deliverables in [docs/](docs/README.md):
 | [Architecture](docs/architecture/) | Solution design, presentation, speaker notes, research, diagrams |
 | [Interview Prep](docs/interview-prep/) | Study guide, Q&A reference, checklist, panel email |
 | [Inputs](docs/inputs/) | Assignment, stakeholder profiles, job description |
-| [Plans](docs/plans/) | Design doc, execution log, technical decisions |
+| [Plans](docs/plans/) | Design doc, technical decisions |
 
 ## License
 

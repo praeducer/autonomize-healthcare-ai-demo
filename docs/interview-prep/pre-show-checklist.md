@@ -6,12 +6,12 @@
 
 ---
 
-## Overnight Decisions (Review Required)
+## Technical Decisions (Review Required)
 
 See [decisions.md](../architecture/decisions.md):
-- [x] D-001: outputs/ un-ignored in .gitignore -- Paul requested this
+- [ ] D-001: HITRUST certification claim unverified -- check before asserting in presentation
 - [x] D-002: CAQH payer cost $3.52 -- verified against 2024 CAQH Index
-- [ ] D-003: AMA physician burden 14 to 12-13 hr/week -- verify you're comfortable
+- [ ] D-003: AMA physician burden corrected to 12-13 hr/week -- verify you're comfortable
 
 ---
 

@@ -4,12 +4,12 @@
 
 ## Summary
 
-This design document captures the validated architecture and phased implementation plan for the AI-driven PA demo. The full implementation specification is at:
+This design document captures the validated architecture and build-step implementation plan for the AI-driven PA demo. The full implementation specification is at:
 `.claude/plans/demo-implementation-prompt.md`
 
 ## Key Design Decisions
 
-1. **Phased C→A progression**: Start cloud-agnostic (Anthropic SDK direct), end Azure-native. Each phase is independently demo-able.
+1. **Progressive C→A build**: Start cloud-agnostic (Anthropic SDK direct), end Azure-native. Each build step is independently demo-able.
 2. **Real data over mocks**: Synthea FHIR R4 patients, Da Vinci PAS example structures, CDC ICD-10 codes, CMS Coverage DB via MCP.
 3. **Standard FHIR models**: `fhir.resources.R4B` Pydantic v2 models, not custom-built.
 4. **HAPI FHIR Server**: Real FHIR server (Docker) instead of mock Python service for clinical data.
@@ -27,9 +27,9 @@ This design document captures the validated architecture and phased implementati
 - CAQH Index 2024 (PA cost data)
 - AMA 2024 PA Survey (physician burden data)
 
-## Phase Summary
+## Build Step Summary
 
-| Phase | Tag | What it proves | Fallback demo |
+| Build Step | Tag | What it proves | Fallback demo |
 |---|---|---|---|
 | 1: Core CLI Engine | v0.1.0 | AI determination works | Terminal |
 | 2: REST API + FHIR | v0.2.0 | Integration patterns are real | Swagger UI |

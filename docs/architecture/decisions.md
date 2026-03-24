@@ -1,28 +1,21 @@
-# Decisions Made Without Paul
+# Technical Decisions — Review Before Demo Build
 
-> Technical decisions made during autonomous overnight execution.
-> Paul: review these when you wake up. High-impact decisions are flagged.
+> Paul: review these before starting the demo implementation. Items are ranked by impact on the presentation.
 
-## Decisions
+## D-001: HITRUST certification claim is unverified (MEDIUM impact)
 
-### D-001: Configured version control to track all deliverables
-- **Decision:** Updated `.gitignore` so all deliverables are tracked and backed up to GitHub
-- **Alternatives:** Keep gitignore and use `git add -f` for each file; create separate repo for deliverables
-- **Rationale:** Paul explicitly requested deliverables be saved and backed up to GitHub. Simplest approach is to un-ignore the directories. Previous rationale (client PII) doesn't apply — this is Paul's own interview prep, not client data.
-- **Impact:** LOW — all future outputs will be tracked.
-- **Aligns with:** Paul's explicit instruction, Principle #17 (Ship. Create value.)
+- **Decision:** The solution architecture references HITRUST compliance. Autonomize AI's HITRUST CSF certification status could not be independently verified from public sources.
+- **Why it matters:** If asked about HITRUST, redirect: "HITRUST inheritance is a compliance assessment activity — scoped as a Phase 3 deliverable." Do not assert Autonomize has HITRUST certification unless you can confirm it.
+- **Action needed:** Check Autonomize's compliance page or ask directly before presenting
 
-### D-002: CAQH payer cost verified at $3.52
+## D-002: CAQH payer cost verified at $3.52 (LOW impact)
+
 - **Decision:** Use $3.52 (2024 CAQH Index, "Prior Authorization" row, "Health Plan" column) as the authoritative payer per-transaction cost
-- **Alternatives:** Use an approximate qualifier; omit payer cost entirely
-- **Rationale:** 2024 CAQH Index report is the most current authoritative source. Using outdated numbers would violate guardrail #1 (no fabricated numbers).
-- **Impact:** LOW — minor number change, same order of magnitude
-- **Aligns with:** Guardrail #1, Principle #6 (Cited or removed)
+- **Why it matters:** This number appears in the presentation (Slide 2) and the demo walkthrough. If challenged, cite the 2024 CAQH Index report directly.
+- **Action needed:** None — verified against published source
 
-### D-003: AMA physician time burden corrected from 14 to 12-13 hours/week
-- **Decision:** Use "12-13 hours/week" (2024 AMA survey) instead of "14 hours/week" with note that 14 is commonly cited approximation
-- **Alternatives:** Use 14 with "approximately" qualifier; cite range "12-14 hours"
-- **Rationale:** Most recent AMA data shows 12-13 hours. Citing the exact survey data is more defensible if Suresh or Ujjwal challenge the number.
-- **Impact:** LOW — strengthens credibility by using most current data
-- **Aligns with:** Guardrail #1, Principle #6
+## D-003: AMA physician time burden corrected to 12-13 hours/week (LOW impact)
 
+- **Decision:** Use "12-13 hours/week" (2024 AMA survey) instead of commonly cited "14 hours/week"
+- **Why it matters:** More defensible if challenged. The 2024 AMA Prior Authorization Survey is the most recent data.
+- **Action needed:** Verify you're comfortable saying "12 to 13 hours" in the presentation

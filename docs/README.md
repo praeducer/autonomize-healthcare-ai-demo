@@ -61,11 +61,10 @@
 | [stakeholder-profiles.md](inputs/stakeholder-profiles.md) | Panel profiles — Kris Nair, Suresh Gopalakrishnan, Ujjwal Rajbhandari |
 | [job-description.md](inputs/job-description.md) | Solutions Architect job description — Autonomize AI |
 
-### Architecture Process
+### Technical Decisions
 | File | Description |
 |------|-------------|
-| [execution-log.md](architecture/execution-log.md) | Autonomous overnight execution log |
-| [decisions.md](architecture/decisions.md) | 3 technical decisions made overnight |
+| [decisions.md](architecture/decisions.md) | Technical decisions to review before presenting |
 
 ### Plans
 | File | Description |

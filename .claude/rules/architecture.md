@@ -12,12 +12,12 @@
 | `mock_healthcare_services/member_eligibility.py` | Mock: returns FHIR CoverageEligibilityResponse |
 | `web_dashboard/dashboard_routes.py` | Jinja2 template routes for the review dashboard |
 
-## Phased Architecture
+## Progressive Build Steps
 
-The demo builds progressively — each phase is independently demo-able:
-1. **Phase 1 (CLI):** `command_line_demo.py` → `clinical_review_engine.py` → Claude
-2. **Phase 2 (API):** `healthcare_api_server.py` → engine + HAPI FHIR + audit store
-3. **Phase 3 (Dashboard):** `web_dashboard/` → API → engine
+The demo builds progressively — each build step is independently demo-able:
+1. **Step 1 (CLI):** `command_line_demo.py` → `clinical_review_engine.py` → Claude
+2. **Step 2 (API):** `healthcare_api_server.py` → engine + HAPI FHIR + audit store
+3. **Step 3 (Dashboard):** `web_dashboard/` → API → engine
 
 ## Data Flow
 
