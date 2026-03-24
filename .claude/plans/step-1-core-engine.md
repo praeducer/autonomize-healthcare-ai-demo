@@ -1,10 +1,28 @@
 # Build Step 1: Core Clinical Review Engine
 
-> **Prerequisites**: Read `shared-context.md` first. Coding standards, FHIR conventions, and architecture rules are auto-loaded from `.claude/rules/`.
+> **Prerequisites**: Read `shared-context.md` first (includes Claude Code automation reference). Coding standards, FHIR conventions, and architecture rules are auto-loaded from `.claude/rules/`.
 
 **Tag**: `v0.1.0` | **Branch**: `release/step-1-core-engine`
 **Dependencies**: `anthropic`, `fhir.resources`, `pydantic-settings`
 **Demo mode**: CLI terminal
+
+## Claude Code Tooling for This Step
+
+| Tool | Usage |
+|------|-------|
+| **`/brainstorming`** | Before designing the clinical review engine — explore system prompt, tool use patterns, confidence routing |
+| **`prior-auth-review@healthcare`** | Invoke for PA workflow patterns: NPI validation, ICD-10 checks, CMS coverage lookup, determination routing |
+| **`fhir-developer@healthcare`** | Invoke when creating the 5 FHIR Claim bundles and ClinicalReviewResult model — ensures R4B compliance |
+| **`context7`** | Use for Anthropic SDK tool use docs: `use context7 for anthropic python SDK tool use` |
+| **`context7`** | Use for fhir.resources docs: `use context7 for fhir.resources R4B` |
+| **`/tdd`** | Write `test_data_quality.py` and `test_clinical_review_engine.py` before implementation |
+| **MCP: `cms-coverage-db`** | Wire into engine as Claude tool — LCD/NCD coverage criteria lookups |
+| **MCP: `npi-registry`** | Wire into engine as Claude tool — provider NPI validation |
+| **MCP: `icd10-codes`** | Wire into engine as Claude tool — ICD-10-CM/PCS code validation (supplements local CDC file) |
+| **`/simplify`** | After writing engine and CLI code |
+| **`/verification-before-completion`** | Run `make lint && make test-unit && make test-e2e` before claiming done |
+| **`/code-review`** | Before commit gate |
+| **`/commit`** | For the v0.1.0 tag and release branch |
 
 ## Architecture
 

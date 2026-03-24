@@ -15,6 +15,10 @@
     "npi-registry": {
       "type": "http",
       "url": "https://mcp.deepsense.ai/npi_registry/mcp"
+    },
+    "icd10-codes": {
+      "type": "http",
+      "url": "https://mcp.deepsense.ai/icd10_codes/mcp"
     }
   }
 }

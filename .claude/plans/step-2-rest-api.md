@@ -1,11 +1,28 @@
 # Build Step 2: REST API with Real FHIR Server
 
-> **Prerequisites**: Step 1 complete. Read `shared-context.md` for service contracts. Rules auto-loaded from `.claude/rules/`.
+> **Prerequisites**: Step 1 complete. Read `shared-context.md` for service contracts and Claude Code automation. Rules auto-loaded from `.claude/rules/`.
 
 **Tag**: `v0.2.0` | **Branch**: `release/step-2-api-service`
 **New dependencies**: `fastapi`, `uvicorn`, `httpx`, `aiosqlite`
 **New infrastructure**: HAPI FHIR Server (Docker), SQLite
 **Demo mode**: Swagger UI in browser
+
+## Claude Code Tooling for This Step
+
+| Tool | Usage |
+|------|-------|
+| **`/brainstorming`** | Before API design — explore endpoint structure, error handling, FHIR server integration |
+| **`/feature-dev`** | Structured implementation of API server, audit store, and FHIR integration |
+| **`context7`** | Use for FastAPI docs: `use context7 for fastapi` — async endpoints, dependency injection, OpenAPI |
+| **`context7`** | Use for httpx docs: `use context7 for httpx` — async client for FHIR server calls |
+| **`fhir-developer@healthcare`** | FHIR server queries, Bundle parsing, CoverageEligibilityResponse creation |
+| **MCP: `docker-mcp`** | Manage HAPI FHIR container — `docker compose up`, health checks, data loading |
+| **`/tdd`** | Write API tests, audit store tests, FHIR integration tests before implementation |
+| **`/dispatching-parallel-agents`** | Sub-steps 2.3 (API), 2.4 (eligibility mock), and 2.5 (audit store) are independent — build in parallel |
+| **`/simplify`** | After each major file (API server, audit store, eligibility mock) |
+| **`/verification-before-completion`** | Run full test suite including `make test-integration` with Docker services |
+| **`/code-review`** | Before commit gate — check async patterns, SQL injection safety, FHIR compliance |
+| **`/commit`** | For the v0.2.0 tag and release branch |
 
 ## Architecture
 

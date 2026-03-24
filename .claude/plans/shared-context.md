@@ -4,6 +4,102 @@
 
 ---
 
+## Claude Code Automation
+
+Skills, plugins, MCP tools, and hooks are pre-configured to accelerate implementation. Use them — they are pre-authorized in `.claude/settings.local.json`.
+
+### Plugins & Skills Available
+
+| Plugin | Source | When to Use |
+|--------|--------|-------------|
+| `fhir-developer@healthcare` | Anthropic Healthcare | FHIR R4B resource creation, validation patterns, coding systems (LOINC, SNOMED CT, ICD-10). Invoke for any FHIR data modeling work. |
+| `prior-auth-review@healthcare` | Anthropic Healthcare | Prior auth workflow patterns, NPI/ICD-10/CMS checks. Invoke when building the clinical review engine. |
+| `context7@claude-plugins-official` | Upstash/Anthropic | Live library docs — add `use context7` to prompts when working with `anthropic` SDK, `fastapi`, `fhir.resources`, `pydantic`, `httpx`, `htmx`. Eliminates hallucinated APIs. |
+| `hookify@claude-plugins-official` | Anthropic | Create new behavioral hooks via natural language. Use `/hookify` to add guardrails. |
+| `frontend-design` | Anthropic | Dashboard UI design (Build Step 3). Polished, presentation-grade layouts. |
+| `feature-dev` | Anthropic | Guided feature development with codebase analysis. Use for each major implementation sub-step. |
+| `code-review` / `pr-review-toolkit` | Anthropic | Post-implementation review. Use before each commit gate. |
+| `code-simplifier` | Anthropic | Auto-invoked after writing code. Simplifies for clarity and maintainability. |
+| `security-guidance` | Anthropic | Healthcare security — PHI protection, audit trail integrity, no SQL injection. |
+| `commit-commands` | Anthropic | `/commit` and `/commit-push-pr` for git operations at each commit gate. |
+
+### MCP Tools Available
+
+| MCP Server | Tools | When to Use |
+|------------|-------|-------------|
+| `cms-coverage-db` | LCD/NCD coverage criteria lookups | Clinical review engine — checking coverage policy for procedures |
+| `npi-registry` | Provider NPI validation, specialty lookup | Clinical review engine — validating requesting provider |
+| `icd10-codes` | ICD-10-CM/PCS code validation and lookup | Clinical review engine — validating diagnosis and procedure codes |
+| `docker-mcp` | Container management (build, run, compose) | Build Steps 2-4 — HAPI FHIR server, app containerization |
+
+### Workflow Skills (superpowers)
+
+| Skill | When to Invoke |
+|-------|---------------|
+| `brainstorming` | Before designing any new component (engine, API, dashboard) |
+| `writing-plans` | When breaking down a build step into sub-tasks |
+| `executing-plans` | When executing a written plan with review checkpoints |
+| `test-driven-development` | Before writing implementation code — write tests first |
+| `systematic-debugging` | When any test fails or unexpected behavior occurs |
+| `verification-before-completion` | Before claiming any build step is done — run all verification commands |
+| `subagent-driven-development` | When a build step has 2+ independent sub-tasks |
+| `dispatching-parallel-agents` | For parallel test writing, parallel file creation |
+| `requesting-code-review` | Before each commit gate |
+| `finishing-a-development-branch` | After all tests pass at each commit gate |
+
+### Context7 Library Reference (Verified March 24, 2026)
+
+When using Context7 for live documentation, use the exact library identifiers below. Add `use context7` to any prompt, or reference a specific library: `use context7 for /fastapi/fastapi`.
+
+| Library | Context7 ID | Snippets | Notes |
+|---------|-------------|----------|-------|
+| Anthropic Python SDK | `/anthropics/anthropic-sdk-python` | 127 | Tool use, structured output, streaming |
+| FastAPI | `/fastapi/fastapi` | 1,679 | Async endpoints, dependency injection, OpenAPI |
+| Pydantic | `/pydantic/pydantic` | 680 | v2 models, validators, serialization |
+| pydantic-settings | `/pydantic/pydantic-settings` | 206 | BaseSettings, env var loading, .env files |
+| httpx | `/encode/httpx` | 245 | Async HTTP client for FHIR server calls |
+| HTMX | `/bigskysoftware/htmx` | 1,747 | hx-post, hx-target, hx-swap, hx-trigger |
+| Pico CSS | `/picocss/pico` | 9 | Use `/websites/picocss` (368 snippets) for better coverage |
+| Jinja2 | `/pallets/jinja` | 193 | Template inheritance, filters, macros |
+| uvicorn | `/kludex/uvicorn` | 150 | ASGI server configuration |
+| pytest | `/pytest-dev/pytest` | 771 | Fixtures, markers, parametrize, async |
+| pytest-asyncio | `/pytest-dev/pytest-asyncio` | 104 | asyncio_mode, async fixtures |
+| aiosqlite | `/omnilib/aiosqlite` | 33 | Async SQLite for audit store |
+| polyfactory | `/litestar-org/polyfactory` | 140 | Test data generation from Pydantic models |
+| ruff | `/astral-sh/ruff` | 7,045 | Linting rules, formatter configuration |
+| FHIR R4 (spec) | `/hl7/fhir` | 5,412 | HL7 FHIR specification (not Python library) |
+| fhir.resources | *Not indexed* | -- | Use `fhir-developer@healthcare` plugin instead |
+
+**Usage examples in prompts:**
+- `"Build the FastAPI server. use context7 for /fastapi/fastapi and /pydantic/pydantic"`
+- `"Implement Claude tool use. use context7 for /anthropics/anthropic-sdk-python"`
+- `"Create the HTMX dashboard. use context7 for /bigskysoftware/htmx and /websites/picocss"`
+
+### Automation Hooks (Pre-configured)
+
+| Hook | Trigger | Effect |
+|------|---------|--------|
+| **Ruff auto-format** | After every Write/Edit of `.py` files | Runs `ruff format` + `ruff check --fix` automatically |
+
+### Standard Workflow Per Build Step
+
+```
+1. Invoke /brainstorming (superpowers) — understand requirements
+2. Invoke /feature-dev — structured implementation plan
+3. Use context7 for library docs: "use context7 for anthropic SDK" etc.
+4. Invoke /tdd — write tests before implementation
+5. Use fhir-developer skill for FHIR resource work
+6. Use prior-auth-review skill for PA workflow logic
+7. Use MCP tools (CMS, NPI) in the clinical review engine
+8. Ruff auto-formats on save (hook)
+9. Invoke /simplify after writing code
+10. Run verification: make lint && make test-unit && make test-e2e
+11. Invoke /code-review before commit gate
+12. Invoke /commit for git operations
+```
+
+---
+
 ## ClinicalReviewResult Model
 
 The engine's output model — referenced by all build steps:

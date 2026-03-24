@@ -49,6 +49,7 @@ Thumbs.db
 
 # Claude Code
 .claude/todos/
+.claude/settings.local.json
 
 # Data — downloaded, not committed
 data/synthea_fhir_patients/raw/

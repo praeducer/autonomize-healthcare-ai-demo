@@ -1,0 +1,54 @@
+{
+  "enabledMcpjsonServers": [
+    "docker-mcp",
+    "cms-coverage-db",
+    "npi-registry",
+    "icd10-codes"
+  ],
+  "plansDirectory": ".claude/plans",
+  "enabledPlugins": {
+    "fhir-developer@healthcare": true,
+    "prior-auth-review@healthcare": true,
+    "context7@claude-plugins-official": true,
+    "hookify@claude-plugins-official": true
+  },
+  "permissions": {
+    "allow": [
+      "Skill(commit-commands:commit)",
+      "Skill(commit-commands:commit-push-pr)",
+      "Skill(feature-dev:feature-dev)",
+      "Skill(code-review:code-review)",
+      "Skill(superpowers:brainstorming)",
+      "Skill(superpowers:writing-plans)",
+      "Skill(superpowers:executing-plans)",
+      "Skill(superpowers:test-driven-development)",
+      "Skill(superpowers:verification-before-completion)",
+      "Skill(superpowers:requesting-code-review)",
+      "Skill(superpowers:systematic-debugging)",
+      "Skill(superpowers:subagent-driven-development)",
+      "Skill(superpowers:dispatching-parallel-agents)",
+      "Skill(superpowers:finishing-a-development-branch)",
+      "Skill(frontend-design:frontend-design)",
+      "Skill(simplify)",
+      "mcp__docker-mcp__*",
+      "mcp__cms-coverage-db__*",
+      "mcp__npi-registry__*",
+      "mcp__icd10-codes__*"
+    ]
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python -c \"import sys,json,subprocess; d=json.load(sys.stdin); p=d.get('tool_input',{}).get('file_path') or d.get('tool_response',{}).get('filePath',''); [subprocess.run(['ruff','format',p],capture_output=True), subprocess.run(['ruff','check','--fix',p],capture_output=True)] if p.endswith('.py') else None\"",
+            "timeout": 10,
+            "statusMessage": "Auto-formatting Python..."
+          }
+        ]
+      }
+    ]
+  }
+}

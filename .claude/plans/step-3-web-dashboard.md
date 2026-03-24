@@ -1,10 +1,27 @@
 # Build Step 3: Web Dashboard and Presentation Polish
 
-> **Prerequisites**: Step 2 complete. Read `shared-context.md` for service contracts. Rules auto-loaded from `.claude/rules/`.
+> **Prerequisites**: Step 2 complete. Read `shared-context.md` for service contracts and Claude Code automation. Rules auto-loaded from `.claude/rules/`.
 
 **Tag**: `v0.3.0` | **Branch**: `release/step-3-web-dashboard`
 **New dependencies**: `jinja2`, `python-multipart`
 **Demo mode**: Polished web dashboard at `localhost:8000`
+
+## Claude Code Tooling for This Step
+
+| Tool | Usage |
+|------|-------|
+| **`/brainstorming`** | Before dashboard design — explore layout, color palette, executive-readability, projector optimization |
+| **`/frontend-design`** | Invoke for the dashboard template — polished, presentation-grade Jinja2+HTMX+Pico CSS layout. Must look professional on a projector at 1920x1080. Color-coded determination badges, confidence bars, clean typography. |
+| **`context7`** | Use for HTMX docs: `use context7 for htmx` — hx-post, hx-target, hx-swap, hx-trigger patterns |
+| **`context7`** | Use for Pico CSS docs: `use context7 for picocss` — semantic HTML styling, color schemes |
+| **`context7`** | Use for Jinja2 docs: `use context7 for jinja2` — template inheritance, filters, macros |
+| **`fhir-developer@healthcare`** | Rendering FHIR ClaimResponse data in human-readable format for the dashboard |
+| **`/tdd`** | Write dashboard HTML tests before building the template |
+| **`/simplify`** | After dashboard routes and template |
+| **`security-guidance`** | No XSS in templates — ensure all dynamic content is escaped, no inline JS |
+| **`/verification-before-completion`** | Test dashboard renders, Swagger still works, all API endpoints intact |
+| **`/code-review`** | Before commit gate — check accessibility, XSS safety, CDN versioning |
+| **`/commit`** | For the v0.3.0 tag and release branch |
 
 ## Architecture
 

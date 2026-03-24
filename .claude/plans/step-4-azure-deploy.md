@@ -1,10 +1,24 @@
 # Build Step 4: Azure Cloud Deployment
 
-> **Prerequisites**: Step 3 complete. Read `shared-context.md` for version control strategy. Rules auto-loaded from `.claude/rules/`.
+> **Prerequisites**: Step 3 complete. Read `shared-context.md` for version control strategy and Claude Code automation. Rules auto-loaded from `.claude/rules/`.
 
 **Tag**: `v0.4.0` | **Branch**: `release/step-4-azure-deploy`
 **New files**: `Dockerfile`, `.github/workflows/deploy-azure.yml`
 **Demo mode**: Live public URL on Azure
+
+## Claude Code Tooling for This Step
+
+| Tool | Usage |
+|------|-------|
+| **`/feature-dev`** | Structured implementation of Dockerfile, compose, Azure deployment |
+| **MCP: `docker-mcp`** | Build and test Docker image locally, manage compose stack, verify container health |
+| **`context7`** | Use for Docker docs: `use context7 for docker` — multi-stage builds, security best practices |
+| **`security-guidance`** | Container security — non-root user, no secrets in image, minimal attack surface |
+| **`/verification-before-completion`** | Test Docker build locally, curl health endpoint, verify dashboard in container |
+| **`/code-review`** | Before commit gate — Dockerfile security, compose config, GitHub Actions workflow |
+| **`/commit`** | For the v0.4.0 tag and release branch |
+
+**Note**: Azure CLI commands (`az`) run via Bash tool. Paul may need to authenticate (`az login`) manually if not already logged in.
 
 ## Architecture
 

@@ -5,6 +5,18 @@
 **Tag**: `v0.5.0` | **Branch**: `release/step-5-managed-services`
 **Demo mode**: Enterprise-aligned Azure architecture
 
+## Claude Code Tooling for This Step
+
+| Tool | Usage |
+|------|-------|
+| **`context7`** | Use for Azure SDK docs if using `azure-identity` or `azure-mgmt-*` packages |
+| **`/feature-dev`** | Each migration (FHIR, LLM, audit store, monitoring) is an independent sub-task |
+| **`/dispatching-parallel-agents`** | All 5 migrations are independent config changes — can parallelize |
+| **`/verification-before-completion`** | Run integration and e2e tests against Azure services |
+| **`/commit`** | For the v0.5.0 tag and release branch |
+
+**Note**: Each migration is a config swap — no architectural refactoring. If any migration fails, skip it and keep the open-source version.
+
 Migrates from open-source Docker services to Azure managed equivalents, aligning the demo with the enterprise architecture in `docs/architecture/solution-architecture.md`.
 
 ## Architecture
