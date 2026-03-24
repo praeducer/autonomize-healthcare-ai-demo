@@ -1,8 +1,8 @@
 name: CI
 
 on:
-  push:
-    branches: [main]
+  # Manual trigger only — automated CI will be enabled in Step 4 (Azure deploy)
+  workflow_dispatch:
   pull_request:
     branches: [main]
 
@@ -30,5 +30,8 @@ jobs:
       - name: Type check
         run: mypy src/prior_auth_demo/
 
-      - name: Test
-        run: pytest -v -m "not e2e"
+      - name: Unit tests
+        run: pytest -v -m unit
+
+      - name: Data quality tests
+        run: pytest -v -m unit tests/test_data_quality.py
