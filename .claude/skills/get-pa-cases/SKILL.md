@@ -1,5 +1,5 @@
 ---
-name: cases
+name: get-pa-cases
 description: Use when the user asks what PA cases are available, wants to see the case list, or asks about test scenarios
 ---
 
@@ -13,4 +13,4 @@ List the available prior authorization test cases:
 | 4 | Humira | M05.79 (rheumatoid arthritis) | HCPCS J0135 | PENDED_MISSING_INFO |
 | 5 | Keytruda | C34.11, C77.1 (lung cancer) | HCPCS J9271 | APPROVED (urgent) |
 
-Then say: Use `/review <number or name>` to review a case, or `/review-all` to review all 5.
+Then say: Use `/invoke-pa-review <number or name>` to review a case, or `/invoke-pa-review-all` to review all 5.

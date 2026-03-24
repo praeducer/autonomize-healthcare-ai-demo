@@ -76,9 +76,9 @@ src/prior_auth_demo/
 
 | Skill | Description |
 |-------|-------------|
-| `/cases` | List the 5 sample PA cases with diagnoses and expected outcomes |
-| `/review <case>` | Review a PA case by number (1-5) or name (e.g., "keytruda") |
-| `/review-all` | Review all 5 cases and show a summary table |
+| `/get-pa-cases` | List the 5 sample PA cases with diagnoses and expected outcomes |
+| `/invoke-pa-review <case>` | Review a PA case by number (1-5) or name (e.g., "keytruda") |
+| `/invoke-pa-review-all` | Review all 5 cases and show a summary table |
 
 Skills are defined in `.claude/skills/` using the modern SKILL.md format with YAML frontmatter.
 

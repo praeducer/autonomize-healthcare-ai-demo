@@ -8,10 +8,10 @@ The most natural way to interact during development. Requires Claude Code CLI.
 
 | Command | What it does |
 |---------|-------------|
-| `/cases` | List the 5 sample PA cases |
-| `/review 1` | Review case 1 (lumbar MRI) |
-| `/review keytruda` | Review case 5 by name |
-| `/review-all` | Review all 5 cases with summary |
+| `/get-pa-cases` | List the 5 sample PA cases |
+| `/invoke-pa-review 1` | Review case 1 (lumbar MRI) |
+| `/invoke-pa-review keytruda` | Review case 5 by name |
+| `/invoke-pa-review-all` | Review all 5 cases with summary |
 
 You can also ask conversationally: "Review the spinal fusion case" or "Run all PA cases and summarize."
 

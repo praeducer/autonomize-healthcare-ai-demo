@@ -1,9 +1,9 @@
 ---
-name: review
+name: invoke-pa-review
 description: Use when the user wants to review a prior authorization case, mentions a PA case by number or name, or says "review case"
 ---
 
-Review a prior authorization case using the clinical review engine.
+Submit a prior authorization case to the AI clinical review engine and display the determination.
 
 Map `$ARGUMENTS` to a case file:
 

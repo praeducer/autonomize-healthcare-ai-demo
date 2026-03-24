@@ -15,7 +15,7 @@ LLM outputs are non-deterministic. If a case gives an unexpected result, re-run 
 | Interface | How to test | What to look for |
 |-----------|------------|-----------------|
 | CLI | `make review` | APPROVED badge, confidence %, rationale, citations, processing time |
-| Claude Code | `/review` | Same output, conversational context |
+| Claude Code | `/invoke-pa-review` | Same output, conversational context |
 | API (Step 2+) | POST `/api/v1/prior-auth/review` via Swagger | JSON response with determination, confidence, rationale |
 | Dashboard (Step 3+) | Select case → Submit | Loading spinner → result card with badge, confidence bar, rationale |
 
@@ -25,7 +25,7 @@ LLM outputs are non-deterministic. If a case gives an unexpected result, re-run 
 
 **Goal**: Every determination includes clinical rationale (2+ sentences) and guideline citations.
 
-Run `make review-all` (or `/review-all` in Claude Code) and read each result:
+Run `make review-all` (or `/invoke-pa-review-all` in Claude Code) and read each result:
 
 | Case | Check rationale for... |
 |------|----------------------|

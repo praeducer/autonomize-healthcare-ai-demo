@@ -9,9 +9,14 @@ from __future__ import annotations
 
 import argparse
 import asyncio
+import io
 import json
 import sys
 from pathlib import Path
+
+# Ensure stdout handles Unicode on Windows (Claude often uses symbols like >= in output)
+if sys.stdout.encoding and sys.stdout.encoding.lower() != "utf-8":
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="replace")
 
 from fhir.resources.R4B.bundle import Bundle
 
