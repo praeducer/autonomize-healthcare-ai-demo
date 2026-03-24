@@ -18,8 +18,15 @@ ENV/
 *.swp
 *.swo
 
-# Environment
+# Environment / Secrets
 .env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+*.crt
 
 # Docker
 docker-compose.override.yml
