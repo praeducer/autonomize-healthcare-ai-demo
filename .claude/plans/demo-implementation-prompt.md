@@ -156,7 +156,7 @@ flowchart LR
 **Excluded by design:**
 - No LangChain (unnecessary abstraction for single-provider use case — [research-context.md § SDK Direction](../../docs/architecture/research-context.md))
 - No Kafka or message queue (over-engineering for a demo — KISS principle)
-- No PostgreSQL (SQLite is sufficient for demo; PostgreSQL is the production choice per [solution-architecture-source-of-truth.md § Technology Decision Table](../../docs/architecture/solution-architecture.md))
+- No PostgreSQL (SQLite is sufficient for demo; PostgreSQL is the production choice per [solution-architecture.md § Technology Decision Table](../../docs/architecture/solution-architecture.md))
 - No Streamlit (requires separate process/port, fights with FastAPI)
 - No React/Next.js (requires npm build pipeline, too complex for 1-day build)
 

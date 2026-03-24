@@ -3,5 +3,10 @@
     "docker-mcp",
     "cms-coverage-db",
     "npi-registry"
-  ]
+  ],
+  "permissions": {
+    "allow": [
+      "Skill(commit-commands:commit)"
+    ]
+  }
 }

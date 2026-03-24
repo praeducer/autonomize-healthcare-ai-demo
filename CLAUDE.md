@@ -70,42 +70,10 @@ src/prior_auth_demo/
 | 4 | Docker + Azure deployment | v0.4.0 |
 | 5 | Azure-native services | v0.5.0 |
 
-## Coding Standards
+## Reference Documents
 
-- Python 3.12 with type hints on all function signatures
-- Pydantic v2 models for all data structures
-- `pydantic-settings` for configuration (`application_settings.py`)
-- Async FastAPI endpoints
-- Ruff for linting and formatting (`ruff check`, `ruff format`)
-- Module docstrings on every file explaining purpose
-- No commented-out code — delete or implement
-- FHIR R4B imports: `from fhir.resources.R4B.<resource> import <Resource>` (NOT root package, which is R5)
-
-## Testing
-
-```bash
-make test              # Run all tests
-pytest tests/ -v       # Verbose output
-pytest -m unit         # Unit tests only
-pytest -m integration  # Integration tests (require Docker)
-pytest -m e2e          # End-to-end tests (require API key)
-```
-
-- `polyfactory` for generating test data from Pydantic/FHIR models
-- All test data is synthetic — no real PHI
-- Every test function has a docstring explaining what it verifies
-
-## MCP Tools Available
-
-- **cms-coverage-db**: CMS Coverage Database — LCD/NCD lookups for coverage determinations
-- **npi-registry**: NPI Registry — provider validation, specialty, practice info
-- **docker-mcp**: Docker management for HAPI FHIR server
-
-## Demo Scope
-
-This demo proves the enterprise architecture is implementable. It does NOT include:
-- Fax ingestion / OCR
-- X12 278 EDI processing
-- Legacy database connectors
-- Multi-LOB configuration
-- Production security hardening
+- **Implementation spec**: `.claude/plans/demo-implementation-prompt.md` — the Phase 1 build prompt
+- **Design doc**: `docs/plans/2026-03-24-demo-implementation-design.md` — design decisions & data flow
+- **Solution architecture**: `docs/architecture/solution-architecture.md` — full enterprise vision
+- **PA case definitions**: `data/sample_pa_cases/README.md` — 5 test cases with expected outcomes
+- **ICD-10 reference**: `data/reference/icd10cm_codes_2026.tsv` — local code validation

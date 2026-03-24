@@ -11,23 +11,7 @@
 
 ## FHIR R4B Imports
 
-Always import from the R4B subpackage — the root package defaults to R5:
-
-```python
-# Correct — R4B
-from fhir.resources.R4B.claim import Claim
-from fhir.resources.R4B.claimresponse import ClaimResponse
-from fhir.resources.R4B.patient import Patient
-
-# WRONG — this imports R5 models
-from fhir.resources.claim import Claim
-```
-
-## Configuration
-
-- Use `pydantic-settings` BaseSettings in `application_settings.py`
-- All external URLs, credentials, thresholds come from environment variables
-- Never hardcode connection strings, model IDs, or thresholds in business logic
+Always use `from fhir.resources.R4B.<resource> import <Resource>` — the root package defaults to R5. See `healthcare-standards.md` for the full import list.
 
 ## Naming
 
