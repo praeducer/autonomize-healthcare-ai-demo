@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "prior-auth-demo"
-version = "0.1.0"
+version = "0.0.1"
 description = "AI-driven prior authorization review demo using Claude, FHIR R4, and evidence-based clinical guidelines"
 readme = "README.md"
 license = "MIT"
@@ -22,6 +22,8 @@ dependencies = [
     "fhir.resources>=8.0.0",
     "pydantic-settings>=2.0.0",
     "jinja2>=3.1.0",
+    "aiosqlite>=0.20.0",
+    "python-multipart>=0.0.12",
 ]
 
 [project.optional-dependencies]
@@ -32,6 +34,7 @@ dev = [
     "mypy>=1.13.0",
     "polyfactory>=2.0.0",
     "pre-commit>=4.0.0",
+    "pytest-timeout>=2.3.0",
 ]
 
 [project.scripts]
