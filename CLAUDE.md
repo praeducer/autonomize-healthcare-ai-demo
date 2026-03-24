@@ -5,7 +5,7 @@
 Interview exercise for Autonomize AI demonstrating AI-driven prior authorization automation using Claude, FHIR R4, and evidence-based clinical guidelines. This is a **demo-scope prototype** — not the full enterprise architecture.
 
 **Full architecture**: `docs/architecture/solution-architecture.md`
-**Implementation spec**: `.claude/plans/demo-implementation-prompt.md`
+**Build step plans**: `.claude/plans/` (shared-context.md + step-1 through step-5)
 **Design doc**: `docs/plans/2026-03-24-demo-implementation-design.md`
 
 **Owner**: Paul Prae — Modular Earth LLC (www.paulprae.com)
@@ -74,7 +74,7 @@ src/prior_auth_demo/
 
 ## Reference Documents
 
-- **Implementation spec**: `.claude/plans/demo-implementation-prompt.md` — the Build Step 1 prompt
+- **Build step plans**: `.claude/plans/shared-context.md` + `step-1-core-engine.md` through `step-5-managed-services.md`
 - **Design doc**: `docs/plans/2026-03-24-demo-implementation-design.md` — design decisions & data flow
 - **Solution architecture**: `docs/architecture/solution-architecture.md` — full enterprise vision
 - **PA case definitions**: `data/sample_pa_cases/README.md` — 5 test cases with expected outcomes

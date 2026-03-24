@@ -1,5 +1,10 @@
 # Architecture Rules
 
+## Hard Constraints
+
+- **Anthropic SDK only** — no LangChain, no LlamaIndex, no AI framework wrappers
+- **Azure-only for cloud hosting** — no Vercel, no Heroku, no AWS deployment
+
 ## Service Boundaries
 
 | File | Responsibility |

@@ -282,18 +282,18 @@ Each phase produces a deployable, demonstrable system. Decision gates between ph
 
 ## Sources
 
-| Claim | Source | Notes |
-|-------|--------|-------|
-| $10.97 manual PA labor cost (provider) | [2024 CAQH Index](https://www.caqh.org/hubfs/Index/2024%20Index%20Report/CAQH_IndexReport_2024_FINAL.pdf), Prior Authorization row | Weighted avg labor cost (salaries + benefits + overhead) per manual transaction; excludes system costs |
-| $3.52 manual PA labor cost (payer) | Same | Same methodology, health plan side |
-| ~$0.05 electronic PA cost (payer) | Same | Fully electronic transaction |
-| 45% review time reduction | [Altais/Autonomize (Feb 2026)](https://www.businesswire.com/news/home/20260224376992/en/Altais-Cuts-Prior-Authorization-Review-Time-by-45-and-Reduces-Manual-Errors-by-54-with-Autonomize-AI) | Press release headline metric |
-| 54% error reduction | Same | |
-| 50% auto-determination rate | Same | |
-| 93% physicians — PA delays care | [AMA 2024 Survey](https://www.ama-assn.org/system/files/prior-authorization-survey.pdf) | Survey of 1,000 practicing physicians, Dec 2024 |
-| CMS-0057-F Phase 1 live Jan 2026 | [CMS Fact Sheet](https://www.cms.gov/newsroom/fact-sheets/cms-interoperability-prior-authorization-final-rule-cms-0057-f) | |
-| CMS-0057-F Phase 2 Jan 2027 | Same | |
-| Autonomize — 3 of top 5 plans | [Autonomize AI](https://autonomize.ai/) | |
-| Autonomize Azure Marketplace | [Azure Marketplace](https://azuremarketplace.microsoft.com/en-us/marketplace/apps/284109.autonomize-prior-auth-copilot) | |
-| Autonomize ServiceNow partnership | [BusinessWire (Mar 2026)](https://www.businesswire.com/news/home/20260305091710/en/Autonomize-AI-Partners-with-ServiceNow-to-Build-AI-Driven-Healthcare-Solutions-for-Payers) | |
-| Claude in Azure AI Foundry | [Microsoft Learn](https://learn.microsoft.com/en-us/azure/foundry/foundry-models/how-to/use-foundry-models-claude) | |
+| # | Claim | Source | Notes |
+| --- | ----- | ------ | ----- |
+| 1 | $10.97 manual PA labor cost (provider) | [2024 CAQH Index, p. 9](https://www.caqh.org/hubfs/Index/2024%20Index%20Report/CAQH_IndexReport_2024_FINAL.pdf) | Prior Authorization row; weighted avg labor cost (salaries + benefits + overhead) per manual transaction; excludes system costs |
+| 2 | $3.52 manual PA labor cost (payer) | [2024 CAQH Index, p. 9](https://www.caqh.org/hubfs/Index/2024%20Index%20Report/CAQH_IndexReport_2024_FINAL.pdf) | Prior Authorization row; weighted avg labor cost per manual transaction, health plan side |
+| 3 | ~$0.05 electronic PA cost (payer) | [2024 CAQH Index, p. 9](https://www.caqh.org/hubfs/Index/2024%20Index%20Report/CAQH_IndexReport_2024_FINAL.pdf) | Fully electronic transaction cost |
+| 4 | 45% PA review time reduction | [Altais + Autonomize AI press release (Feb 2026)](https://www.businesswire.com/news/home/20260224376992/en/Altais-Cuts-Prior-Authorization-Review-Time-by-45-and-Reduces-Manual-Errors-by-54-with-Autonomize-AI) | Headline metric from joint press release |
+| 5 | 54% manual error reduction | [Altais + Autonomize AI press release (Feb 2026)](https://www.businesswire.com/news/home/20260224376992/en/Altais-Cuts-Prior-Authorization-Review-Time-by-45-and-Reduces-Manual-Errors-by-54-with-Autonomize-AI) | Headline metric from joint press release |
+| 6 | 50% auto-determination rate | [Altais + Autonomize AI press release (Feb 2026)](https://www.businesswire.com/news/home/20260224376992/en/Altais-Cuts-Prior-Authorization-Review-Time-by-45-and-Reduces-Manual-Errors-by-54-with-Autonomize-AI) | Headline metric from joint press release |
+| 7 | 93% of physicians say PA delays care | [AMA 2024 Prior Authorization Survey, p. 5](https://www.ama-assn.org/system/files/prior-authorization-survey.pdf) | Survey of 1,000 practicing physicians, Dec 2024 |
+| 8 | CMS-0057-F Phase 1 operational Jan 2026 | [CMS Interoperability & Prior Authorization Final Rule Fact Sheet](https://www.cms.gov/newsroom/fact-sheets/cms-interoperability-prior-authorization-final-rule-cms-0057-f) | Operational provisions: decision timeframes, metrics reporting |
+| 9 | CMS-0057-F Phase 2 APIs due Jan 2027 | [CMS Interoperability & Prior Authorization Final Rule Fact Sheet](https://www.cms.gov/newsroom/fact-sheets/cms-interoperability-prior-authorization-final-rule-cms-0057-f) | API requirements: Patient Access, Provider Access, Payer-to-Payer, Prior Authorization APIs |
+| 10 | Autonomize live at 3 of 5 largest US health plans | [Autonomize AI leadership hires press release (Feb 2026)](https://www.businesswire.com/news/home/20260226730170/en/Autonomize-AI-Strengthens-Leadership-with-Senior-Healthcare-Marketing-and-Regulatory-Hires) | Exact wording: "live at three of the five largest U.S. health plans" |
+| 11 | Autonomize Prior Auth Copilot on Azure Marketplace | [Azure Marketplace listing](https://azuremarketplace.microsoft.com/en-us/marketplace/apps/284109.autonomize-prior-auth-copilot) | SaaS product listing |
+| 12 | Autonomize + ServiceNow partnership | [Autonomize + ServiceNow press release (Mar 2026)](https://www.businesswire.com/news/home/20260305091710/en/Autonomize-AI-Partners-with-ServiceNow-to-Build-AI-Driven-Healthcare-Solutions-for-Payers) | AI-driven healthcare solutions for payers |
+| 13 | Claude models available in Azure AI Foundry | [Microsoft Learn: Deploy Claude in Microsoft Foundry](https://learn.microsoft.com/en-us/azure/foundry/foundry-models/how-to/use-foundry-models-claude) | Opus, Sonnet, Haiku model families via global standard deployment |

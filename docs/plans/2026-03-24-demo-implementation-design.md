@@ -4,8 +4,9 @@
 
 ## Summary
 
-This design document captures the validated architecture and build-step implementation plan for the AI-driven PA demo. The full implementation specification is at:
-`.claude/plans/demo-implementation-prompt.md`
+This design document captures the validated architecture and build-step implementation plan for the AI-driven PA demo. Implementation specs are modular:
+- `.claude/plans/shared-context.md` — cross-step context (model, service contracts, version control)
+- `.claude/plans/step-1-core-engine.md` through `step-5-managed-services.md` — per-step specs
 
 ## Key Design Decisions
 

@@ -128,3 +128,30 @@ I'll take you through the architecture in tiers -- executive context, then techn
 **Template**: "That's a great discovery question -- here's what I'd want to find out and why it matters for the architecture."
 
 **Example**: "Do you know the Payer Core API spec?" -- "I don't -- that's the first thing I'd validate. If REST, the synchronous eligibility check works as designed. If SOAP or batch-only, I'd redesign to use a pre-fetched cache. I've built both patterns."
+
+---
+
+## Live Demo Walkthrough (5-6 minutes)
+
+> Use during the presentation after the architecture slides. Run all 5 cases in order 1→4→3→5→2.
+
+**Opening** (30 seconds):
+"To validate the architecture I'm proposing, I built a working proof-of-concept this morning. It demonstrates the core AI-driven PA review flow -- the same pattern that would integrate with Autonomize's PA Copilot in production."
+
+**Case 1 -- Lumbar MRI Auto-Approval** (60 seconds):
+"Here's a straightforward case -- lumbar MRI after 8 weeks of failed conservative treatment. The AI checks the ICD-10 codes against CMS coverage criteria, validates the provider's NPI, reviews the clinical evidence, and returns an approval with 90%+ confidence in under 30 seconds. In production, this type of case would be auto-approved without human review -- that's the 50% auto-determination rate Altais achieved with your platform."
+
+**Case 4 -- Humira Missing Documentation** (60 seconds):
+"Now a specialty drug case -- Humira for rheumatoid arthritis. The provider says 'failed methotrexate' but didn't include the dose, duration, or labs. Instead of a generic 'send more info' response, the AI identifies the five specific items missing -- methotrexate details, RF and CRP labs, DAS28 score, biosimilar consideration, and complete DMARD history. This reduces back-and-forth cycles, which is the number one provider complaint about PA."
+
+**Case 3 -- Spinal Fusion Complex Review** (90 seconds):
+"This is the most interesting case -- a 2-level spinal fusion. The AI finds that some criteria are met -- MRI confirms stenosis, EMG confirms radiculopathy -- but flags specific gaps: only 8 PT sessions versus the 12 typically required, no epidural steroid injections attempted, and the patient's A1C of 8.2% creates surgical risk. Rather than approve or deny, it routes to the medical director with a structured summary for a peer-to-peer call. This is where AI augments the clinical reviewer instead of replacing them."
+
+**Case 5 -- Urgent Oncology** (60 seconds):
+"An urgent case -- first-line Keytruda for Stage IIIB non-small cell lung cancer. The AI recognizes the NCCN Category 1 recommendation for PD-L1-high NSCLC, confirms the clinical evidence, and approves within the 72-hour urgent timeline mandated by CMS-0057-F. The audit trail captures the full reasoning chain, model version, and evidence citations -- that's your 7-year HIPAA compliance trail."
+
+**Case 2 -- Cosmetic Rhinoplasty Denial** (30 seconds):
+"Finally, a clear denial -- rhinoplasty with a mismatched diagnosis code. The AI catches the mismatch between actinic keratosis and rhinoplasty, identifies the lack of functional indication, and generates a denial with the specific clinical reason required by CMS-0057-F. In Phase 1 production, this would still route to a human reviewer before finalizing the denial."
+
+**Bridge to Architecture** (60 seconds):
+"What you just saw is Phase 0 of the roadmap. The clinical review engine uses Claude's tool use to check NPI registries, validate ICD-10 codes, and look up CMS coverage criteria -- real data sources, not hardcoded rules. The FHIR R4 data model means this plugs directly into your existing health plan integrations. Phase 1 would connect this to Autonomize's PA Copilot on the Genesis Platform, replace the mock eligibility service with a real Facets integration, and add the clinical review dashboard you already have in AI Studio."

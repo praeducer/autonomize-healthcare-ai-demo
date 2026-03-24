@@ -11,7 +11,7 @@
 | **1 hour before** | [interview-prep/pre-show-checklist.md](interview-prep/pre-show-checklist.md) | Checklists, risk awareness, rehearsal items |
 | **During presentation** | [presentation.md](architecture/presentation.md) + [speaker-script.md](architecture/speaker-script.md) | Slides on screen + speaking notes in hand |
 | **During Q&A** | [interview-prep/quick-reference.md](interview-prep/quick-reference.md) | 18 anticipated questions with 60-second answers |
-| **Morning demo build** | [demo-implementation-prompt.md](../.claude/plans/demo-implementation-prompt.md) | Claude Code plan for building the PA review demo |
+| **Morning demo build** | [Build step plans](../.claude/plans/) | Modular Claude Code plans (shared-context + step 1-5) |
 | **Before sending email** | [email-draft.md](interview-prep/email-draft.md) | Email to panel with attachments |
 
 ---
@@ -64,5 +64,5 @@
 ### Plans
 | File | Description |
 |------|-------------|
-| [demo-implementation-prompt.md](../.claude/plans/demo-implementation-prompt.md) | Claude Code plan for demo build (March 24 morning) |
+| [Build step plans](../.claude/plans/) | Modular Claude Code plans: `shared-context.md` + `step-1` through `step-5` |
 | [demo-implementation-design.md](plans/2026-03-24-demo-implementation-design.md) | Design summary for demo implementation |
