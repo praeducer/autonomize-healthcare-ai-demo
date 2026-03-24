@@ -1,0 +1,20 @@
+{% for det in determinations %}
+<tr>
+    <td>{{ det.case_name or "—" }}</td>
+    <td>
+        {% if det.determination == "APPROVED" %}
+        <span class="badge badge-approved">APPROVED</span>
+        {% elif det.determination == "DENIED" %}
+        <span class="badge badge-denied">DENIED</span>
+        {% else %}
+        <span class="badge badge-pended">{{ det.determination }}</span>
+        {% endif %}
+    </td>
+    <td>{{ "%.0f"|format(det.confidence_score * 100) }}%</td>
+    <td>{{ "%.1f"|format(det.processing_time_seconds) }}s</td>
+    <td>{{ det.created_at[:19] }}</td>
+</tr>
+{% endfor %}
+{% if not determinations %}
+<tr><td colspan="5" style="text-align:center; color: var(--pico-muted-color);">No reviews yet.</td></tr>
+{% endif %}

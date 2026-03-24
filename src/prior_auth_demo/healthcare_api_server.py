@@ -55,11 +55,16 @@ async def lifespan(application: FastAPI) -> AsyncIterator[None]:
 app = FastAPI(
     title="Prior Authorization Review API",
     description="AI-driven prior authorization clinical review using Claude and FHIR R4",
-    version="0.2.0",
+    version="0.3.0",
     lifespan=lifespan,
 )
 
 app.include_router(eligibility_router, prefix="/mock/eligibility")
+
+# Dashboard routes — HTML responses for web UI (additive, does not affect API routes)
+from prior_auth_demo.web_dashboard.dashboard_routes import router as dashboard_router  # noqa: E402
+
+app.include_router(dashboard_router)
 
 
 @app.get("/health")
@@ -78,7 +83,7 @@ async def health_check() -> dict[str, Any]:
     return {
         "status": "healthy",
         "fhir_server": fhir_status,
-        "version": "0.2.0",
+        "version": app.version,
     }
 
 

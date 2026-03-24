@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Prior Authorization Review</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2.0.6/css/pico.min.css">
+    <script src="https://unpkg.com/htmx.org@2.0.4"></script>
+    <style>
+        :root {
+            --color-approved: #2ecc40;
+            --color-denied: #e74c3c;
+            --color-pended: #f39c12;
+        }
+        body { font-size: 1.1rem; }
+        header h1 { font-size: 1.6rem; margin-bottom: 0.25rem; }
+        header p { margin-top: 0; color: var(--pico-muted-color); }
+        .badge {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            border-radius: 4px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: #fff;
+        }
+        .badge-approved { background: var(--color-approved); }
+        .badge-denied { background: var(--color-denied); }
+        .badge-pended { background: var(--color-pended); }
+        .confidence-label { font-size: 1.3rem; font-weight: 600; }
+        blockquote { font-size: 1rem; line-height: 1.6; border-left: 4px solid var(--pico-primary); }
+        .history-table td, .history-table th { padding: 0.5rem 0.75rem; font-size: 0.95rem; }
+        .result-card { padding: 1.5rem; }
+        .htmx-indicator { display: none; }
+        .htmx-request .htmx-indicator { display: inline-block; }
+        footer { text-align: center; font-size: 0.85rem; color: var(--pico-muted-color); margin-top: 2rem; }
+        .grid-layout { display: grid; grid-template-columns: 1fr 2fr; gap: 2rem; align-items: start; }
+        @media (max-width: 768px) { .grid-layout { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <main class="container">
+        <header>
+            <h1>Prior Authorization Review</h1>
+            <p>AI-Driven Clinical Decision Support &mdash; Autonomize AI Demo</p>
+        </header>
+
+        <div class="grid-layout">
+            <section>
+                <article>
+                    <h3>Submit Case for Review</h3>
+                    <form hx-post="/dashboard/review"
+                          hx-target="#result-panel"
+                          hx-swap="innerHTML"
+                          hx-indicator="#spinner">
+                        <label for="case_name">Select PA Case</label>
+                        <select id="case_name" name="case_name" required>
+                            {% for case in cases %}
+                            <option value="{{ case.filename }}">{{ case.label }}</option>
+                            {% endfor %}
+                        </select>
+                        <button type="submit">
+                            Submit for Review
+                            <span id="spinner" class="htmx-indicator" aria-busy="true"> Reviewing...</span>
+                        </button>
+                    </form>
+                </article>
+            </section>
+
+            <section>
+                <div id="result-panel">
+                    <article>
+                        <p style="text-align:center; color: var(--pico-muted-color);">
+                            Select a case and click "Submit for Review" to see the AI determination.
+                        </p>
+                    </article>
+                </div>
+            </section>
+        </div>
+
+        <section>
+            <h3>Determination History</h3>
+            <figure>
+                <table class="history-table">
+                    <thead>
+                        <tr>
+                            <th>Case</th>
+                            <th>Determination</th>
+                            <th>Confidence</th>
+                            <th>Time</th>
+                            <th>Reviewed</th>
+                        </tr>
+                    </thead>
+                    <tbody id="history-body"
+                           hx-get="/dashboard/history"
+                           hx-trigger="load, every 15s"
+                           hx-swap="innerHTML">
+                    </tbody>
+                </table>
+            </figure>
+        </section>
+
+        <footer>
+            <p>Phase 0 Demo &mdash; Full architecture in solution-architecture.md</p>
+        </footer>
+    </main>
+</body>
+</html>

@@ -1,0 +1,46 @@
+<article class="result-card">
+    <header>
+        {% if determination == "APPROVED" %}
+        <span class="badge badge-approved">APPROVED</span>
+        {% elif determination == "DENIED" %}
+        <span class="badge badge-denied">DENIED</span>
+        {% else %}
+        <span class="badge badge-pended">{{ determination }}</span>
+        {% endif %}
+        <span class="confidence-label" style="margin-left: 1rem;">{{ "%.0f"|format(confidence_score * 100) }}% confidence</span>
+    </header>
+
+    <label>Confidence</label>
+    <progress value="{{ (confidence_score * 100)|int }}" max="100"
+        {% if determination == "APPROVED" %}style="--pico-progress-color: var(--color-approved);"
+        {% elif determination == "DENIED" %}style="--pico-progress-color: var(--color-denied);"
+        {% else %}style="--pico-progress-color: var(--color-pended);"{% endif %}
+    ></progress>
+
+    {% if determination in ("PENDED_FOR_REVIEW", "PENDED_MISSING_INFO") %}
+    <p><small><em>This case would be routed to a human clinical reviewer for final determination.</em></small></p>
+    {% endif %}
+
+    <h4>Clinical Rationale</h4>
+    <blockquote>{{ clinical_rationale }}</blockquote>
+
+    <h4>Guideline Citations</h4>
+    <ul>
+        {% for citation in guideline_citations %}
+        <li>{{ citation }}</li>
+        {% endfor %}
+    </ul>
+
+    {% if missing_documentation %}
+    <h4 style="color: var(--color-pended);">Missing Documentation</h4>
+    <ul>
+        {% for item in missing_documentation %}
+        <li><strong>{{ item }}</strong></li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+    <footer>
+        <small>Processing time: {{ "%.1f"|format(review_duration_seconds) }}s</small>
+    </footer>
+</article>

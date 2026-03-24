@@ -3,46 +3,60 @@
 > **Owner**: Paul Prae | **Status**: In Progress
 > **Scope**: Everything you need to do before the Autonomize AI interview demo
 
+Each task includes the Claude Code command to run once the human task is done.
+
 ---
 
 ## After Step 1 (CLI Engine) — v0.1.0
 
-- [ ] Run UAT: `make review-all` — verify all 5 cases produce expected results (see `docs/uat-guide.md`)
-- [ ] Read each rationale aloud — does it sound like a clinical reviewer wrote it?
-- [ ] Check the ICD-10 codes in each case against real clinical scenarios — would an ex-Elevance reviewer find these realistic?
+- [ ] **Run UAT**: `make review-all` — verify all 5 cases produce expected results
+  - *Then run*: `make test-unit` to confirm automated tests agree
+- [ ] **Read rationale quality**: Read each case's rationale aloud — does it sound like a clinical reviewer wrote it?
+  - *This is UAT-only* — automated tests check keywords but can't judge clinical tone
+- [ ] **Clinical realism check**: Would an ex-Elevance reviewer find the ICD-10 codes and scenarios realistic?
+  - *Reference*: `data/sample_pa_cases/README.md` for case definitions
 
 ## After Step 2 (REST API) — v0.2.0
 
-- [ ] Start Docker Desktop and run `docker compose up -d && make load-fhir-data`
-- [ ] Open `http://localhost:8000/docs` — walk through Swagger UI
-- [ ] Submit Case 1 via Swagger POST — verify APPROVED with audit trail
-- [ ] Open `http://localhost:8080` — verify HAPI FHIR has patient data
-- [ ] Run `make review` — verify CLI still works independently
-- [ ] Run `make down && make review` — verify CLI works without Docker
+- [ ] **Start Docker**: `docker compose up -d && make load-fhir-data`
+  - *Then run*: `make test-integration` to verify FHIR server connectivity
+- [ ] **Swagger walkthrough**: Open `http://localhost:8000/docs` — try each endpoint
+  - *Then run*: `make test-e2e` to run API E2E tests
+- [ ] **CLI independence**: `make down && make review` — CLI must work without Docker
+  - *This validates the decoupling architecture*
 
 ## After Step 3 (Web Dashboard) — v0.3.0
 
-- [ ] Full demo walkthrough: Cases 1→4→3→5→2 in order
-- [ ] Time it — target 5-6 minutes total
-- [ ] Test at 1920x1080 fullscreen — all text readable on projector?
-- [ ] Rehearse the narrative: "Here's a clear approval... now missing info... ambiguous... urgent oncology... denial"
-- [ ] Have someone else watch the demo — are the badges and rationale clear to a non-technical viewer?
+- [ ] **Dashboard smoke test**: `make dev` → open `http://localhost:8000`
+  - *Verify*: Case selector loads, 5 cases in demo order, no console errors
+- [ ] **Full demo walkthrough**: Submit cases in order 1→4→3→5→2
+  - *Target*: 5-6 minutes total, each case < 60 seconds
+  - *Narrative*: "Clear approval → missing docs → ambiguous → urgent oncology → denial"
+- [ ] **Projector test**: Fullscreen at 1920x1080 — all text readable? Badges visible?
+  - *This is UAT-only* — no automated test can verify projector readability
+- [ ] **History panel**: After 5 cases, verify history table shows all 5 with correct determinations
+- [ ] **Swagger regression**: Open `http://localhost:8000/docs` — Swagger still works alongside dashboard
+- [ ] **CLI regression**: `make review` in a separate terminal — CLI still works independently
+- [ ] **Audience test**: Have someone else watch the demo — are badges and rationale clear to a non-technical viewer?
 
 ## Before Interview
 
-- [ ] Prepare 2-minute architecture overview using `docs/architecture/solution-architecture.md`
-- [ ] Know the CAQH cost numbers cold: $3.47 savings per automated PA, $10.97 provider cost
-- [ ] Be ready to explain: "Why not auto-deny?" → CMS-0057-F, liability, clinical safety
-- [ ] Be ready to explain: "Why Claude, not GPT?" → tool use, FHIR-native reasoning, Anthropic safety
-- [ ] Be ready to explain: "How does this scale?" → Azure Container Apps, Service Bus, PostgreSQL (see solution architecture §2)
-- [ ] Have fallback demo ready: if Step 3 fails, demo via Swagger UI (Step 2); if that fails, CLI (Step 1)
-- [ ] Test the `.env` on the demo machine — API key works, model ID is correct
+- [ ] **Architecture prep**: 2-minute overview from `docs/architecture/solution-architecture.md`
+- [ ] **Key numbers**: $3.47 savings per automated PA (CAQH 2024), $10.97 provider cost, 93% of physicians report PA delays (AMA 2024)
+- [ ] **Anticipated questions**:
+  - "Why not auto-deny?" → CMS-0057-F compliance, clinical safety, liability
+  - "Why Claude?" → Tool use pattern, FHIR-native reasoning, Anthropic safety alignment
+  - "How does this scale?" → Azure Container Apps, Service Bus, PostgreSQL (solution architecture §2)
+  - "What about real PHI?" → All data synthetic (Synthea), PHI tokenization before LLM in production
+- [ ] **Fallback plan**: If Step 3 fails → demo via Swagger UI (Step 2); if that fails → CLI (Step 1)
+- [ ] **Demo machine check**: `.env` has valid API key, Docker running, `make install` done, internet connected
+- [ ] **Backup recording**: Screenshot or recording of a successful demo run in case of API outage
 
-## Infrastructure
+## Infrastructure Checklist
 
-- [ ] Docker Desktop installed and running on demo machine
+- [ ] Docker Desktop installed and running
 - [ ] Python 3.12+ installed
-- [ ] `make install` completed successfully
-- [ ] `.env` file has valid `ANTHROPIC_API_KEY`
-- [ ] Internet connectivity for Claude API calls during demo
-- [ ] Backup: screenshot/recording of a successful demo run in case of API outage
+- [ ] `make install` completed
+- [ ] `.env` file configured with valid `ANTHROPIC_API_KEY`
+- [ ] Internet connectivity for Claude API calls
+- [ ] HAPI FHIR loaded: `docker compose up -d && make load-fhir-data`
