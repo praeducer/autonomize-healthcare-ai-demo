@@ -175,6 +175,9 @@ These are questions a thorough SA would ask before committing to implementation.
 > **CAQH methodology**: Costs are weighted average **labor costs** (salaries + wages + benefits + overhead) per transaction, measured via annual provider/plan survey. Excludes technology/system costs and time spent gathering information. The $10.97 provider figure and $3.52 payer figure reflect the same methodology applied to each side of the transaction.
 >
 > **Data vintage**: Per-transaction costs are from the **2024 CAQH Index** (2023 data) — the most recent with publicly verifiable per-transaction figures. The **[2025 CAQH Index](https://www.caqh.org/blog/2025-caqh-index-shows-u.s.-healthcare-avoided-258-billion-and-accelerated-automation-interoperability-and-ai-adoption)** (Feb 2026, 2024 data) estimates **$515M annual PA savings opportunity**, reports providers save **14 minutes per authorization** through automation, and finds **50%+ of health plans** now use AI in administrative workflows. Per-transaction cost breakdown moved behind Index Pro paywall.
+
+| Metric | Value | Source |
+|---|---|---|
 | Review time reduction (Altais) | 45% | [BusinessWire Feb 2026](https://www.businesswire.com/news/home/20260224376992/en/Altais-Cuts-Prior-Authorization-Review-Time-by-45-and-Reduces-Manual-Errors-by-54-with-Autonomize-AI) |
 | Error reduction (Altais) | 54% | Same |
 | Auto-approval rate (Altais) | 50% | Same |
