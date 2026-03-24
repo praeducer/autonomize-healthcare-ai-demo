@@ -1,0 +1,142 @@
+{
+  "coverage_criteria": [
+    {
+      "procedure_code": "72148",
+      "procedure_description": "MRI lumbar spine without contrast",
+      "coding_system": "CPT",
+      "coverage_requirements": [
+        "Documented failure of conservative treatment (minimum 4-6 weeks)",
+        "Physical therapy trial documented (minimum 6 sessions)",
+        "Red flag symptoms present (radiculopathy, progressive neurological deficit, cauda equina syndrome) OR failure to improve with conservative management",
+        "Clinical correlation with physical examination findings"
+      ],
+      "auto_approve_criteria": [
+        "Conservative treatment failure >= 6 weeks AND radiculopathy on exam",
+        "Progressive neurological deficit",
+        "Cauda equina syndrome (emergency)"
+      ],
+      "denial_criteria": [
+        "No trial of conservative therapy",
+        "Purely cosmetic indication",
+        "Duplicate imaging within 6 months without clinical change"
+      ],
+      "references": [
+        "CMS LCD L35028 - MRI of the Spine",
+        "ACR Appropriateness Criteria - Low Back Pain (2024)",
+        "AHRQ Guideline - Noninvasive Treatments for Low Back Pain"
+      ]
+    },
+    {
+      "procedure_code": "30400",
+      "procedure_description": "Rhinoplasty, primary; lateral and alar cartilages and/or elevation of nasal tip",
+      "coding_system": "CPT",
+      "coverage_requirements": [
+        "Documented functional impairment (nasal airway obstruction)",
+        "Failed trial of medical management (nasal steroids, antihistamines)",
+        "Objective testing (rhinomanometry or acoustic rhinometry) showing obstruction",
+        "Pre-authorization photos showing deformity IF reconstructive"
+      ],
+      "auto_approve_criteria": [
+        "Documented nasal obstruction with objective testing AND failed medical therapy",
+        "Post-traumatic nasal deformity with functional impairment"
+      ],
+      "denial_criteria": [
+        "Cosmetic indication only",
+        "No documentation of functional impairment",
+        "Diagnosis-procedure mismatch (e.g., skin condition diagnosis for nasal surgery)"
+      ],
+      "references": [
+        "CMS NCD 160.16 - Rhinoplasty",
+        "ASPS Clinical Practice Guideline - Rhinoplasty"
+      ]
+    },
+    {
+      "procedure_code": "22612",
+      "procedure_description": "Lumbar arthrodesis (spinal fusion), posterior or posterolateral technique",
+      "coding_system": "CPT",
+      "coverage_requirements": [
+        "Documented failure of conservative treatment (minimum 3-6 months)",
+        "Physical therapy (minimum 12 sessions or 6 weeks)",
+        "At least one epidural steroid injection trial",
+        "Imaging correlation (MRI/CT) showing structural pathology",
+        "Psychological clearance for chronic pain patients",
+        "BMI < 40 (relative contraindication above)",
+        "Hemoglobin A1C < 8.0% for diabetic patients"
+      ],
+      "auto_approve_criteria": [
+        "Spondylolisthesis Grade II+ with neurological deficit",
+        "Spinal instability on flexion/extension films",
+        "Failed conservative care >= 6 months with all documentation complete"
+      ],
+      "denial_criteria": [
+        "Less than 12 weeks conservative treatment",
+        "No epidural steroid injection trial",
+        "BMI > 40 without documented weight management",
+        "Uncontrolled diabetes (A1C > 9.0%)"
+      ],
+      "references": [
+        "CMS LCD L37950 - Lumbar Spinal Fusion",
+        "NASS Guidelines - Lumbar Fusion (2024)",
+        "Spine Patient Outcomes Research Trial (SPORT)"
+      ]
+    },
+    {
+      "procedure_code": "J0135",
+      "procedure_description": "Injection, adalimumab (Humira), 20 mg",
+      "coding_system": "HCPCS",
+      "coverage_requirements": [
+        "Confirmed diagnosis of indicated condition (RA, PsA, AS, Crohn's, UC)",
+        "Documentation of disease severity (DAS28 score for RA)",
+        "Failed adequate trial of conventional DMARDs (methotrexate at 15-25mg/week for >= 3 months)",
+        "Laboratory results: RF, anti-CCP, ESR, CRP within 3 months",
+        "TB screening (PPD or QuantiFERON) within 12 months",
+        "Hepatitis B/C screening",
+        "Biosimilar step therapy consideration"
+      ],
+      "auto_approve_criteria": [
+        "DAS28 >= 5.1 AND failed methotrexate 20mg/week >= 3 months with documentation",
+        "Biosimilar requested as first-line biologic"
+      ],
+      "denial_criteria": [
+        "No documentation of DMARD failure",
+        "No disease severity scoring",
+        "Active untreated TB or hepatitis"
+      ],
+      "references": [
+        "CMS LCD L33822 - Biologic DMARDs for Autoimmune Conditions",
+        "ACR 2024 RA Treatment Guidelines",
+        "FDA Label - Adalimumab (Humira)"
+      ]
+    },
+    {
+      "procedure_code": "J9271",
+      "procedure_description": "Injection, pembrolizumab (Keytruda), 1 mg",
+      "coding_system": "HCPCS",
+      "coverage_requirements": [
+        "Biopsy-confirmed malignancy with FDA-approved indication",
+        "Biomarker testing (PD-L1 TPS for NSCLC, MSI/dMMR for applicable cancers)",
+        "ECOG performance status 0-2",
+        "Absence of contraindicated mutations (EGFR, ALK for NSCLC first-line mono)",
+        "Staging documentation",
+        "Prior treatment history for non-first-line indications"
+      ],
+      "auto_approve_criteria": [
+        "NSCLC with PD-L1 TPS >= 50% AND no EGFR/ALK AND ECOG 0-1 (NCCN Category 1)",
+        "MSI-H/dMMR solid tumor after prior treatment",
+        "Urgent/emergent oncology with NCCN Category 1 evidence"
+      ],
+      "denial_criteria": [
+        "No biomarker testing performed",
+        "ECOG performance status >= 3",
+        "Active autoimmune disease requiring systemic immunosuppression",
+        "Non-FDA-approved indication without clinical trial enrollment"
+      ],
+      "references": [
+        "CMS NCD 110.17 - Anti-cancer Chemotherapy",
+        "NCCN Guidelines - Non-Small Cell Lung Cancer v4.2026",
+        "FDA Label - Pembrolizumab (Keytruda)",
+        "CMS-0057-F - Prior Authorization and Interoperability Final Rule (72-hour SLA)"
+      ]
+    }
+  ]
+}

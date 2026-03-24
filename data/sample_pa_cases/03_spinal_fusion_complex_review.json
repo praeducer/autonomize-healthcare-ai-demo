@@ -1,0 +1,362 @@
+{
+  "resourceType": "Bundle",
+  "id": "pa-bundle-03-spinal-fusion-complex-review",
+  "type": "collection",
+  "timestamp": "2026-03-24T10:00:00Z",
+  "entry": [
+    {
+      "fullUrl": "urn:uuid:claim-03",
+      "resource": {
+        "resourceType": "Claim",
+        "id": "claim-03",
+        "status": "active",
+        "type": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/claim-type",
+              "code": "professional",
+              "display": "Professional"
+            }
+          ]
+        },
+        "use": "preauthorization",
+        "patient": {
+          "reference": "Patient/pat-03"
+        },
+        "created": "2026-03-24",
+        "provider": {
+          "reference": "Practitioner/pract-03"
+        },
+        "priority": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/processpriority",
+              "code": "normal",
+              "display": "Normal"
+            }
+          ]
+        },
+        "insurance": [
+          {
+            "sequence": 1,
+            "focal": true,
+            "coverage": {
+              "reference": "Coverage/cov-03"
+            }
+          }
+        ],
+        "diagnosis": [
+          {
+            "sequence": 1,
+            "diagnosisCodeableConcept": {
+              "coding": [
+                {
+                  "system": "http://hl7.org/fhir/sid/icd-10-cm",
+                  "code": "M47.816",
+                  "display": "Spondylosis without myelopathy or radiculopathy, lumbar region"
+                }
+              ]
+            }
+          },
+          {
+            "sequence": 2,
+            "diagnosisCodeableConcept": {
+              "coding": [
+                {
+                  "system": "http://hl7.org/fhir/sid/icd-10-cm",
+                  "code": "M48.06",
+                  "display": "Spinal stenosis, lumbar region"
+                }
+              ]
+            }
+          },
+          {
+            "sequence": 3,
+            "diagnosisCodeableConcept": {
+              "coding": [
+                {
+                  "system": "http://hl7.org/fhir/sid/icd-10-cm",
+                  "code": "E11.9",
+                  "display": "Type 2 diabetes mellitus without complications"
+                }
+              ]
+            }
+          }
+        ],
+        "item": [
+          {
+            "sequence": 1,
+            "productOrService": {
+              "coding": [
+                {
+                  "system": "http://www.ama-assn.org/go/cpt",
+                  "code": "22612",
+                  "display": "Lumbar arthrodesis"
+                }
+              ]
+            }
+          },
+          {
+            "sequence": 2,
+            "productOrService": {
+              "coding": [
+                {
+                  "system": "http://www.ama-assn.org/go/cpt",
+                  "code": "22614",
+                  "display": "Arthrodesis, each additional interspace"
+                }
+              ]
+            }
+          },
+          {
+            "sequence": 3,
+            "productOrService": {
+              "coding": [
+                {
+                  "system": "http://www.ama-assn.org/go/cpt",
+                  "code": "22842",
+                  "display": "Posterior segmental instrumentation"
+                }
+              ]
+            }
+          }
+        ],
+        "supportingInfo": [
+          {
+            "sequence": 1,
+            "category": {
+              "coding": [
+                {
+                  "system": "http://terminology.hl7.org/CodeSystem/claiminformationcategory",
+                  "code": "info",
+                  "display": "Information"
+                }
+              ]
+            },
+            "valueString": "61-year-old male with 18-month history of progressive low back pain and bilateral lower extremity claudication. MRI shows moderate central canal stenosis at L4-L5 with Grade I degenerative spondylolisthesis. EMG/NCV shows mild bilateral L5 radiculopathy. Patient has type 2 diabetes (most recent A1C 8.2%), BMI 34."
+          },
+          {
+            "sequence": 2,
+            "category": {
+              "coding": [
+                {
+                  "system": "http://terminology.hl7.org/CodeSystem/claiminformationcategory",
+                  "code": "info",
+                  "display": "Information"
+                }
+              ]
+            },
+            "valueString": "Conservative treatment: Physical therapy x 8 sessions over 6 weeks — some improvement in function. One lumbar epidural steroid injection (L4-L5) with 40% pain relief lasting 3 weeks. No second ESI attempted. Patient reports pain 6/10 at rest, 8/10 with ambulation > 2 blocks. Currently on gabapentin 300mg TID and meloxicam 15mg daily."
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:pat-03",
+      "resource": {
+        "resourceType": "Patient",
+        "id": "pat-03",
+        "identifier": [
+          {
+            "type": {
+              "coding": [
+                {
+                  "system": "http://terminology.hl7.org/CodeSystem/v2-0203",
+                  "code": "MR",
+                  "display": "Medical Record Number"
+                }
+              ]
+            },
+            "value": "MBR-2026-003"
+          }
+        ],
+        "name": [
+          {
+            "use": "official",
+            "family": "Davis",
+            "given": ["William"]
+          }
+        ],
+        "gender": "male",
+        "birthDate": "1964-09-08"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:pract-03",
+      "resource": {
+        "resourceType": "Practitioner",
+        "id": "pract-03",
+        "identifier": [
+          {
+            "system": "http://hl7.org/fhir/sid/us-npi",
+            "value": "1497758544"
+          }
+        ],
+        "name": [
+          {
+            "family": "Kim",
+            "given": ["Sarah"],
+            "prefix": ["Dr."]
+          }
+        ],
+        "qualification": [
+          {
+            "code": {
+              "coding": [
+                {
+                  "system": "http://terminology.hl7.org/CodeSystem/v2-0360",
+                  "code": "MD",
+                  "display": "Doctor of Medicine"
+                }
+              ],
+              "text": "Neurosurgery"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:cov-03",
+      "resource": {
+        "resourceType": "Coverage",
+        "id": "cov-03",
+        "status": "active",
+        "type": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode",
+              "code": "MCPOL",
+              "display": "Medicare Policy"
+            }
+          ]
+        },
+        "subscriber": {
+          "reference": "Patient/pat-03"
+        },
+        "beneficiary": {
+          "reference": "Patient/pat-03"
+        },
+        "payor": [
+          {
+            "reference": "Organization/insurer-03",
+            "display": "UnitedHealthcare Medicare Advantage"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:cond-03-1",
+      "resource": {
+        "resourceType": "Condition",
+        "id": "cond-03-1",
+        "clinicalStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+              "code": "active",
+              "display": "Active"
+            }
+          ]
+        },
+        "verificationStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/condition-ver-status",
+              "code": "confirmed",
+              "display": "Confirmed"
+            }
+          ]
+        },
+        "code": {
+          "coding": [
+            {
+              "system": "http://hl7.org/fhir/sid/icd-10-cm",
+              "code": "M47.816",
+              "display": "Spondylosis without myelopathy or radiculopathy, lumbar region"
+            }
+          ]
+        },
+        "subject": {
+          "reference": "Patient/pat-03"
+        },
+        "onsetDateTime": "2024-09-01"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:cond-03-2",
+      "resource": {
+        "resourceType": "Condition",
+        "id": "cond-03-2",
+        "clinicalStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+              "code": "active",
+              "display": "Active"
+            }
+          ]
+        },
+        "verificationStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/condition-ver-status",
+              "code": "confirmed",
+              "display": "Confirmed"
+            }
+          ]
+        },
+        "code": {
+          "coding": [
+            {
+              "system": "http://hl7.org/fhir/sid/icd-10-cm",
+              "code": "M48.06",
+              "display": "Spinal stenosis, lumbar region"
+            }
+          ]
+        },
+        "subject": {
+          "reference": "Patient/pat-03"
+        },
+        "onsetDateTime": "2025-06-15"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:cond-03-3",
+      "resource": {
+        "resourceType": "Condition",
+        "id": "cond-03-3",
+        "clinicalStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+              "code": "active",
+              "display": "Active"
+            }
+          ]
+        },
+        "verificationStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/condition-ver-status",
+              "code": "confirmed",
+              "display": "Confirmed"
+            }
+          ]
+        },
+        "code": {
+          "coding": [
+            {
+              "system": "http://hl7.org/fhir/sid/icd-10-cm",
+              "code": "E11.9",
+              "display": "Type 2 diabetes mellitus without complications"
+            }
+          ]
+        },
+        "subject": {
+          "reference": "Patient/pat-03"
+        },
+        "onsetDateTime": "2018-03-20"
+      }
+    }
+  ]
+}

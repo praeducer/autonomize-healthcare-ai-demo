@@ -1,0 +1,288 @@
+{
+  "resourceType": "Bundle",
+  "id": "pa-bundle-01-lumbar-mri-clear-approval",
+  "type": "collection",
+  "timestamp": "2026-03-24T10:00:00Z",
+  "entry": [
+    {
+      "fullUrl": "urn:uuid:claim-01",
+      "resource": {
+        "resourceType": "Claim",
+        "id": "claim-01",
+        "status": "active",
+        "type": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/claim-type",
+              "code": "professional",
+              "display": "Professional"
+            }
+          ]
+        },
+        "use": "preauthorization",
+        "patient": {
+          "reference": "Patient/pat-01"
+        },
+        "created": "2026-03-24",
+        "provider": {
+          "reference": "Practitioner/pract-01"
+        },
+        "priority": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/processpriority",
+              "code": "normal",
+              "display": "Normal"
+            }
+          ]
+        },
+        "insurance": [
+          {
+            "sequence": 1,
+            "focal": true,
+            "coverage": {
+              "reference": "Coverage/cov-01"
+            }
+          }
+        ],
+        "diagnosis": [
+          {
+            "sequence": 1,
+            "diagnosisCodeableConcept": {
+              "coding": [
+                {
+                  "system": "http://hl7.org/fhir/sid/icd-10-cm",
+                  "code": "M54.5",
+                  "display": "Low back pain"
+                }
+              ]
+            }
+          },
+          {
+            "sequence": 2,
+            "diagnosisCodeableConcept": {
+              "coding": [
+                {
+                  "system": "http://hl7.org/fhir/sid/icd-10-cm",
+                  "code": "M54.41",
+                  "display": "Lumbago with sciatica, right side"
+                }
+              ]
+            }
+          }
+        ],
+        "item": [
+          {
+            "sequence": 1,
+            "productOrService": {
+              "coding": [
+                {
+                  "system": "http://www.ama-assn.org/go/cpt",
+                  "code": "72148",
+                  "display": "MRI lumbar spine without contrast"
+                }
+              ]
+            }
+          }
+        ],
+        "supportingInfo": [
+          {
+            "sequence": 1,
+            "category": {
+              "coding": [
+                {
+                  "system": "http://terminology.hl7.org/CodeSystem/claiminformationcategory",
+                  "code": "info",
+                  "display": "Information"
+                }
+              ]
+            },
+            "valueString": "Patient is a 52-year-old male presenting with chronic low back pain and right-sided radiculopathy. Symptoms began 10 weeks ago after lifting injury. Pain radiates from lower back to right posterior thigh and calf. Pain rated 7/10 on VAS. Positive straight leg raise test at 40 degrees on the right. Decreased ankle jerk reflex on the right. No bowel or bladder dysfunction."
+          },
+          {
+            "sequence": 2,
+            "category": {
+              "coding": [
+                {
+                  "system": "http://terminology.hl7.org/CodeSystem/claiminformationcategory",
+                  "code": "info",
+                  "display": "Information"
+                }
+              ]
+            },
+            "valueString": "Conservative treatment history: Physical therapy x 12 sessions over 8 weeks (McKenzie method, core stabilization) — minimal improvement. NSAIDs (naproxen 500mg BID) x 6 weeks — partial relief. Oral prednisone taper (Medrol dose pack) — temporary improvement only. Home exercise program compliant. Failed conservative treatment per ACR Appropriateness Criteria."
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:pat-01",
+      "resource": {
+        "resourceType": "Patient",
+        "id": "pat-01",
+        "identifier": [
+          {
+            "type": {
+              "coding": [
+                {
+                  "system": "http://terminology.hl7.org/CodeSystem/v2-0203",
+                  "code": "MR",
+                  "display": "Medical Record Number"
+                }
+              ]
+            },
+            "value": "MBR-2026-001"
+          }
+        ],
+        "name": [
+          {
+            "use": "official",
+            "family": "Thompson",
+            "given": ["Robert", "J"]
+          }
+        ],
+        "gender": "male",
+        "birthDate": "1974-03-15"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:pract-01",
+      "resource": {
+        "resourceType": "Practitioner",
+        "id": "pract-01",
+        "identifier": [
+          {
+            "system": "http://hl7.org/fhir/sid/us-npi",
+            "value": "1234567893"
+          }
+        ],
+        "name": [
+          {
+            "family": "Chen",
+            "given": ["David"],
+            "prefix": ["Dr."]
+          }
+        ],
+        "qualification": [
+          {
+            "code": {
+              "coding": [
+                {
+                  "system": "http://terminology.hl7.org/CodeSystem/v2-0360",
+                  "code": "MD",
+                  "display": "Doctor of Medicine"
+                }
+              ],
+              "text": "Orthopedic Surgery"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:cov-01",
+      "resource": {
+        "resourceType": "Coverage",
+        "id": "cov-01",
+        "status": "active",
+        "type": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode",
+              "code": "PPO",
+              "display": "Preferred Provider Organization"
+            }
+          ]
+        },
+        "subscriber": {
+          "reference": "Patient/pat-01"
+        },
+        "beneficiary": {
+          "reference": "Patient/pat-01"
+        },
+        "payor": [
+          {
+            "reference": "Organization/insurer-01",
+            "display": "Acme Health Insurance"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:cond-01-1",
+      "resource": {
+        "resourceType": "Condition",
+        "id": "cond-01-1",
+        "clinicalStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+              "code": "active",
+              "display": "Active"
+            }
+          ]
+        },
+        "verificationStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/condition-ver-status",
+              "code": "confirmed",
+              "display": "Confirmed"
+            }
+          ]
+        },
+        "code": {
+          "coding": [
+            {
+              "system": "http://hl7.org/fhir/sid/icd-10-cm",
+              "code": "M54.5",
+              "display": "Low back pain"
+            }
+          ]
+        },
+        "subject": {
+          "reference": "Patient/pat-01"
+        },
+        "onsetDateTime": "2026-01-13"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:cond-01-2",
+      "resource": {
+        "resourceType": "Condition",
+        "id": "cond-01-2",
+        "clinicalStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+              "code": "active",
+              "display": "Active"
+            }
+          ]
+        },
+        "verificationStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/condition-ver-status",
+              "code": "confirmed",
+              "display": "Confirmed"
+            }
+          ]
+        },
+        "code": {
+          "coding": [
+            {
+              "system": "http://hl7.org/fhir/sid/icd-10-cm",
+              "code": "M54.41",
+              "display": "Lumbago with sciatica, right side"
+            }
+          ]
+        },
+        "subject": {
+          "reference": "Patient/pat-01"
+        },
+        "onsetDateTime": "2026-01-13"
+      }
+    }
+  ]
+}

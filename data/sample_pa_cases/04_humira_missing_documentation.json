@@ -1,0 +1,238 @@
+{
+  "resourceType": "Bundle",
+  "id": "pa-bundle-04-humira-missing-documentation",
+  "type": "collection",
+  "timestamp": "2026-03-24T10:00:00Z",
+  "entry": [
+    {
+      "fullUrl": "urn:uuid:claim-04",
+      "resource": {
+        "resourceType": "Claim",
+        "id": "claim-04",
+        "status": "active",
+        "type": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/claim-type",
+              "code": "professional",
+              "display": "Professional"
+            }
+          ]
+        },
+        "use": "preauthorization",
+        "patient": {
+          "reference": "Patient/pat-04"
+        },
+        "created": "2026-03-24",
+        "provider": {
+          "reference": "Practitioner/pract-04"
+        },
+        "priority": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/processpriority",
+              "code": "normal",
+              "display": "Normal"
+            }
+          ]
+        },
+        "insurance": [
+          {
+            "sequence": 1,
+            "focal": true,
+            "coverage": {
+              "reference": "Coverage/cov-04"
+            }
+          }
+        ],
+        "diagnosis": [
+          {
+            "sequence": 1,
+            "diagnosisCodeableConcept": {
+              "coding": [
+                {
+                  "system": "http://hl7.org/fhir/sid/icd-10-cm",
+                  "code": "M05.79",
+                  "display": "Rheumatoid arthritis with rheumatoid factor of multiple sites"
+                }
+              ]
+            }
+          }
+        ],
+        "item": [
+          {
+            "sequence": 1,
+            "productOrService": {
+              "coding": [
+                {
+                  "system": "https://www.cms.gov/Medicare/Coding/HCPCSReleaseCodeSets",
+                  "code": "J0135",
+                  "display": "Adalimumab injection"
+                }
+              ]
+            }
+          }
+        ],
+        "supportingInfo": [
+          {
+            "sequence": 1,
+            "category": {
+              "coding": [
+                {
+                  "system": "http://terminology.hl7.org/CodeSystem/claiminformationcategory",
+                  "code": "info",
+                  "display": "Information"
+                }
+              ]
+            },
+            "valueString": "45-year-old female with rheumatoid arthritis diagnosed 3 years ago. Currently experiencing moderate disease activity with symmetric polyarthritis involving MCPs, PIPs, wrists, and knees bilaterally. Morning stiffness lasting > 2 hours. Reports 'failed methotrexate' but dose, duration, and reason for discontinuation not documented."
+          },
+          {
+            "sequence": 2,
+            "category": {
+              "coding": [
+                {
+                  "system": "http://terminology.hl7.org/CodeSystem/claiminformationcategory",
+                  "code": "info",
+                  "display": "Information"
+                }
+              ]
+            },
+            "valueString": "Requesting Humira (adalimumab) 40mg subcutaneous every 2 weeks. No laboratory results provided with this submission. DAS28 score not documented. No documentation of prior DMARD trial details. TB screening status unknown. No biosimilar consideration documented."
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:pat-04",
+      "resource": {
+        "resourceType": "Patient",
+        "id": "pat-04",
+        "identifier": [
+          {
+            "type": {
+              "coding": [
+                {
+                  "system": "http://terminology.hl7.org/CodeSystem/v2-0203",
+                  "code": "MR",
+                  "display": "Medical Record Number"
+                }
+              ]
+            },
+            "value": "MBR-2026-004"
+          }
+        ],
+        "name": [
+          {
+            "use": "official",
+            "family": "Johnson",
+            "given": ["Emily"]
+          }
+        ],
+        "gender": "female",
+        "birthDate": "1981-02-14"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:pract-04",
+      "resource": {
+        "resourceType": "Practitioner",
+        "id": "pract-04",
+        "identifier": [
+          {
+            "system": "http://hl7.org/fhir/sid/us-npi",
+            "value": "1356425615"
+          }
+        ],
+        "name": [
+          {
+            "family": "Rodriguez",
+            "given": ["Michael"],
+            "prefix": ["Dr."]
+          }
+        ],
+        "qualification": [
+          {
+            "code": {
+              "coding": [
+                {
+                  "system": "http://terminology.hl7.org/CodeSystem/v2-0360",
+                  "code": "MD",
+                  "display": "Doctor of Medicine"
+                }
+              ],
+              "text": "Rheumatology"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:cov-04",
+      "resource": {
+        "resourceType": "Coverage",
+        "id": "cov-04",
+        "status": "active",
+        "type": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode",
+              "code": "EPO",
+              "display": "Exclusive Provider Organization"
+            }
+          ]
+        },
+        "subscriber": {
+          "reference": "Patient/pat-04"
+        },
+        "beneficiary": {
+          "reference": "Patient/pat-04"
+        },
+        "payor": [
+          {
+            "reference": "Organization/insurer-04",
+            "display": "Cigna EPO Select"
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:cond-04-1",
+      "resource": {
+        "resourceType": "Condition",
+        "id": "cond-04-1",
+        "clinicalStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+              "code": "active",
+              "display": "Active"
+            }
+          ]
+        },
+        "verificationStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/condition-ver-status",
+              "code": "confirmed",
+              "display": "Confirmed"
+            }
+          ]
+        },
+        "code": {
+          "coding": [
+            {
+              "system": "http://hl7.org/fhir/sid/icd-10-cm",
+              "code": "M05.79",
+              "display": "Rheumatoid arthritis with rheumatoid factor of multiple sites"
+            }
+          ]
+        },
+        "subject": {
+          "reference": "Patient/pat-04"
+        },
+        "onsetDateTime": "2023-04-10"
+      }
+    }
+  ]
+}

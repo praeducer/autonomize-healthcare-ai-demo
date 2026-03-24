@@ -16,7 +16,7 @@ Interview exercise for Autonomize AI demonstrating AI-driven prior authorization
 |-------|-----------|---------|
 | Language | Python | 3.12+ |
 | AI Provider | Anthropic SDK (direct) | Latest |
-| LLM | Claude Sonnet 4.6 | claude-sonnet-4-6-20260320 |
+| LLM | Claude Sonnet 4.6 | claude-sonnet-4-6 |
 | FHIR Models | `fhir.resources` R4B | 8.2.0 |
 | API Framework | FastAPI | Latest |
 | FHIR Server | HAPI FHIR (Docker) | Latest |
