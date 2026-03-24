@@ -9,6 +9,8 @@
     "bierner.markdown-mermaid",
     "tamasfe.even-better-toml",
     "redhat.vscode-yaml",
-    "anthropic.claude-code"
+    "anthropic.claude-code",
+    "GitHub.copilot",
+    "GitHub.copilot-chat"
   ]
 }

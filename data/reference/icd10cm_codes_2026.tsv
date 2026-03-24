@@ -1,0 +1,131 @@
+code	description
+E11.0	Type 2 diabetes mellitus with hyperosmolarity
+E11.00	Type 2 diabetes mellitus with hyperosmolarity without nonketotic hyperglycemic-hyperosmolar coma (NKHHC)
+E11.01	Type 2 diabetes mellitus with hyperosmolarity with coma
+E11.21	Type 2 diabetes mellitus with diabetic nephropathy
+E11.22	Type 2 diabetes mellitus with diabetic chronic kidney disease
+E11.29	Type 2 diabetes mellitus with other diabetic kidney complication
+E11.311	Type 2 diabetes mellitus with unspecified diabetic retinopathy with macular edema
+E11.319	Type 2 diabetes mellitus with unspecified diabetic retinopathy without macular edema
+E11.40	Type 2 diabetes mellitus with diabetic neuropathy, unspecified
+E11.41	Type 2 diabetes mellitus with diabetic mononeuropathy
+E11.42	Type 2 diabetes mellitus with diabetic polyneuropathy
+E11.51	Type 2 diabetes mellitus with diabetic peripheral angiopathy without gangrene
+E11.52	Type 2 diabetes mellitus with diabetic peripheral angiopathy with gangrene
+E11.59	Type 2 diabetes mellitus with other circulatory complications
+E11.65	Type 2 diabetes mellitus with hyperglycemia
+E11.69	Type 2 diabetes mellitus with other specified complication
+E11.8	Type 2 diabetes mellitus with unspecified complications
+E11.9	Type 2 diabetes mellitus without complications
+C34.10	Malignant neoplasm of upper lobe, unspecified bronchus or lung
+C34.11	Malignant neoplasm of upper lobe, right bronchus or lung
+C34.12	Malignant neoplasm of upper lobe, left bronchus or lung
+C34.2	Malignant neoplasm of middle lobe, bronchus or lung
+C34.30	Malignant neoplasm of lower lobe, unspecified bronchus or lung
+C34.31	Malignant neoplasm of lower lobe, right bronchus or lung
+C34.32	Malignant neoplasm of lower lobe, left bronchus or lung
+C34.80	Malignant neoplasm of overlapping sites of unspecified bronchus and lung
+C34.81	Malignant neoplasm of overlapping sites of right bronchus and lung
+C34.82	Malignant neoplasm of overlapping sites of left bronchus and lung
+C34.90	Malignant neoplasm of unspecified part of unspecified bronchus or lung
+C34.91	Malignant neoplasm of unspecified part of right bronchus or lung
+C34.92	Malignant neoplasm of unspecified part of left bronchus or lung
+C77.0	Secondary and unspecified malignant neoplasm of lymph nodes of head, face and neck
+C77.1	Secondary and unspecified malignant neoplasm of intrathoracic lymph nodes
+C77.2	Secondary and unspecified malignant neoplasm of intra-abdominal lymph nodes
+C77.3	Secondary and unspecified malignant neoplasm of axillary and upper limb lymph nodes
+C77.4	Secondary and unspecified malignant neoplasm of inguinal and lower limb lymph nodes
+C77.5	Secondary and unspecified malignant neoplasm of intrapelvic lymph nodes
+C77.8	Secondary and unspecified malignant neoplasm of lymph nodes of multiple regions
+C77.9	Secondary and unspecified malignant neoplasm of lymph node, unspecified
+M05.00	Felty's syndrome, unspecified site
+M05.011	Felty's syndrome, right shoulder
+M05.012	Felty's syndrome, left shoulder
+M05.10	Rheumatoid lung disease with rheumatoid arthritis of unspecified site
+M05.20	Rheumatoid vasculitis with rheumatoid arthritis of unspecified site
+M05.30	Rheumatoid heart disease with rheumatoid arthritis of unspecified site
+M05.40	Rheumatoid myopathy with rheumatoid arthritis of unspecified site
+M05.50	Rheumatoid polyneuropathy with rheumatoid arthritis of unspecified site
+M05.60	Rheumatoid arthritis of unspecified site with involvement of other organs and systems
+M05.70	Rheumatoid arthritis with rheumatoid factor of unspecified site without organ or systems involvement
+M05.711	Rheumatoid arthritis with rheumatoid factor of right shoulder without organ or systems involvement
+M05.712	Rheumatoid arthritis with rheumatoid factor of left shoulder without organ or systems involvement
+M05.79	Rheumatoid arthritis with rheumatoid factor of multiple sites without organ or systems involvement
+M47.10	Other spondylosis with myelopathy, site unspecified
+M47.11	Other spondylosis with myelopathy, occipito-atlanto-axial region
+M47.12	Other spondylosis with myelopathy, cervical region
+M47.13	Other spondylosis with myelopathy, cervicothoracic region
+M47.14	Other spondylosis with myelopathy, thoracic region
+M47.15	Other spondylosis with myelopathy, thoracolumbar region
+M47.16	Other spondylosis with myelopathy, lumbar region
+M47.20	Other spondylosis with radiculopathy, site unspecified
+M47.21	Other spondylosis with radiculopathy, occipito-atlanto-axial region
+M47.22	Other spondylosis with radiculopathy, cervical region
+M47.26	Other spondylosis with radiculopathy, lumbar region
+M47.27	Other spondylosis with radiculopathy, lumbosacral region
+M47.812	Spondylosis without myelopathy or radiculopathy, cervical region
+M47.816	Spondylosis without myelopathy or radiculopathy, lumbar region
+M47.817	Spondylosis without myelopathy or radiculopathy, lumbosacral region
+M47.896	Other spondylosis, lumbar region
+M47.897	Other spondylosis, lumbosacral region
+M48.00	Spinal stenosis, site unspecified
+M48.01	Spinal stenosis, occipito-atlanto-axial region
+M48.02	Spinal stenosis, cervical region
+M48.03	Spinal stenosis, cervicothoracic region
+M48.04	Spinal stenosis, thoracic region
+M48.05	Spinal stenosis, thoracolumbar region
+M48.06	Spinal stenosis, lumbar region
+M48.061	Spinal stenosis, lumbar region without neurogenic claudication
+M48.062	Spinal stenosis, lumbar region with neurogenic claudication
+M48.07	Spinal stenosis, lumbosacral region
+M48.08	Spinal stenosis, sacral and sacrococcygeal region
+M54.10	Radiculopathy, site unspecified
+M54.11	Radiculopathy, occipito-atlanto-axial region
+M54.12	Radiculopathy, cervical region
+M54.13	Radiculopathy, cervicothoracic region
+M54.14	Radiculopathy, thoracic region
+M54.15	Radiculopathy, thoracolumbar region
+M54.16	Radiculopathy, lumbar region
+M54.17	Radiculopathy, lumbosacral region
+M54.2	Cervicalgia
+M54.30	Sciatica, unspecified side
+M54.31	Sciatica, right side
+M54.32	Sciatica, left side
+M54.40	Lumbago with sciatica, unspecified side
+M54.41	Lumbago with sciatica, right side
+M54.42	Lumbago with sciatica, left side
+M54.5	Low back pain
+M54.50	Low back pain, unspecified
+M54.51	Vertebrogenic low back pain
+M54.59	Other low back pain
+M54.6	Pain in thoracic spine
+M54.89	Other dorsalgia
+M54.9	Dorsalgia, unspecified
+L57.0	Actinic keratosis
+L57.1	Actinic reticuloid
+L57.2	Cutis rhomboidalis nuchae
+L57.3	Poikiloderma of Civatte
+L57.4	Cutis laxa senilis
+L57.5	Actinic granuloma
+L57.8	Other skin changes due to chronic exposure to nonionizing radiation
+L57.9	Skin changes due to chronic exposure to nonionizing radiation, unspecified
+Z96.611	Presence of right artificial shoulder joint
+Z96.612	Presence of left artificial shoulder joint
+Z96.641	Presence of right artificial hip joint
+Z96.642	Presence of left artificial hip joint
+Z96.651	Presence of right artificial knee joint
+Z96.652	Presence of left artificial knee joint
+S72.001A	Fracture of unspecified part of neck of right femur, initial encounter
+S72.002A	Fracture of unspecified part of neck of left femur, initial encounter
+G89.29	Other chronic pain
+G89.4	Chronic pain syndrome
+R10.9	Unspecified abdominal pain
+R51.9	Headache, unspecified
+J06.9	Acute upper respiratory infection, unspecified
+J18.9	Pneumonia, unspecified organism
+N18.6	End stage renal disease
+I10	Essential (primary) hypertension
+I25.10	Atherosclerotic heart disease of native coronary artery without angina pectoris
+J44.1	Chronic obstructive pulmonary disease with (acute) exacerbation
+F32.1	Major depressive disorder, single episode, moderate
+F41.1	Generalized anxiety disorder

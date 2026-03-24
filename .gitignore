@@ -42,4 +42,11 @@ Thumbs.db
 
 # Claude Code
 .claude/todos/
-*.egg-info/
+
+# Data — downloaded, not committed
+data/synthea_fhir_patients/raw/
+
+# SQLite
+*.db
+*.db-journal
+*.db-wal

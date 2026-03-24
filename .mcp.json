@@ -7,6 +7,14 @@
         "mcp-server-docker"
       ],
       "env": {}
+    },
+    "cms-coverage-db": {
+      "type": "http",
+      "url": "https://mcp.deepsense.ai/cms_coverage/mcp"
+    },
+    "npi-registry": {
+      "type": "http",
+      "url": "https://mcp.deepsense.ai/npi_registry/mcp"
     }
   }
 }

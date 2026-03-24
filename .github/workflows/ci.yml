@@ -22,10 +22,13 @@ jobs:
         run: pip install -e ".[dev]"
 
       - name: Lint
-        run: ruff check src/ tests/
+        run: ruff check src/prior_auth_demo/ tests/
+
+      - name: Format check
+        run: ruff format --check src/prior_auth_demo/ tests/
 
       - name: Type check
-        run: mypy src/
+        run: mypy src/prior_auth_demo/
 
       - name: Test
         run: pytest -v

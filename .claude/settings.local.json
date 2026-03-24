@@ -1,0 +1,7 @@
+{
+  "enabledMcpjsonServers": [
+    "docker-mcp",
+    "cms-coverage-db",
+    "npi-registry"
+  ]
+}
