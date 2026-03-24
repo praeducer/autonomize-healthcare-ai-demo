@@ -42,7 +42,7 @@
 ### Slide Generation (for Claude for PowerPoint)
 | File | Description |
 |------|-------------|
-| [slide-generation-prompts/README.md](slide-generation-prompts/README.md) | All 11 prompts referencing presentation.md as source of truth |
+| [slide-generation-prompts.md](architecture/slide-generation-prompts.md) | All 11 prompts referencing presentation.md as source of truth |
 
 ### Diagrams (6 progressive views, 3 formats each)
 | Diagram | .mmd | .svg | .png |
@@ -61,9 +61,14 @@
 | [stakeholder-profiles.md](inputs/stakeholder-profiles.md) | Panel profiles — Kris Nair, Suresh Gopalakrishnan, Ujjwal Rajbhandari |
 | [job-description.md](inputs/job-description.md) | Solutions Architect job description — Autonomize AI |
 
+### Architecture Process
+| File | Description |
+|------|-------------|
+| [execution-log.md](architecture/execution-log.md) | Autonomous overnight execution log |
+| [decisions.md](architecture/decisions.md) | 3 technical decisions made overnight |
+
 ### Plans
 | File | Description |
 |------|-------------|
 | [demo-implementation-prompt.md](../.claude/plans/demo-implementation-prompt.md) | Claude Code plan for demo build (March 24 morning) |
-| [execution-log.md](plans/execution-log.md) | Autonomous overnight execution log |
-| [decisions.md](plans/decisions.md) | 3 technical decisions made overnight |
+| [demo-implementation-design.md](plans/2026-03-24-demo-implementation-design.md) | Design summary for demo implementation |

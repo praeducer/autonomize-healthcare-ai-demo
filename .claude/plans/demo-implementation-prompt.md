@@ -67,7 +67,7 @@ The demo supports the slide deck narrative at these points:
 | Slide 8 (LLMOps) | "The confidence scoring you see here is how we'd detect drift in production..." |
 | Slide 9 (Roadmap) | "This demo is Phase 0. Phase 1 would connect to Autonomize's PA Copilot..." |
 
-**Slide prompts**: `docs/slide-generation-prompts/`
+**Slide prompts**: `docs/architecture/slide-generation-prompts.md`
 
 ## 1.5 Scope Boundary
 

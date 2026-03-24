@@ -8,7 +8,7 @@
 
 ## Overnight Decisions (Review Required)
 
-See [decisions.md](../plans/decisions.md):
+See [decisions.md](../architecture/decisions.md):
 - [x] D-001: outputs/ un-ignored in .gitignore -- Paul requested this
 - [x] D-002: CAQH payer cost $3.52 -- verified against 2024 CAQH Index
 - [ ] D-003: AMA physician burden 14 to 12-13 hr/week -- verify you're comfortable

@@ -3,7 +3,7 @@
 Each prompt below generates one slide. Use with the Claude for PowerPoint add-in.
 
 **Workflow:**
-1. Open [presentation.md](../architecture/presentation.md) — this is the single source of truth for all slide content
+1. Open [presentation.md](presentation.md) — this is the single source of truth for all slide content
 2. For each slide, paste the corresponding prompt into Claude for PowerPoint
 3. The prompt references `presentation.md` as context — attach it or paste the relevant slide section when prompted
 
