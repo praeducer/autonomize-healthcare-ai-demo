@@ -76,6 +76,8 @@ HTMX patterns:
 
 ### 3.4: Mount dashboard on API server
 
+> **IMPORTANT**: The dashboard routes must be additive — they must NOT modify or shadow existing API routes. The `/api/v1/...` endpoints, `/docs` (Swagger), and `/health` must all continue to work exactly as in Step 2. The dashboard adds `/` as a new HTML route. All three entry points (CLI, API, Dashboard) must work simultaneously.
+
 Update `healthcare_api_server.py`:
 - Mount `dashboard_routes` router
 - Configure Jinja2 template directory

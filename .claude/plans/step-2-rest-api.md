@@ -68,6 +68,8 @@ load-fhir-data:
 
 ### 2.3: Build the FastAPI server
 
+> **IMPORTANT**: The API server must NOT break the CLI. The engine module (`clinical_review_engine.py`) must remain importable and functional without FastAPI running. The CLI (`command_line_demo.py`) calls the engine directly — it never goes through the API.
+
 `src/prior_auth_demo/healthcare_api_server.py`:
 
 ```
@@ -99,6 +101,8 @@ Mount the mock eligibility service as a sub-router.
 - Append-only: no update or delete operations
 
 ### 2.6: Update engine for FHIR server
+
+> **IMPORTANT**: The engine's `retrieve_clinical_data()` function already extracts data from the Bundle. The FHIR server integration should be an ADDITIONAL data source, not a replacement. When the FHIR server is available, merge its data with bundle-embedded data. When unavailable, the engine must still work with bundle data alone. This ensures the CLI always works without Docker.
 
 Update `clinical_review_engine.py`:
 - Accept optional `fhir_server_url` parameter

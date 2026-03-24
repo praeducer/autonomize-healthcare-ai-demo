@@ -70,7 +70,7 @@ The repo scaffolding exists (pyproject.toml, Makefile, conftest.py, __init__.py 
 - Create: `tests/test_clinical_review_engine.py` (initial file with settings tests)
 
 **Step 1:** Write failing tests in `tests/test_clinical_review_engine.py`:
-- `TestApplicationSettings.test_settings_loads_defaults` — construct with `ANTHROPIC_API_KEY="test-key"`, assert `claude_model_id == "claude-sonnet-4-6-20260320"`, thresholds 0.85/0.60, log_level "INFO"
+- `TestApplicationSettings.test_settings_loads_defaults` — construct with `ANTHROPIC_API_KEY="test-key"`, assert `claude_model_id == "claude-sonnet-4-6"`, thresholds 0.85/0.60, log_level "INFO"
 - `TestApplicationSettings.test_settings_requires_api_key` — construct with no args, expect `ValidationError`
 
 **Step 2:** Run: `pytest tests/test_clinical_review_engine.py::TestApplicationSettings -v`
@@ -79,7 +79,7 @@ Expected: FAIL (ImportError)
 **Step 3:** Implement `application_settings.py`:
 - `BaseSettings` with `SettingsConfigDict(env_file=".env", case_sensitive=False)`
 - `anthropic_api_key: SecretStr` (required, never logged)
-- `claude_model_id: str` (default: `claude-sonnet-4-6-20260320`)
+- `claude_model_id: str` (default: `claude-sonnet-4-6`)
 - `log_level: str` (default: `INFO`)
 - `auto_approve_confidence_threshold: float` (default: 0.85, ge=0.0, le=1.0)
 - `human_review_confidence_threshold: float` (default: 0.60, ge=0.0, le=1.0)

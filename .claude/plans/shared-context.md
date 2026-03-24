@@ -116,6 +116,16 @@ class ClinicalReviewResult(BaseModel):
     review_duration_seconds: float
 ```
 
+## Step 1 Implementation Notes
+
+- `fhir.resources.R4B` uses `get_resource_type()` method, NOT `resource_type` attribute
+- `pydantic-settings` requires lowercase field names for kwargs (e.g., `anthropic_api_key=`, not `ANTHROPIC_API_KEY=`). Env vars are case-insensitive via `case_sensitive=False`.
+- `ApplicationSettings()` default constructor loads from `.env` file. In tests, use `_env_file=None` to disable.
+- NPI Luhn-10 algorithm: prefix with `80840`, then double every OTHER digit from the RIGHT starting at position 1 (0-indexed). Valid NPIs in demo: `1234567893`, `1528060019`, `1497758544`, `1356425615`, `1649382052`.
+- CMS coverage criteria stored locally in `data/reference/cms_coverage_criteria.json` (not runtime MCP calls). MCP servers are Claude Code protocol, not available to the Python app at runtime.
+- Anthropic SDK tool use: `tools` and `messages` params need `# type: ignore[arg-type]` for mypy strict mode (SDK type stubs are looser than strict mypy expects).
+- `polyfactory` cannot auto-generate valid FHIR models. Pre-build a `ClaimResponse` and assign as class attribute override on the factory.
+
 ## Healthcare Service Contracts
 
 ### Real Services

@@ -76,7 +76,7 @@ review-all:
 
 `src/prior_auth_demo/application_settings.py`:
 - `pydantic-settings` `BaseSettings` for env var configuration
-- Settings: `ANTHROPIC_API_KEY`, `CLAUDE_MODEL_ID` (default: `claude-sonnet-4-6-20260320`), `AUTO_APPROVE_CONFIDENCE_THRESHOLD` (default: `0.85`), `HUMAN_REVIEW_CONFIDENCE_THRESHOLD` (default: `0.60`)
+- Settings: `ANTHROPIC_API_KEY`, `CLAUDE_MODEL_ID` (default: `claude-sonnet-4-6`), `AUTO_APPROVE_CONFIDENCE_THRESHOLD` (default: `0.85`), `HUMAN_REVIEW_CONFIDENCE_THRESHOLD` (default: `0.60`)
 - Load from `.env` file or environment variables
 
 ### 1.3: Create the 5 sample PA cases
