@@ -200,11 +200,11 @@ flowchart LR
 
 ## Slide 6: Top 3 Security Risks & Mitigations
 
-| # | Risk | Mitigation |
-|---|------|------------|
-| 1 | **PHI exposure through AI pipeline** | PHI tokenization before LLM — AI sees clinical facts without patient identity. Enterprise deployment (data not used for training). |
-| 2 | **Prompt injection via clinical documents** | Document sanitization + system prompt isolation + output validation requiring evidence citations. |
-| 3 | **Untraceable AI decisions** | Tamper-proof audit trail: model version, input hash, reasoning, evidence, confidence. Immutable 7-year retention. |
+| # | Risk | Mitigation 1: Architectural | Mitigation 2: Operational |
+| --- | ------ | ------------------------------ | --------------------------- |
+| 1 | **PHI exposure through AI pipeline** | PHI tokenization before LLM — AI sees clinical facts without patient identity | Anthropic API usage ensures zero data retention for model training (per enterprise terms) |
+| 2 | **Prompt injection via clinical documents** | Document sanitization + system prompt isolation | Output validation requiring evidence citations — hallucinated or injected claims fail verification |
+| 3 | **Untraceable AI decisions** | Tamper-proof audit trail: model version, input hash, reasoning, evidence, confidence | Immutable 7-year retention with append-only writes |
 
 **Additional controls:** Entra ID RBAC, AES-256 at rest, TLS 1.2+ in transit, private endpoints, no auto-deny without human review.
 
