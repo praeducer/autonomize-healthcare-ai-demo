@@ -143,6 +143,8 @@ client = anthropic.Anthropic(
 
 ## Automated Test Suite
 
+**Bash:**
+
 ```bash
 make lint
 docker build -t healthcare-demo:local .
@@ -155,6 +157,23 @@ make test-integration
 curl -X POST http://localhost:8000/api/v1/prior-auth/review \
   -H "Content-Type: application/json" \
   -d @data/sample_pa_cases/01_lumbar_mri_clear_approval.json
+# Verify response contains "APPROVED"
+docker compose down
+```
+
+**PowerShell:**
+
+```powershell
+ruff check src/prior_auth_demo/ tests/
+ruff format --check src/prior_auth_demo/ tests/
+mypy src/prior_auth_demo/
+docker build -t healthcare-demo:local .
+docker compose up --build -d
+Start-Sleep 10
+Invoke-WebRequest -Uri http://localhost:8000/health -UseBasicParsing
+Invoke-WebRequest -Uri http://localhost:8000/docs -UseBasicParsing
+Invoke-WebRequest -Uri http://localhost:8000/api/v1/prior-auth/sample-cases -UseBasicParsing
+pytest tests/ -m integration -v
 # Verify response contains "APPROVED"
 docker compose down
 ```

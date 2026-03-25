@@ -173,6 +173,8 @@ dev:
 
 ## Automated Test Suite
 
+**Bash:**
+
 ```bash
 make up && make load-fhir-data   # Start infrastructure
 make lint
@@ -180,8 +182,23 @@ make test-data-quality
 make test-unit                    # Includes audit store tests
 make test-integration             # FHIR server + API endpoints
 make test-e2e                     # Full API review flow
-# AI review: API error handling, FHIR models, audit append-only, no SQL injection, async patterns.
 ```
+
+**PowerShell:**
+
+```powershell
+docker compose up -d
+python -m prior_auth_demo.mock_healthcare_services.load_fhir_data
+ruff check src/prior_auth_demo/ tests/
+ruff format --check src/prior_auth_demo/ tests/
+mypy src/prior_auth_demo/
+pytest tests/test_data_quality.py -v
+pytest tests/ -m unit -v                                 # Includes audit store tests
+pytest tests/ -m integration -v                          # FHIR server + API endpoints
+pytest tests/ -m e2e -v --timeout=300                    # Full API review flow
+```
+
+AI review: API error handling, FHIR models, audit append-only, no SQL injection, async patterns.
 
 ## Paul's UAT Checklist
 

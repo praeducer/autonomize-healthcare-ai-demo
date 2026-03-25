@@ -22,7 +22,8 @@ LLM outputs are non-deterministic. If a case gives an unexpected result, re-run 
 
 | Interface | How to test | What to look for |
 |-----------|------------|-----------------|
-| CLI | `make review` | APPROVED badge, confidence %, rationale, citations, processing time |
+| CLI (bash) | `make review` | APPROVED badge, confidence %, rationale, citations, processing time |
+| CLI (PowerShell) | `python -m prior_auth_demo.command_line_demo --case data/sample_pa_cases/01_lumbar_mri_clear_approval.json` | Same as above |
 | Claude Code | `/invoke-pa-review` | Same output, conversational context |
 | API (Step 2+) | POST `/api/v1/prior-auth/review` via Swagger | JSON response with determination, confidence, rationale |
 | Dashboard (Step 3+) | Select case → Submit | Loading spinner → result card with badge, confidence bar, rationale |
@@ -33,7 +34,7 @@ LLM outputs are non-deterministic. If a case gives an unexpected result, re-run 
 
 **Goal**: Every determination includes clinical rationale (2+ sentences) and guideline citations.
 
-Run `make review-all` (or `/invoke-pa-review-all` in Claude Code) and read each result:
+Run `make review-all` (bash) or `python -m prior_auth_demo.command_line_demo --all` (PowerShell) or `/invoke-pa-review-all` (Claude Code) and read each result:
 
 | Case | Check rationale for... |
 |------|----------------------|
@@ -84,7 +85,12 @@ Open `http://localhost:8000/docs` — Swagger UI should render with all endpoint
 
 ## US-7: Immutable audit trail (Step 2+)
 
-After submitting cases via any interface, verify they appear in `GET /api/v1/prior-auth/determinations`. Check the SQLite database directly: `sqlite3 data/audit_trail.db "SELECT determination, confidence_score FROM determinations;"`. Records should accumulate, never disappear.
+After submitting cases via any interface, verify they appear in `GET /api/v1/prior-auth/determinations`. Check the SQLite database directly:
+
+- **Bash**: `sqlite3 data/audit_trail.db "SELECT determination, confidence_score FROM determinations;"`
+- **PowerShell**: `python -c "import sqlite3; conn = sqlite3.connect('data/audit_trail.db'); print(conn.execute('SELECT determination, confidence_score FROM determinations').fetchall())"`
+
+Records should accumulate, never disappear.
 
 ---
 
@@ -106,12 +112,12 @@ Share your screen via Teams. All text readable? Badges visible? No horizontal sc
 
 After each new step, verify previous interfaces still work:
 
-| Check | Command |
-|-------|---------|
-| CLI works standalone | `make review` |
-| CLI works without Docker | `make down && make review` |
-| Swagger still renders (Step 2+) | Open `/docs` |
-| API returns JSON, not HTML (Step 3+) | `GET /api/v1/prior-auth/sample-cases` |
+| Check | Bash | PowerShell |
+|-------|------|------------|
+| CLI works standalone | `make review` | `python -m prior_auth_demo.command_line_demo --case data/sample_pa_cases/01_lumbar_mri_clear_approval.json` |
+| CLI works without Docker | `make down && make review` | `docker compose down; python -m prior_auth_demo.command_line_demo --case data/sample_pa_cases/01_lumbar_mri_clear_approval.json` |
+| Swagger still renders (Step 2+) | Open `/docs` | Open `/docs` |
+| API returns JSON, not HTML (Step 3+) | `GET /api/v1/prior-auth/sample-cases` | `GET /api/v1/prior-auth/sample-cases` |
 
 ---
 

@@ -143,7 +143,7 @@ Paul is presenting via Microsoft Teams screen share for an Autonomize AI Solutio
 | All CAQH/AMA/CMS numbers consistent | Cross-reference sources table |
 | No legacy integration emphasis | Grep for "legacy" |
 | FHIR team composition is broad | Check wording |
-| Demo script references match CLI output | Run `make review` and compare |
+| Demo script references match CLI output | Run `make review` (bash) or `python -m prior_auth_demo.command_line_demo --case data/sample_pa_cases/01_lumbar_mri_clear_approval.json` (PowerShell) and compare |
 
 ## Execution Batches
 

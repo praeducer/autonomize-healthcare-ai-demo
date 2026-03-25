@@ -55,10 +55,20 @@ Each migration is an independent config change. No architectural refactoring req
 
 ## Automated Test Suite
 
+**Bash:**
+
 ```bash
 # Same suite as Step 4, pointed at Azure services:
 make test-integration   # Azure FHIR, Azure AI Foundry connectivity
 make test-e2e           # Full review flow through Azure services
+```
+
+**PowerShell:**
+
+```powershell
+# Same suite as Step 4, pointed at Azure services:
+pytest tests/ -m integration -v    # Azure FHIR, Azure AI Foundry connectivity
+pytest tests/ -m e2e -v --timeout=300   # Full review flow through Azure services
 ```
 
 ## Paul's UAT Checklist

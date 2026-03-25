@@ -12,7 +12,7 @@
 
 - Clinical review engine with Claude tool use (5 tools: NPI validation, ICD-10 lookup, CMS coverage, eligibility check, clinical data retrieval)
 - 5 realistic PA cases as FHIR R4 Claim bundles (Da Vinci PAS aligned)
-- CLI with color-coded output (`make review`, `make review-all`)
+- CLI with color-coded output (bash: `make review`/`make review-all`, PowerShell: `python -m prior_auth_demo.command_line_demo --case ...`/`--all`)
 - ICD-10-CM 2026 validation from CDC data
 - Confidence-based determination routing (auto-approve >= 0.85, human review 0.60-0.84)
 - Full test suite: data quality, unit, and e2e tests
@@ -200,24 +200,37 @@ Download ICD-10-CM 2026 code descriptions from CDC FTP. Create curated subset (`
 
 ## Automated Test Suite
 
+**Bash:**
+
 ```bash
 make lint                # ~5 sec
 make test-data-quality   # ~2 sec, no API key
 make test-unit           # ~3 sec, no API key
 make test-e2e            # ~5 min, needs ANTHROPIC_API_KEY
-# AI architecture review (Claude Code subagent): type hints, no bare exceptions,
-# no hardcoded secrets, FHIR model usage, architecture alignment.
 ```
+
+**PowerShell:**
+
+```powershell
+ruff check src/prior_auth_demo/ tests/                  # ~5 sec
+ruff format --check src/prior_auth_demo/ tests/
+mypy src/prior_auth_demo/
+pytest tests/test_data_quality.py -v                     # ~2 sec, no API key
+pytest tests/ -m unit -v                                 # ~3 sec, no API key
+pytest tests/ -m e2e -v --timeout=300                    # ~5 min, needs ANTHROPIC_API_KEY
+```
+
+AI architecture review (Claude Code subagent): type hints, no bare exceptions, no hardcoded secrets, FHIR model usage, architecture alignment.
 
 ## Paul's UAT Checklist
 
 **What Changed**: CLI tool + 5 PA cases + Claude tool use + ICD-10 validation + FHIR R4B models.
-**Prerequisites**: `make install`, `ANTHROPIC_API_KEY` in `.env`
+**Prerequisites**: Install deps (bash: `make install` / PowerShell: `pip install -e ".[dev]" && pre-commit install`), `ANTHROPIC_API_KEY` in `.env`
 
 | # | Action | Expected |
 |---|--------|----------|
-| 1 | `make review` | Case 1: green APPROVED, confidence ≥ 80%, mentions "conservative treatment" or "radiculopathy" |
-| 2 | `make review-all` | 5 cases: approval (1,5), denial (2), pended (3,4) |
+| 1 | Run single case (bash: `make review` / PowerShell: `python -m prior_auth_demo.command_line_demo --case data/sample_pa_cases/01_lumbar_mri_clear_approval.json`) | Case 1: green APPROVED, confidence ≥ 80%, mentions "conservative treatment" or "radiculopathy" |
+| 2 | Run all cases (bash: `make review-all` / PowerShell: `python -m prior_auth_demo.command_line_demo --all`) | 5 cases: approval (1,5), denial (2), pended (3,4) |
 | 3 | Read Case 2 | Mentions "cosmetic" AND "diagnosis mismatch" or "no functional indication" |
 | 4 | Read Case 3 | Mentions PT gap, no ESI, BMI, or A1C. PENDED_FOR_REVIEW, not DENIED. |
 | 5 | Read Case 4 | missing_documentation has 2+ specific items (methotrexate dose, labs, DAS28) |

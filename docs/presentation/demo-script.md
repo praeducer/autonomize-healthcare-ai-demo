@@ -8,10 +8,21 @@
 
 ## Prerequisites (10 minutes before)
 
+**Bash:**
+
 ```bash
 # Start Docker Desktop, then:
 make setup-fhir     # HAPI FHIR + Synthea patients (~60s first time)
 make dev            # FastAPI server on localhost:8000
+```
+
+**PowerShell:**
+
+```powershell
+# Start Docker Desktop, then:
+docker compose up -d
+python -m prior_auth_demo.mock_healthcare_services.load_fhir_data
+uvicorn prior_auth_demo.healthcare_api_server:app --reload --port 8000
 ```
 
 Verify: `http://localhost:8000` (dashboard), `http://localhost:8080/fhir` (HAPI FHIR).
@@ -35,7 +46,10 @@ Switch to terminal.
 > File: `01_lumbar_mri_clear_approval.json`
 
 ```bash
-make review
+make review  # bash
+```
+```powershell
+python -m prior_auth_demo.command_line_demo --case data/sample_pa_cases/01_lumbar_mri_clear_approval.json  # PowerShell
 ```
 
 > "This is a lumbar MRI request for radiculopathy. The patient has 12 sessions of physical therapy, tried NSAIDs with only partial improvement, and has documented radiculopathy. Watch how Claude uses tools — it validates the NPI, looks up the ICD-10 codes, checks CMS coverage criteria, then produces a determination."
@@ -49,7 +63,7 @@ make review
 > File: `04_humira_missing_documentation.json`
 
 ```bash
-python -m prior_auth_demo.command_line_demo --case data/sample_pa_cases/04_humira_missing_documentation.json
+python -m prior_auth_demo.command_line_demo --case data/sample_pa_cases/04_humira_missing_documentation.json  # bash & PowerShell
 ```
 
 > "Now a Humira request for rheumatoid arthritis. The provider says the patient 'failed methotrexate' but doesn't include dose, duration, or reason for discontinuation."
@@ -63,7 +77,7 @@ python -m prior_auth_demo.command_line_demo --case data/sample_pa_cases/04_humir
 > File: `03_spinal_fusion_complex_review.json`
 
 ```bash
-python -m prior_auth_demo.command_line_demo --case data/sample_pa_cases/03_spinal_fusion_complex_review.json
+python -m prior_auth_demo.command_line_demo --case data/sample_pa_cases/03_spinal_fusion_complex_review.json  # bash & PowerShell
 ```
 
 > "A spinal fusion with mixed signals — some criteria met, but only 8 PT sessions instead of 12, elevated A1C, no second epidural injection."
@@ -77,7 +91,7 @@ python -m prior_auth_demo.command_line_demo --case data/sample_pa_cases/03_spina
 > File: `05_keytruda_urgent_oncology.json`
 
 ```bash
-python -m prior_auth_demo.command_line_demo --case data/sample_pa_cases/05_keytruda_urgent_oncology.json
+python -m prior_auth_demo.command_line_demo --case data/sample_pa_cases/05_keytruda_urgent_oncology.json  # bash & PowerShell
 ```
 
 > "Keytruda for stage IIIA lung cancer. PD-L1 at 65%, no EGFR or ALK mutations, ECOG 1. This is an NCCN Category 1 recommendation — the gold standard."
@@ -91,7 +105,7 @@ python -m prior_auth_demo.command_line_demo --case data/sample_pa_cases/05_keytr
 > File: `02_cosmetic_rhinoplasty_denial.json`
 
 ```bash
-python -m prior_auth_demo.command_line_demo --case data/sample_pa_cases/02_cosmetic_rhinoplasty_denial.json
+python -m prior_auth_demo.command_line_demo --case data/sample_pa_cases/02_cosmetic_rhinoplasty_denial.json  # bash & PowerShell
 ```
 
 > "A rhinoplasty coded with a skin condition diagnosis — actinic keratosis. There's no functional indication, no nasal obstruction documented."

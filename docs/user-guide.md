@@ -27,29 +27,47 @@ You can also ask conversationally: "Review the spinal fusion case" or "Run all P
 
 Direct terminal commands. Works standalone — no Docker, no API server needed.
 
+**Bash:**
+
 ```bash
-# Single case
-make review
-# or: python -m prior_auth_demo.command_line_demo --case data/sample_pa_cases/01_lumbar_mri_clear_approval.json
+make review         # Single case (case 1 — lumbar MRI)
+make review-all     # All 5 cases
+```
+
+**PowerShell:**
+
+```powershell
+# Single case (case 1 — lumbar MRI)
+python -m prior_auth_demo.command_line_demo --case data/sample_pa_cases/01_lumbar_mri_clear_approval.json
 
 # All 5 cases
-make review-all
-# or: python -m prior_auth_demo.command_line_demo --all
+python -m prior_auth_demo.command_line_demo --all
 ```
 
 Output is color-coded: green (approved), red (denied), yellow (pended).
 
 ## 3. REST API + Swagger (Step 2+)
 
+**Bash:**
+
 ```bash
+make setup-fhir     # First time: start HAPI FHIR + load Synthea patients
+make up             # Subsequent runs: data persists across restarts
+make dev            # Start FastAPI server
+```
+
+**PowerShell:**
+
+```powershell
 # First time — start FHIR server + load patient data:
-make setup-fhir  # Starts HAPI FHIR (Docker), waits for ready, loads 10 Synthea patients
+docker compose up -d                                                    # Start HAPI FHIR (Docker)
+python -m prior_auth_demo.mock_healthcare_services.load_fhir_data       # Load 10 Synthea patients
 
 # Subsequent runs — data persists across restarts:
-make up          # Start HAPI FHIR server (data already loaded)
+docker compose up -d                                                    # Start HAPI FHIR server
 
 # Then start the API:
-make dev         # Start FastAPI server
+uvicorn prior_auth_demo.healthcare_api_server:app --reload --port 8000  # Start FastAPI server
 ```
 
 Open `http://localhost:8000/docs` for Swagger UI. Key endpoints:
@@ -63,9 +81,18 @@ Open `http://localhost:8000/docs` for Swagger UI. Key endpoints:
 
 ## 4. Web Dashboard (Step 3+)
 
+**Bash:**
+
 ```bash
-make up          # Start HAPI FHIR server (or make setup-fhir for first time)
-make dev         # Start FastAPI server
+make up             # Start HAPI FHIR server (or make setup-fhir for first time)
+make dev            # Start FastAPI server
+```
+
+**PowerShell:**
+
+```powershell
+docker compose up -d                                                    # Start HAPI FHIR server
+uvicorn prior_auth_demo.healthcare_api_server:app --reload --port 8000  # Start FastAPI server
 ```
 
 Open `http://localhost:8000`. Select a case from the dropdown and click Submit.
@@ -76,9 +103,20 @@ Open `http://localhost:8000`. Select a case from the dropdown and click Submit.
 
 ## Setup
 
+**Bash:**
+
 ```bash
-make install                     # Install dependencies
+make install                     # Install dependencies + pre-commit hooks
 cp .env.example .env             # Create config
+# Edit .env — add your ANTHROPIC_API_KEY
+```
+
+**PowerShell:**
+
+```powershell
+pip install -e ".[dev]"          # Install dependencies
+pre-commit install               # Install pre-commit hooks
+Copy-Item .env.example .env      # Create config
 # Edit .env — add your ANTHROPIC_API_KEY
 ```
 

@@ -128,6 +128,8 @@ Update `healthcare_api_server.py`:
 
 ## Automated Test Suite
 
+**Bash:**
+
 ```bash
 make up && make load-fhir-data
 make lint
@@ -135,13 +137,28 @@ make test-data-quality
 make test-unit
 make test-integration    # Includes dashboard HTML checks
 make test-e2e
-# AI review: no XSS (no unescaped user input), versioned CDN URLs, no inline JS, existing API intact.
 ```
+
+**PowerShell:**
+
+```powershell
+docker compose up -d
+python -m prior_auth_demo.mock_healthcare_services.load_fhir_data
+ruff check src/prior_auth_demo/ tests/
+ruff format --check src/prior_auth_demo/ tests/
+mypy src/prior_auth_demo/
+pytest tests/test_data_quality.py -v
+pytest tests/ -m unit -v
+pytest tests/ -m integration -v
+pytest tests/ -m e2e -v --timeout=300
+```
+
+AI review: no XSS (no unescaped user input), versioned CDN URLs, no inline JS, existing API intact.
 
 ## Paul's UAT Checklist
 
 **What Changed**: Web dashboard at localhost:8000 — case selector, results panel, history. This is the interview demo surface.
-**Prerequisites**: `make up && make load-fhir-data`, `make dev` running
+**Prerequisites**: HAPI FHIR running with data loaded (see above), FastAPI server running (bash: `make dev` / PowerShell: `uvicorn prior_auth_demo.healthcare_api_server:app --reload --port 8000`)
 
 | # | Action | Expected |
 |---|--------|----------|

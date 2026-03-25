@@ -308,10 +308,18 @@ claude plugins list  # Should show 14 enabled plugins
 # Check MCP servers (start a session to verify)
 claude mcp list  # Should show context7 connected + 4 project servers
 
-# Run tests
+# Run tests (bash)
 make install
 make lint
 make test
+
+# Run tests (PowerShell)
+pip install -e ".[dev]"
+pre-commit install
+ruff check src/prior_auth_demo/ tests/
+ruff format --check src/prior_auth_demo/ tests/
+mypy src/prior_auth_demo/
+pytest -v
 ```
 
 ### Step 8: Start Working

@@ -4,16 +4,16 @@ Synthetic patient data from the [SMART on FHIR Synthea sample datasets](https://
 
 ## Download
 
+**Bash:**
+
 ```bash
 make download-synthea
 ```
 
-Or manually:
+**PowerShell:**
 
-```bash
-git clone --branch 10-patients --single-branch --depth 1 \
-  https://github.com/smart-on-fhir/sample-bulk-fhir-datasets.git \
-  data/synthea_fhir_patients/raw
+```powershell
+git clone --branch 10-patients --single-branch --depth 1 https://github.com/smart-on-fhir/sample-bulk-fhir-datasets.git data/synthea_fhir_patients/raw
 ```
 
 ## Contents

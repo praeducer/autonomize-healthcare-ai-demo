@@ -215,10 +215,10 @@ git push origin release/step-N-<name>
 
 Every build step follows this test sequence. All automated tests must pass before Paul's UAT.
 
-1. `make lint` — ruff check + format check
-2. `make test-data-quality` — FHIR data validation
-3. `make test-unit` — pure logic, no network
-4. `make test-integration` — service connectivity (Build Step 2+, needs Docker)
-5. `make test-e2e` — full flow with real AI (needs ANTHROPIC_API_KEY)
+1. Lint — bash: `make lint` / PowerShell: `ruff check src/prior_auth_demo/ tests/ && ruff format --check src/prior_auth_demo/ tests/ && mypy src/prior_auth_demo/`
+2. Data quality — bash: `make test-data-quality` / PowerShell: `pytest tests/test_data_quality.py -v`
+3. Unit tests — bash: `make test-unit` / PowerShell: `pytest tests/ -m unit -v`
+4. Integration tests (Build Step 2+, needs Docker) — bash: `make test-integration` / PowerShell: `pytest tests/ -m integration -v`
+5. E2E tests (needs ANTHROPIC_API_KEY) — bash: `make test-e2e` / PowerShell: `pytest tests/ -m e2e -v --timeout=300`
 6. AI architecture review (Claude Code subagent) — code quality, FHIR compliance, security
 7. Paul's UAT — manual walkthrough per step's checklist

@@ -70,21 +70,29 @@ All statistics in the presentation have been verified against primary sources:
 
 ### Infrastructure (10 minutes before)
 - [ ] Docker Desktop running (open it; takes ~30s to start)
-- [ ] `make setup-fhir` — starts HAPI FHIR container, waits for ready, loads Synthea data
-- [ ] `make fhir-status` — confirms "FHIR API: responding"
-- [ ] `make dev` — starts FastAPI server on `http://localhost:8000`
+- [ ] Start HAPI FHIR + load data:
+  - Bash: `make setup-fhir`
+  - PowerShell: `docker compose up -d` then `python -m prior_auth_demo.mock_healthcare_services.load_fhir_data`
+- [ ] Verify FHIR is responding: open `http://localhost:8080/fhir/metadata` in browser
+- [ ] Start FastAPI server:
+  - Bash: `make dev`
+  - PowerShell: `uvicorn prior_auth_demo.healthcare_api_server:app --reload --port 8000`
 - [ ] `.env` has valid `ANTHROPIC_API_KEY` and `FHIR_SERVER_URL=http://localhost:8080/fhir`
 
 ### Smoke Test (5 minutes before)
-- [ ] `make review` — single case produces APPROVED determination
-- [ ] `make review-all` — all 5 cases produce expected outcomes (approve, deny, pend, complex, urgent)
+- [ ] Single case produces APPROVED determination:
+  - Bash: `make review`
+  - PowerShell: `python -m prior_auth_demo.command_line_demo --case data/sample_pa_cases/01_lumbar_mri_clear_approval.json`
+- [ ] All 5 cases produce expected outcomes (approve, deny, pend, complex, urgent):
+  - Bash: `make review-all`
+  - PowerShell: `python -m prior_auth_demo.command_line_demo --all`
 - [ ] Open `http://localhost:8000` — dashboard loads, case dropdown populated
 - [ ] Open `http://localhost:8000/docs` — Swagger UI renders all endpoints
 - [ ] Open `http://localhost:8080` — HAPI FHIR welcome page shows
 - [ ] Check response times — should be under 30 seconds per case
 - [ ] Verify confidence scores are in reasonable range (0.0-1.0)
 - [ ] Verify reasoning includes evidence citations
-- [ ] **Fallback plan**: If dashboard fails → demo via Swagger UI (`/docs`); if that fails → CLI (`make review`); if all fail → walk through architecture diagrams
+- [ ] **Fallback plan**: If dashboard fails → demo via Swagger UI (`/docs`); if that fails → CLI (bash: `make review` / PowerShell: `python -m prior_auth_demo.command_line_demo --case data/sample_pa_cases/01_lumbar_mri_clear_approval.json`); if all fail → walk through architecture diagrams
 - [ ] **Backup recording**: Screenshot or recording of a successful demo run in case of API outage
 
 ---
@@ -95,7 +103,7 @@ All statistics in the presentation have been verified against primary sources:
 - [ ] **Test screen share resolution**: Start a Teams test call → Share screen → confirm text is crisp and readable
 - [ ] **Close distracting apps**: Slack, email, personal browser tabs, notifications (Focus Assist ON)
 - [ ] **Pre-load browser**: Open `http://localhost:8000` and `http://localhost:8000/docs` in separate tabs before the call
-- [ ] **Services running**: Docker Desktop started, `make setup-fhir` done, `make dev` running, internet connected
+- [ ] **Services running**: Docker Desktop started, FHIR loaded (see Infrastructure above), FastAPI server running, internet connected
 
 ---
 
