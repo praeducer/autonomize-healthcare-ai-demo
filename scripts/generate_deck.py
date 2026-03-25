@@ -434,16 +434,10 @@ SLIDES: list[dict] = [
     {
         "title": "System Context",
         "body": [
-            {"type": "image", "path": _diagram("01-system-context.png"), "max_h": 3.2},
+            {"type": "image", "path": _diagram("01-system-context.png"), "max_h": 4.0},
             {
-                "type": "table",
-                "headers": ["Actor", "Role", "Integration"],
-                "rows": [
-                    ["Healthcare Providers", "Submit PA requests", "Fax, Portal, X12 278"],
-                    ["Autonomize AI Platform", "AI-driven clinical review", "PA Copilot on Genesis"],
-                    ["Health Plan Systems", "Eligibility, benefits, clinical data", "REST API, FHIR R4"],
-                    ["Regulators (CMS)", "Compliance reporting", "CMS-0057-F metrics"],
-                ],
+                "type": "callout",
+                "text": "Four actors, one platform. Providers submit PA requests. The Payer Core provides eligibility and receives determinations. Clinical data sources feed FHIR R4 records. CMS receives compliance reporting. Autonomize PA Copilot sits in the center \u2014 automating the clinical review, not replacing it.",
             },
         ],
     },
@@ -482,11 +476,11 @@ SLIDES: list[dict] = [
                 "type": "text",
                 "font_size": 13,
                 "text": (
-                    "\u2022 Safety-first routing \u2014 confidence thresholds route low-certainty cases to human reviewers; no auto-deny without clinical review\n\n"
-                    "\u2022 Configurable thresholds \u2014 start conservative, tune with real performance data\n\n"
-                    "\u2022 CMS-0057-F compliance \u2014 FHIR R4 foundation meets Jan 2027 API deadline without re-architecture\n\n"
-                    "\u2022 Azure-native \u2014 leverages Autonomize\u2019s Azure ecosystem, Pegasus Program, and Marketplace presence\n\n"
-                    "\u2022 Full audit trail \u2014 every determination records model version, input hash, reasoning, evidence, and confidence for 7-year retention"
+                    "\u2022 Safety-first determination routing \u2014 confidence thresholds route low-certainty cases to human reviewers; no case is ever auto-denied without clinical review\n\n"
+                    "\u2022 Configurable confidence thresholds \u2014 start conservative, tune with real performance data as the system learns\n\n"
+                    "\u2022 CMS-0057-F compliance readiness \u2014 FHIR R4 foundation meets the Jan 2027 API deadline without re-architecture\n\n"
+                    "\u2022 Azure-native deployment \u2014 leverages Autonomize\u2019s existing Azure ecosystem, Pegasus Program membership, and Marketplace presence\n\n"
+                    "\u2022 Full audit trail \u2014 every determination records model version, input hash, reasoning, evidence, and confidence for 7-year regulatory retention"
                 ),
             },
         ],
@@ -497,25 +491,25 @@ SLIDES: list[dict] = [
             {
                 "type": "table",
                 "font_size": 9,
-                "headers": ["#", "Risk", "Architectural Mitigation", "Operational Mitigation"],
+                "headers": ["#", "Risk", "Mitigation 1: Architectural", "Mitigation 2: Operational"],
                 "rows": [
                     [
                         "1",
                         "PHI exposure through AI pipeline",
                         "PHI tokenization before LLM \u2014 AI sees clinical facts without patient identity",
-                        "Zero data retention for model training (enterprise terms)",
+                        "Anthropic API: zero data retention for model training (enterprise terms)",
                     ],
                     [
                         "2",
-                        "Prompt injection via clinical docs",
+                        "Prompt injection via clinical documents",
                         "Document sanitization + system prompt isolation",
-                        "Output validation requires evidence citations",
+                        "Output validation requiring evidence citations \u2014 hallucinated claims fail verification",
                     ],
                     [
                         "3",
                         "Untraceable AI decisions",
-                        "Tamper-proof audit: model version, input hash, reasoning, confidence",
-                        "Immutable 7-year retention, append-only writes",
+                        "Tamper-proof audit trail: model version, input hash, reasoning, evidence, confidence",
+                        "Immutable 7-year retention with append-only writes",
                     ],
                 ],
             },
@@ -527,42 +521,57 @@ SLIDES: list[dict] = [
         ],
     },
     {
-        "title": "Progressive Delivery",
+        "title": "Progressive Delivery \u2014 Agile, Iterative, Data-Driven",
         "body": [
             {
                 "type": "table",
-                "headers": ["Phase", "Focus", "Key Deliverable"],
+                "font_size": 9,
+                "headers": ["Phase", "Duration", "What We Deliver", "How We Work"],
                 "rows": [
-                    ["Phase 0: Demo", "Prove the concept", "Working AI PA review with mock data"],
-                    ["Phase 1: MVP", "Single LOB, single channel", "Production PA processing with human review"],
-                    ["Phase 2: Scale", "Multi-channel, multi-LOB", "Fax OCR, legacy data, LOB configuration"],
-                    ["Phase 3: Enterprise", "Full scale, compliance", "All channels, 20 LOBs, CMS reporting"],
+                    [
+                        "Phase 0: Demo",
+                        "Weeks 1-2",
+                        "Working AI PA review with mock data",
+                        "Spike + validate core architecture",
+                    ],
+                    [
+                        "Phase 1: MVP",
+                        "Weeks 3-6",
+                        "Single LOB, single channel in production",
+                        "2-week sprints, daily standups, human review on all cases",
+                    ],
+                    [
+                        "Phase 2: Scale",
+                        "Weeks 7-10",
+                        "Multi-channel, multi-LOB",
+                        "Iterate on real performance data, add fax OCR + legacy connectors",
+                    ],
+                    [
+                        "Phase 3: Enterprise",
+                        "Weeks 11-12",
+                        "All channels, 20 LOBs, CMS reporting",
+                        "Harden, load test, compliance validation",
+                    ],
                 ],
             },
             {
                 "type": "callout",
-                "label": "Design principle",
-                "text": "Each phase produces a deployable, demonstrable system. Decision gates between phases use real performance data to scope the next phase.",
+                "text": "Each phase: Design \u2192 Build \u2192 Test \u2192 Demo \u2192 Decision Gate. No phase starts without stakeholder sign-off. Real performance data drives scope decisions \u2014 not assumptions.",
             },
         ],
     },
     {
         "title": "Discussion Starters",
         "body": [
-            {"type": "heading", "text": "Business Strategy"},
+            {"type": "heading", "text": "For the team:"},
             {
                 "type": "text",
-                "text": "\u2022 How does the ServiceNow partnership change payer integration strategy?\n\u2022 What is the target auto-determination rate for Phase 1?",
+                "text": "\u2022 Which LOB would be the best Phase 1 candidate \u2014 and why?\n\u2022 What auto-determination rate should we target for Phase 1?\n\u2022 What\u2019s been the biggest integration surprise with existing payer deployments?",
             },
-            {"type": "heading", "text": "Technical Depth"},
+            {"type": "heading", "text": "What I\u2019d want to learn in discovery:"},
             {
                 "type": "text",
-                "text": "\u2022 How does the Genesis Platform handle coverage criteria updates?\n\u2022 What\u2019s the Azure AI Foundry Agent Service integration status?",
-            },
-            {"type": "heading", "text": "Implementation"},
-            {
-                "type": "text",
-                "text": "\u2022 Which LOB is the ideal Phase 1 candidate?\n\u2022 What\u2019s been the biggest integration challenge with existing payer deployments?",
+                "text": "\u2022 How does Genesis handle coverage criteria updates today?\n\u2022 What does the ServiceNow partnership mean for payer workflow integration?\n\u2022 What Autonomize platform components are available for a new engagement?",
             },
         ],
     },
@@ -620,12 +629,7 @@ SLIDES: list[dict] = [
             {
                 "type": "callout",
                 "label": "Recommendation",
-                "text": "Start multi-tenant with per-LOB config. Genesis Platform supports it. Separate instances only where regulation requires physical isolation.",
-            },
-            {
-                "type": "callout",
-                "label": "Honest unknowns",
-                "text": "The right answer depends on actual LOB rule complexity and regulatory requirements \u2014 both are discovery questions.",
+                "text": "Multi-tenant with per-LOB configuration. Separate instances only where regulation requires physical isolation. The right answer depends on actual LOB rule complexity \u2014 a discovery question.",
             },
         ],
     },
