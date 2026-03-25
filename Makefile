@@ -105,4 +105,4 @@ diagrams:
 	@echo "Done."
 
 deck: diagrams
-	npx tsx scripts/generate-deck.ts
+	python scripts/generate_deck.py

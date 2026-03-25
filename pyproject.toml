@@ -24,6 +24,7 @@ dependencies = [
     "jinja2>=3.1.0",
     "aiosqlite>=0.20.0",
     "python-multipart>=0.0.12",
+    "python-pptx>=1.0.0",
 ]
 
 [project.optional-dependencies]
@@ -50,6 +51,9 @@ line-length = 120
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "N", "W", "UP"]
+
+[tool.ruff.lint.per-file-ignores]
+"scripts/*.py" = ["E501"]  # slide content strings are naturally long
 
 [tool.mypy]
 python_version = "3.12"

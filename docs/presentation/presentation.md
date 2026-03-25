@@ -217,7 +217,7 @@ Portal / Fax"| PROV
 
 ---
 
-## Slide 6: Solution Architecture
+## Slide 6a: Solution Architecture — Diagram
 
 ```mermaid
 flowchart TB
@@ -275,6 +275,10 @@ flowchart TB
 *Azure Monitor + Evals*`"]
     end
 ```
+
+---
+
+## Slide 6b: Solution Architecture — Components
 
 | Component | Azure Service | Purpose |
 |-----------|--------------|---------|
