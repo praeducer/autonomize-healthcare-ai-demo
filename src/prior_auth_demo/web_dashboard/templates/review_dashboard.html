@@ -54,7 +54,7 @@
                           hx-target="#result-panel"
                           hx-swap="innerHTML"
                           hx-indicator="#spinner"
-                          hx-on::after-request="htmx.trigger('#history-body', 'load')">
+                          hx-on::after-request="if(event.detail.successful) htmx.trigger('#history-body', 'load')">
                         <label for="case_name">Select PA Case</label>
                         <select id="case_name" name="case_name" required>
                             {% for case in cases %}

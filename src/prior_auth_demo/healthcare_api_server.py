@@ -297,7 +297,7 @@ app.include_router(dashboard_router)
 @app.get("/dashboard", include_in_schema=False)
 async def dashboard_redirect() -> RedirectResponse:
     """Redirect /dashboard to the root dashboard page."""
-    return RedirectResponse(url="/", status_code=301)
+    return RedirectResponse(url="/", status_code=302)
 
 
 # --- API Endpoints ---

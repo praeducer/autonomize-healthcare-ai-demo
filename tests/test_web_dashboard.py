@@ -56,9 +56,9 @@ class TestDashboardAlias:
     """Tests for /dashboard redirect alias."""
 
     async def test_dashboard_alias_redirects_to_root(self, client: httpx.AsyncClient) -> None:
-        """GET /dashboard returns 301 redirect to /."""
+        """GET /dashboard returns 302 redirect to /."""
         response = await client.get("/dashboard", follow_redirects=False)
-        assert response.status_code == 301
+        assert response.status_code == 302
         assert response.headers["location"] == "/"
 
     async def test_dashboard_alias_follows_to_html(self, client: httpx.AsyncClient) -> None:
