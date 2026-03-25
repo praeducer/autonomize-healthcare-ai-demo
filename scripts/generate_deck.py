@@ -29,6 +29,8 @@ from pptx.util import Emu, Inches, Pt
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 DIAGRAMS = PROJECT_ROOT / "docs" / "architecture" / "diagrams"
 OUTPUT_DIR = PROJECT_ROOT / "docs" / "presentation"
+LOGO_WHITE = PROJECT_ROOT / "docs" / "assets" / "autonomize-logo.png"  # for dark backgrounds
+LOGO_DARK = PROJECT_ROOT / "docs" / "assets" / "autonomize-logo-dark.png"  # for light backgrounds
 
 # ---------------------------------------------------------------------------
 # Brand theme — extracted from autonomize.ai CSS
@@ -70,13 +72,13 @@ def _png_dimensions(path: Path) -> tuple[int, int]:
 
 
 def _add_title_bar(slide, title: str) -> None:
-    """Colored rectangle across the top with white title text."""
+    """Colored rectangle with white title text + white logo."""
     shape = slide.shapes.add_shape(
         1,
         Inches(0),
         Inches(0),
         SLIDE_W,
-        TITLE_H,  # MSO_SHAPE.RECTANGLE = 1
+        TITLE_H,
     )
     shape.fill.solid()
     shape.fill.fore_color.rgb = PRIMARY
@@ -92,9 +94,22 @@ def _add_title_bar(slide, title: str) -> None:
     p.font.name = FONT_NAME
     p.alignment = PP_ALIGN.LEFT
 
+    # White logo in top-right of title bar
+    if LOGO_WHITE.exists():
+        logo_h = Inches(0.35)
+        pw, ph = _png_dimensions(LOGO_WHITE)
+        logo_w = Inches(0.35 * pw / ph)
+        slide.shapes.add_picture(
+            str(LOGO_WHITE),
+            Emu(SLIDE_W.emu - MARGIN.emu - logo_w.emu),
+            Emu(int((TITLE_H.emu - logo_h.emu) / 2)),
+            logo_w,
+            logo_h,
+        )
+
 
 def _add_footer(slide, num: int, total: int) -> None:
-    """Slide number in bottom-right."""
+    """Slide number + dark logo in footer."""
     tx_box = slide.shapes.add_textbox(
         SLIDE_W - MARGIN - Inches(1.5),
         SLIDE_H - FOOTER_H,
@@ -107,6 +122,20 @@ def _add_footer(slide, num: int, total: int) -> None:
     p.font.size = Pt(8)
     p.font.color.rgb = RGBColor(0x99, 0x99, 0x99)
     p.font.name = FONT_NAME
+    p.alignment = PP_ALIGN.RIGHT
+
+    # Dark logo in bottom-left
+    if LOGO_DARK.exists():
+        logo_h = Inches(0.2)
+        pw, ph = _png_dimensions(LOGO_DARK)
+        logo_w = Inches(0.2 * pw / ph)
+        slide.shapes.add_picture(
+            str(LOGO_DARK),
+            MARGIN,
+            Emu(SLIDE_H.emu - FOOTER_H.emu + Inches(0.05).emu),
+            logo_w,
+            logo_h,
+        )
     p.alignment = PP_ALIGN.RIGHT
 
 
@@ -199,8 +228,8 @@ def _add_callout_block(slide, text: str, y: int, label: str = "", font_size=FONT
     full_text = (f"{label}: " if label else "") + text
     line_h = int(font_size.emu * 1.5)
     num_lines = _estimate_lines(full_text, CONTENT_W.inches - 0.4, font_size.pt)
-    padding = Inches(0.15).emu
-    h = max(Inches(0.35).emu, num_lines * line_h + padding * 2)
+    padding = Inches(0.1).emu
+    h = max(Inches(0.3).emu, num_lines * line_h + padding * 2)
     h = min(h, _remaining(y))
     if h < Inches(0.2).emu:
         return y
@@ -331,11 +360,11 @@ def _diagram(name: str) -> str:
 SLIDES: list[dict] = [
     {
         "title": "AI-Driven Prior Authorization",
+        "layout": "title",  # special layout: vertically centered
         "body": [
-            {"type": "heading", "text": "Solution Architecture for a Large US Health Plan"},
-            {"type": "text", "text": ""},
-            {"type": "text", "text": "Paul Prae  |  Principal AI Engineer & Architect"},
-            {"type": "text", "text": "www.paulprae.com"},
+            {"type": "heading", "text": "Solution Architecture for a Large US Health Plan", "font_size": 20},
+            {"type": "text", "text": "Paul Prae  |  Principal AI Engineer & Architect", "font_size": 16},
+            {"type": "text", "text": "www.paulprae.com", "font_size": 14},
         ],
     },
     {
@@ -344,7 +373,7 @@ SLIDES: list[dict] = [
             {"type": "heading", "text": "The Problem"},
             {
                 "type": "text",
-                "text": "Manual PA costs $10.97/transaction provider-side (CAQH 2024), $3.52 payer-side vs $0.05 electronic. 93% of physicians say PA delays care (AMA 2024).",
+                "text": "Manual PA processing costs $10.97 per provider transaction and $3.52 per payer transaction, versus $0.05 when fully electronic (CAQH 2024). 93% of physicians report PA delays patient care (AMA 2024).",
             },
             {"type": "heading", "text": "The Opportunity \u2014 Altais + Autonomize AI (Feb 2026)"},
             {
@@ -653,7 +682,12 @@ def render_pptx(slides: list[dict], output_path: Path) -> None:
         _add_title_bar(slide, slide_data["title"])
         _add_footer(slide, si + 1, total)
 
-        y = CONTENT_Y.emu
+        # Title slide: vertically center the content block
+        is_title_layout = slide_data.get("layout") == "title"
+        if is_title_layout:
+            y = int(SLIDE_H.emu * 0.35)  # start at ~35% down for visual center
+        else:
+            y = CONTENT_Y.emu
 
         for block in slide_data["body"]:
             if _remaining(y) < Inches(0.15).emu:
@@ -664,7 +698,8 @@ def render_pptx(slides: list[dict], output_path: Path) -> None:
                 fs = Pt(block.get("font_size", FONT_BODY.pt))
                 y = _add_text_block(slide, block["text"], y, font_size=fs)
             elif btype == "heading":
-                y = _add_heading_block(slide, block["text"], y)
+                fs = Pt(block.get("font_size", FONT_HEADING.pt))
+                y = _add_heading_block(slide, block["text"], y, font_size=fs)
             elif btype == "image":
                 y = _add_image_block(slide, block["path"], y, max_h=block.get("max_h"))
             elif btype == "callout":
