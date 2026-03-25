@@ -27,9 +27,9 @@ Paul is presenting via Microsoft Teams screen share for an Autonomize AI Solutio
 
 | File | Changes |
 |------|---------|
-| `docs/architecture/presentation.md` | Restructure slide order, remove AWS column, add demo slide, fix diagrams |
-| `docs/architecture/speaker-script.md` | Align with new slide order, add demo context, update per-slide notes |
-| `docs/architecture/slide-generation-prompts.md` | Align prompt numbers with new slide order |
+| `docs/presentation/presentation.md` | Restructure slide order, remove AWS column, add demo slide, fix diagrams |
+| `docs/presentation/speaker-script.md` | Align with new slide order, add demo context, update per-slide notes |
+| `docs/presentation/slide-generation-prompts.md` | Align prompt numbers with new slide order |
 | `docs/architecture/solution-architecture.md` | Minor fixes for consistency (FHIR team composition, legacy justification) |
 
 ## New Slide Order
@@ -39,7 +39,7 @@ Paul is presenting via Microsoft Teams screen share for an Autonomize AI Solutio
 | 1 | Title & Introduction | Slide 1 | Keep |
 | 2 | PA Request Lifecycle | Slide 5 | **Moved to front** — opens with the business process |
 | 3 | Demo: Proof of Concept | NEW | High-level system diagram of demo + "this is a PoC" framing |
-| 4 | **LIVE DEMO** | Was in speaker notes only | 5-minute CLI demo per `docs/demo-script.md` |
+| 4 | **LIVE DEMO** | Was in speaker notes only | 5-minute CLI demo per `docs/presentation/demo-script.md` |
 | 5 | System Context | Slide 3 | Fix: differentiate actor vs role in diagram |
 | 6 | Component Architecture | Slide 4 | Fix: differentiate generic vs Azure. **Remove AWS column** |
 | 7 | Why This Architecture | Slide 2 | Moved after diagrams — now answers "why these choices?" |
@@ -90,7 +90,7 @@ Paul is presenting via Microsoft Teams screen share for an Autonomize AI Solutio
 
 **Step 1:** Reorder per-slide notes to match new slide order.
 
-**Step 2:** Add demo transition notes between Slide 3 (PoC overview) and Slide 4 (live demo). Reference `docs/demo-script.md` for the full CLI walkthrough.
+**Step 2:** Add demo transition notes between Slide 3 (PoC overview) and Slide 4 (live demo). Reference `docs/presentation/demo-script.md` for the full CLI walkthrough.
 
 **Step 3:** Update opening thesis to mention the demo upfront: "...and I've built a working proof of concept to demonstrate the core review flow."
 

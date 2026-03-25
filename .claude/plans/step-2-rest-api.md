@@ -1,11 +1,24 @@
 # Build Step 2: REST API with Real FHIR Server
 
+> **Status: COMPLETED** — All implementation, tests, and UAT passed. Tagged `v0.2.0`.
+>
 > **Prerequisites**: Step 1 complete. Read `shared-context.md` for service contracts and Claude Code automation. Rules auto-loaded from `.claude/rules/`.
 
 **Tag**: `v0.2.0` | **Branch**: `release/step-2-api-service`
 **New dependencies**: `fastapi`, `uvicorn`, `httpx`, `aiosqlite`
 **New infrastructure**: HAPI FHIR Server (Docker), SQLite
 **Demo mode**: Swagger UI in browser
+
+## What Was Delivered
+
+- FastAPI REST API with full Swagger documentation at `/docs`
+- HAPI FHIR server (Docker, v7.6.0) with 10 Synthea patients loaded
+- Clinical data retrieval from real FHIR R4 server (Conditions, Observations, Procedures)
+- SQLite append-only audit trail (`determination_audit_store.py`)
+- Mock member eligibility service (FHIR CoverageEligibilityResponse)
+- Sample case browser endpoints (`/api/v1/prior-auth/sample-cases`)
+- Health check endpoint with FHIR server connectivity reporting
+- Graceful fallback: engine works without Docker (CLI always functional)
 
 ## Claude Code Tooling for This Step
 

@@ -2,7 +2,7 @@
 ## AI-Driven Prior Authorization — Autonomize AI Interview
 
 > Work through this checklist before sending the email and before presenting.
-> For study material, see [study-guide.md](study-guide.md). For speaking notes, see [speaker-script.md](../architecture/speaker-script.md).
+> For study material, see [study-guide.md](study-guide.md). For speaking notes, see [speaker-script.md](../presentation/speaker-script.md).
 
 ---
 
@@ -50,7 +50,7 @@ All statistics in the presentation have been verified against primary sources:
 
 ## Before Presenting -- Rehearsal
 
-- [ ] Read [speaker-script.md](../architecture/speaker-script.md) opening thesis aloud
+- [ ] Read [speaker-script.md](../presentation/speaker-script.md) opening thesis aloud
 - [ ] Read closing summary aloud
 - [ ] Time yourself on slides 1-6 (target: 15 min)
 - [ ] Review "don't elaborate" topics in speaker-script.md
@@ -131,7 +131,7 @@ All statistics in the presentation have been verified against primary sources:
 4. **Review Azure-to-AWS mapping** in [study-guide.md](study-guide.md) -- be ready for Ujjwal's questions.
 5. **Review assumptions and discovery questions** in [study-guide.md](study-guide.md) -- these show depth and honesty.
 6. **Verify all cited URLs work** -- spot-check 5 random source links from the appendix.
-7. **Practice the 60-second opening thesis** from [speaker-script.md](../architecture/speaker-script.md).
+7. **Practice the 60-second opening thesis** from [speaker-script.md](../presentation/speaker-script.md).
 8. **Practice the 30-second closing summary** -- this is your landing point no matter what.
 
 ---

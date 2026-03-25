@@ -2,7 +2,7 @@
 ## AI-Driven Prior Authorization — Autonomize AI Interview
 
 > Keep this open during the interview for fast lookup when the panel asks questions.
-> For full presentation flow, see [speaker-script.md](../architecture/speaker-script.md).
+> For full presentation flow, see [speaker-script.md](../presentation/speaker-script.md).
 
 ---
 

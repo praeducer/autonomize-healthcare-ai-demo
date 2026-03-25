@@ -142,7 +142,7 @@ make test-e2e
 | 8 | Check history panel | All 5 determinations listed in order. |
 | 9 | Fullscreen at 1920x1080 | All text readable, no horizontal scroll, badges clear. |
 | 10 | Open `http://localhost:8000/docs` | Swagger UI intact. |
-| 11 | **Practice demo walkthrough** (see `docs/architecture/speaker-script.md`) | All 5 cases in order 1→4→3→5→2, 5-6 minutes total. |
+| 11 | **Practice demo walkthrough** (see `docs/presentation/speaker-script.md`) | All 5 cases in order 1→4→3→5→2, 5-6 minutes total. |
 
 **Special note on step 11**: This is your dress rehearsal. If any case takes >45s or gives unexpected results, re-run — LLM outputs vary.
 

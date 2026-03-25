@@ -132,7 +132,7 @@ flowchart LR
 - Synthetic patient data (production: real clinical records via FHIR)
 - Single-user demo (production: Azure Container Apps with auto-scaling)
 
-> **[LIVE DEMO]** — See `docs/demo-script.md` for the 5-minute CLI walkthrough
+> **[LIVE DEMO]** — See [demo-script.md](demo-script.md) for the 5-minute CLI walkthrough
 
 ---
 

@@ -1,7 +1,7 @@
 # Study Guide -- Night Before / Morning Of
 ## AI-Driven Prior Authorization — Autonomize AI Interview
 
-> Study this to build confidence. For the presentation itself, use [speaker-script.md](../architecture/speaker-script.md) alongside [presentation.md](../architecture/presentation.md).
+> Study this to build confidence. For the presentation itself, use [speaker-script.md](../presentation/speaker-script.md) alongside [presentation.md](../presentation/presentation.md).
 
 ---
 

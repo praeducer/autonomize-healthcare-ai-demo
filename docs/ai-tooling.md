@@ -74,8 +74,8 @@ Files in this repo trace back to SA Agent outputs:
 | This Repo | SA Agent Source (`outputs/eng-2026-004-v2/`) |
 |-----------|-----------------------------------------------|
 | `docs/architecture/solution-architecture.md` | `solution-architecture-source-of-truth.md` |
-| `docs/architecture/presentation.md` | `presentation.md` |
-| `docs/architecture/speaker-script.md` | `speaker-script.md` |
+| `docs/presentation/presentation.md` | `presentation.md` |
+| `docs/presentation/speaker-script.md` | `speaker-script.md` |
 | `docs/architecture/research-context.md` | `research-context.md` |
 | `docs/architecture/requirements-traceability.md` | `requirements-traceability.md` |
 | `docs/architecture/diagrams/*` (6 diagrams × 3 formats) | `diagrams/*` |

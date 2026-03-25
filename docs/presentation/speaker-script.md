@@ -2,7 +2,7 @@
 ## AI-Driven Prior Authorization | Autonomize AI Interview
 
 > **Use alongside [presentation.md](presentation.md) during the interview.**
-> For deeper technical reference, see [solution-architecture.md](solution-architecture.md).
+> For deeper technical reference, see [solution-architecture.md](../architecture/solution-architecture.md).
 
 ---
 
@@ -45,7 +45,7 @@ I'll take you through the architecture in tiers -- executive context, then techn
 
 ### Slide 3: Demo -- Proof of Concept
 **Core (30 sec)**: "I built this to validate the architecture. Same clinical review engine, FHIR R4 data models, real ICD-10 and CMS coverage criteria. Three interfaces -- CLI, API with Swagger, and a web dashboard."
-**Transition to demo**: "Let me show you it working." Then follow docs/demo-script.md for the 5-minute CLI walkthrough.
+**Transition to demo**: "Let me show you it working." Then follow [demo-script.md](demo-script.md) for the 5-minute CLI walkthrough.
 **After demo**: "What you just saw is Phase 0 of the roadmap. The same engine would integrate with your PA Copilot on Genesis."
 
 ### Slide 4: System Context
