@@ -41,11 +41,12 @@
 
 These are Azure-specific. You can't fully substitute with "same as AWS" on these:
 
-**1. Azure AI Foundry**
+**1. Azure AI Foundry (recently rebranded to "Microsoft Foundry")**
 - What it is: Microsoft's unified AI development platform -- model catalog (Claude, GPT-4, Llama), Agent Service, Prompt Flow, evals
 - Why it's in the architecture: Hosts the AI models PA Copilot calls; Agent Service provides the agentic runtime
 - 5-minute review: [Azure AI Foundry overview](https://learn.microsoft.com/en-us/azure/foundry/)
-- Key fact: Agent Service is in free preview until April 2026 -- mention this as a Phase 0 cost advantage
+- Key fact: Agent Service went GA May 2025. Free preview pricing until April 2026.
+- **Naming note**: Microsoft rebranded "Azure AI Foundry" to "Microsoft Foundry" in early 2026. Either name is understood. If panelists use the old name, don't correct them -- just use whichever they use.
 
 **2. Azure Health Data Services**
 - What it is: Managed FHIR R4 server + DICOM + MedTech services in one Azure resource

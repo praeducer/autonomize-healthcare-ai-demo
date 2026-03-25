@@ -42,7 +42,7 @@ All statistics in the presentation have been verified against primary sources:
 
 ## Before Presenting -- Azure Service Names
 
-- [ ] Azure AI Foundry (not "Azure OpenAI Service" -- rebranded)
+- [ ] Azure AI Foundry / Microsoft Foundry (recently rebranded from "Azure AI Foundry" to "Microsoft Foundry" -- either name is acceptable; avoid "Azure OpenAI Service")
 - [ ] Azure AI Document Intelligence (not "Form Recognizer" -- rebranded)
 - [ ] Microsoft Entra ID (not "Azure AD" -- rebranded)
 - [ ] Azure Health Data Services (not "Azure API for FHIR" -- evolved)

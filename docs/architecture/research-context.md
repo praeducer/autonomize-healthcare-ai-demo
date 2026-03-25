@@ -119,11 +119,12 @@ Source: [BusinessWire Leadership Hires](https://www.businesswire.com/news/home/2
   - [Azure Blog: Claude in Foundry](https://azure.microsoft.com/en-us/blog/introducing-anthropics-claude-models-in-microsoft-foundry-bringing-frontier-intelligence-to-azure/)
   - [Microsoft Healthcare Blog](https://www.microsoft.com/en-us/industry/blog/healthcare/2026/01/11/bridging-the-gap-between-ai-and-medicine-claude-in-microsoft-foundry-advances-capabilities-for-healthcare-and-life-sciences-customers/)
 
-### Azure AI Foundry Agent Service
-- **Status**: Generally available Q4 2025 / Q1 2026
+### Azure AI Foundry Agent Service (now Microsoft Foundry Agent Service)
+- **Status**: Generally available (GA May 2025). MCP tool support added June 2025 (preview).
 - **SDKs**: Python (`azure-ai-projects` v2.0.0b3), JavaScript, Java, .NET
 - **MCP Support**: Public and private MCP endpoints, Foundry MCP Server at mcp.ai.azure.com
 - **Pricing**: No platform fee — pay per model tokens + tools. Free preview until April 1, 2026.
+- **Note**: Classic agents deprecated, retiring March 2027. New Foundry portal agents are GA.
 - Sources:
   - [Foundry Agent Service](https://azure.microsoft.com/en-us/products/ai-foundry/agent-service)
   - [Microsoft Learn: MCP with Agents](https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/tools/model-context-protocol)
@@ -316,3 +317,5 @@ Source: [MultiState PA Reform](https://www.multistate.us/insider/2025/8/14/prior
 | Autonomize HITRUST certification | No public source found | Do not claim HITRUST — only cite SOC 2 Type 2 + HIPAA |
 | Claude healthcare connectors via API | Connectors confirmed in Claude UI, unclear if available via Anthropic API for custom apps | Frame as "Claude platform capability" not "API endpoint" |
 | Autonomize "100+ agents" | Number from October 2025 launch — may have grown | Cite "100+" with date qualifier |
+| ICD-10 codes M54.5 and M48.06 in demo cases | Category headers, not billable for HIPAA transactions | Acceptable for demo scope; note if asked: "Production would use the more specific subcodes (M54.50, M48.061)" |
+| Azure AI Foundry → Microsoft Foundry rebrand | "Azure AI Foundry" rebranded to "Microsoft Foundry" in early 2026 | Use either name; our docs say "Azure AI Foundry" which is still widely understood |
