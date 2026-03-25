@@ -80,14 +80,17 @@ docker compose up -d                                                    # Start 
 uvicorn prior_auth_demo.healthcare_api_server:app --reload --port 8000  # Start FastAPI server
 ```
 
-Open `http://localhost:8000/docs` for Swagger UI. Key endpoints:
+Open `http://localhost:8000/docs` for Swagger UI. Endpoints are numbered in demo order:
 
-| Method | Path | Description |
-|--------|------|-------------|
-| POST | `/api/v1/prior-auth/review` | Submit a PA case for review |
-| GET | `/api/v1/prior-auth/determinations` | List all past determinations |
-| GET | `/api/v1/prior-auth/sample-cases` | List available test cases |
-| GET | `/health` | System health check |
+| # | Method | Path | Description |
+|---|--------|------|-------------|
+| 1 | GET | `/health` | Check system health — call this first |
+| 2 | GET | `/api/v1/prior-auth/sample-cases` | List available test cases |
+| 3 | GET | `/api/v1/prior-auth/sample-cases/{name}` | Get a case's FHIR Bundle payload |
+| 4 | POST | `/api/v1/prior-auth/review` | Submit a Bundle for AI review (pre-filled example in Swagger) |
+| 5 | GET | `/api/v1/prior-auth/determinations` | View audit trail of all past reviews |
+
+The POST /review endpoint has a **pre-filled example payload** — click "Try it out" and Execute to run a review immediately.
 
 ## 4. Web Dashboard (Step 3+)
 
@@ -105,7 +108,7 @@ docker compose up -d                                                    # Start 
 uvicorn prior_auth_demo.healthcare_api_server:app --reload --port 8000  # Start FastAPI server
 ```
 
-Open `http://localhost:8000`. Select a case from the dropdown and click Submit.
+Open `http://localhost:8000/dashboard` (or `http://localhost:8000/`). Select a case from the dropdown and click Submit.
 
 **Demo order**: 1 (approval) → 4 (missing docs) → 3 (ambiguous) → 5 (urgent) → 2 (denial).
 

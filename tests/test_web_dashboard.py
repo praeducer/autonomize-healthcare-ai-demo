@@ -52,6 +52,59 @@ class TestDashboardRenders:
 
 
 @pytest.mark.unit
+class TestDashboardAlias:
+    """Tests for /dashboard redirect alias."""
+
+    async def test_dashboard_alias_redirects_to_root(self, client: httpx.AsyncClient) -> None:
+        """GET /dashboard returns 301 redirect to /."""
+        response = await client.get("/dashboard", follow_redirects=False)
+        assert response.status_code == 301
+        assert response.headers["location"] == "/"
+
+    async def test_dashboard_alias_follows_to_html(self, client: httpx.AsyncClient) -> None:
+        """GET /dashboard with follow_redirects returns the dashboard HTML."""
+        response = await client.get("/dashboard", follow_redirects=True)
+        assert response.status_code == 200
+        assert "text/html" in response.headers["content-type"]
+        assert "Prior Authorization Review" in response.text
+
+
+@pytest.mark.unit
+class TestDashboardCrossLinks:
+    """Tests for cross-links between dashboard and Swagger UI."""
+
+    async def test_dashboard_footer_links_to_swagger(self, client: httpx.AsyncClient) -> None:
+        """Dashboard footer includes link to /docs (Swagger UI)."""
+        response = await client.get("/")
+        html = response.text
+        assert 'href="/docs"' in html
+
+    async def test_dashboard_footer_links_to_redoc(self, client: httpx.AsyncClient) -> None:
+        """Dashboard footer includes link to /redoc."""
+        response = await client.get("/")
+        html = response.text
+        assert 'href="/redoc"' in html
+
+    async def test_dashboard_footer_links_to_health(self, client: httpx.AsyncClient) -> None:
+        """Dashboard footer includes link to /health."""
+        response = await client.get("/")
+        html = response.text
+        assert 'href="/health"' in html
+
+
+@pytest.mark.unit
+class TestDashboardHistoryRefresh:
+    """Tests for HTMX history auto-refresh after review submit."""
+
+    async def test_form_triggers_history_refresh(self, client: httpx.AsyncClient) -> None:
+        """Review form includes hx-on attribute to refresh history after submission."""
+        response = await client.get("/")
+        html = response.text
+        assert "hx-on::after-request" in html
+        assert "history-body" in html
+
+
+@pytest.mark.unit
 class TestApiNotAffected:
     """Existing API and Swagger routes must still work after dashboard addition."""
 

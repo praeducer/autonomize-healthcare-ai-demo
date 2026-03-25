@@ -78,12 +78,57 @@ class TestReviewEndpoint:
 
 @pytest.mark.unit
 class TestSwaggerDocs:
-    """Tests for API documentation."""
+    """Tests for API documentation and Swagger UI enrichment."""
 
     async def test_swagger_docs_accessible(self, client: httpx.AsyncClient) -> None:
         """GET /docs returns 200 (Swagger UI)."""
         response = await client.get("/docs")
         assert response.status_code == 200
+
+    async def test_openapi_schema_has_tags_in_order(self, client: httpx.AsyncClient) -> None:
+        """OpenAPI schema groups endpoints by numbered tags for demo walkthrough."""
+        response = await client.get("/openapi.json")
+        assert response.status_code == 200
+        schema = response.json()
+        # Verify endpoints use numbered tags
+        paths = schema["paths"]
+        health_tags = paths["/health"]["get"].get("tags", [])
+        assert any("Health" in t for t in health_tags)
+        review_tags = paths["/api/v1/prior-auth/review"]["post"].get("tags", [])
+        assert any("Review" in t for t in review_tags)
+
+    async def test_openapi_schema_has_review_example(self, client: httpx.AsyncClient) -> None:
+        """POST /review endpoint has a pre-filled FHIR Bundle example in the schema."""
+        response = await client.get("/openapi.json")
+        schema = response.json()
+        review_path = schema["paths"]["/api/v1/prior-auth/review"]["post"]
+        body = review_path.get("requestBody", {})
+        content = body.get("content", {}).get("application/json", {})
+        # FastAPI puts examples under schema when using Body(examples=[...])
+        examples = content.get("schema", {}).get("examples", [])
+        assert len(examples) > 0, "No examples found in review endpoint schema"
+        example = examples[0]
+        assert example.get("resourceType") == "Bundle"
+        assert example.get("type") == "collection"
+
+    async def test_openapi_description_has_quick_start(self, client: httpx.AsyncClient) -> None:
+        """OpenAPI info description includes Quick Start guide."""
+        response = await client.get("/openapi.json")
+        schema = response.json()
+        description = schema["info"]["description"]
+        assert "Quick Start" in description
+        assert "/dashboard" in description
+
+    async def test_endpoints_have_summaries(self, client: httpx.AsyncClient) -> None:
+        """All API endpoints have summary and description fields for Swagger UI."""
+        response = await client.get("/openapi.json")
+        schema = response.json()
+        for path, methods in schema["paths"].items():
+            if path.startswith("/mock") or path == "/dashboard":
+                continue
+            for method, spec in methods.items():
+                if method in ("get", "post", "put", "delete"):
+                    assert "summary" in spec, f"{method.upper()} {path} missing summary"
 
 
 @pytest.mark.unit

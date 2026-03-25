@@ -53,7 +53,8 @@
                     <form hx-post="/dashboard/review"
                           hx-target="#result-panel"
                           hx-swap="innerHTML"
-                          hx-indicator="#spinner">
+                          hx-indicator="#spinner"
+                          hx-on::after-request="htmx.trigger('#history-body', 'load')">
                         <label for="case_name">Select PA Case</label>
                         <select id="case_name" name="case_name" required>
                             {% for case in cases %}
@@ -102,7 +103,12 @@
         </section>
 
         <footer>
-            <p>Phase 0 Demo &mdash; Full architecture in solution-architecture.md</p>
+            <p>
+                Phase 0 Demo &mdash;
+                <a href="/docs">Swagger UI</a> &middot;
+                <a href="/redoc">ReDoc</a> &middot;
+                <a href="/health">Health Check</a>
+            </p>
         </footer>
     </main>
 </body>
