@@ -63,7 +63,7 @@ These are Azure-specific. You can't fully substitute with "same as AWS" on these
 - What it is: Full-lifecycle API gateway -- rate limiting, auth, developer portal, analytics
 - Why it's in the architecture: PA Ingestion Gateway front door; handles all three intake channels
 - AWS equivalent: Amazon API Gateway + custom developer portal
-- Key fact: APIM has native Azure Active Directory integration for OAuth 2.0
+- Key fact: APIM has native Microsoft Entra ID integration for OAuth 2.0
 
 **5. Azure Container Apps**
 - What it is: Serverless container platform built on Kubernetes -- no K8s control plane to manage

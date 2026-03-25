@@ -62,7 +62,7 @@ All statistics in the presentation have been verified against primary sources:
 
 ## Before Presenting -- Diagrams
 
-- [ ] All 6 diagrams render in PowerPoint at readable size
+- [ ] All 7 diagrams render in PowerPoint at readable size
 - [ ] Diagram labels match component names in speaker notes
 - [ ] No diagram has more text than fits comfortably on a slide
 
