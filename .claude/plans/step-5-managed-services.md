@@ -1,5 +1,7 @@
 # Build Step 5: Azure Managed Healthcare Services
 
+> **Status: NOT STARTED** — Stretch goal. Depends on Step 4 completion. Step 4 is sufficient for the interview demo.
+>
 > **Prerequisites**: Step 4 complete. This step is **stretch-only**. If not set up in time, Step 4 is sufficient.
 
 **Tag**: `v0.5.0` | **Branch**: `release/step-5-managed-services`

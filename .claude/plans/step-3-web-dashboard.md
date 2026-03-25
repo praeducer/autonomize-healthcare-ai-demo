@@ -1,10 +1,23 @@
 # Build Step 3: Web Dashboard and Presentation Polish
 
+> **Status: COMPLETED** — All implementation, tests, and UAT passed. Tagged `v0.3.0`.
+>
 > **Prerequisites**: Step 2 complete. Read `shared-context.md` for service contracts and Claude Code automation. Rules auto-loaded from `.claude/rules/`.
 
 **Tag**: `v0.3.0` | **Branch**: `release/step-3-web-dashboard`
 **New dependencies**: `jinja2`, `python-multipart`
 **Demo mode**: Polished web dashboard at `localhost:8000`
+
+## What Was Delivered
+
+- Jinja2 + HTMX + Pico CSS web dashboard (no npm, no build step)
+- Case selector with 5 PA scenarios and descriptive names
+- Color-coded determination display (green/red/yellow) with confidence visualization
+- Clinical rationale, guideline citations, and missing documentation rendering
+- Auto-refreshing determination history panel via HTMX polling
+- HTMX partial templates for result card and history rows
+- Presentation-optimized layout for 1920x1080 projector
+- All three entry points work simultaneously: CLI, API (/docs), Dashboard (/)
 
 ## Claude Code Tooling for This Step
 

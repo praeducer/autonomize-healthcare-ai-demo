@@ -1,10 +1,29 @@
 # Build Step 4: Azure Cloud Deployment
 
+> **Status: READY** — Steps 1-3 complete. This is the next step to implement.
+>
 > **Prerequisites**: Step 3 complete. Read `shared-context.md` for version control strategy and Claude Code automation. Rules auto-loaded from `.claude/rules/`.
 
 **Tag**: `v0.4.0` | **Branch**: `release/step-4-azure-deploy`
 **New files**: `Dockerfile`, `.github/workflows/deploy-azure.yml`
 **Demo mode**: Live public URL on Azure
+
+## What Exists So Far
+
+Steps 1-3 delivered a fully working local demo:
+- **Step 1**: CLI review engine with 5 PA cases, Claude tool use, ICD-10 validation
+- **Step 2**: FastAPI REST API, HAPI FHIR server (Docker), SQLite audit trail
+- **Step 3**: Web dashboard (Jinja2 + HTMX + Pico CSS) at `localhost:8000`
+
+All three entry points (CLI, Swagger UI, Dashboard) are functional. The `docker-compose.yml` already runs HAPI FHIR. This step adds containerization of the app itself and Azure deployment.
+
+## What Remains
+
+1. **Dockerfile** for the FastAPI application (sub-step 4.1)
+2. **docker-compose.yml update** to include the app container alongside HAPI FHIR (sub-step 4.2)
+3. **Azure Container Registry** push (sub-step 4.3)
+4. **Azure App Service** deployment (sub-step 4.4)
+5. **GitHub Actions CI/CD** workflow — optional (sub-step 4.5)
 
 ## Claude Code Tooling for This Step
 

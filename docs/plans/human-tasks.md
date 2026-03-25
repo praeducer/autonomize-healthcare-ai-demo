@@ -32,21 +32,8 @@
 
 ## Before Interview
 
-For key statistics, Q&A preparation, and risk awareness, see [`docs/interview-prep/pre-show-checklist.md`](../interview-prep/pre-show-checklist.md) and [`docs/interview-prep/study-guide.md`](../interview-prep/study-guide.md).
-
-- [ ] **Architecture prep**: 2-minute overview from [`docs/architecture/solution-architecture.md`](../architecture/solution-architecture.md)
-- [ ] **Review key numbers**: CAQH 2024 and AMA 2024 statistics — verified in [`docs/interview-prep/pre-show-checklist.md`](../interview-prep/pre-show-checklist.md)
-- [ ] **Review anticipated questions**: See Q&A section in [`docs/interview-prep/study-guide.md`](../interview-prep/study-guide.md)
-- [ ] **Fallback plan**: If Step 3 fails → demo via Swagger UI (Step 2); if that fails → CLI (Step 1)
-- [ ] **Backup recording**: Screenshot or recording of a successful demo run in case of API outage
-
-## Teams Screen Share Prep
-
-- [ ] **This desktop is the demo machine** — no separate laptop needed
-- [ ] **Test screen share resolution**: Start a Teams test call → Share screen → confirm text is crisp and readable
-- [ ] **Close distracting apps**: Slack, email, personal browser tabs, notifications (Focus Assist ON)
-- [ ] **Pre-load browser**: Open `http://localhost:8000` and `http://localhost:8000/docs` in separate tabs before the call
-- [ ] **`.env` verified**: Valid API key, Docker running, `make install` done, internet connected
+- [ ] **Work through pre-show checklist**: [`docs/interview-prep/pre-show-checklist.md`](../interview-prep/pre-show-checklist.md) (statistics, rehearsal, demo prep, Teams screen share, fallback plan)
+- [ ] **Review study guide**: [`docs/interview-prep/study-guide.md`](../interview-prep/study-guide.md) (Q&A, risk awareness, assumptions)
 
 ## Infrastructure Prerequisites
 

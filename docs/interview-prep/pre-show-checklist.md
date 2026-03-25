@@ -50,6 +50,7 @@ All statistics in the presentation have been verified against primary sources:
 
 ## Before Presenting -- Rehearsal
 
+- [ ] **Architecture overview**: Practice 2-minute walkthrough of [`docs/architecture/solution-architecture.md`](../architecture/solution-architecture.md)
 - [ ] Read [speaker-script.md](../presentation/speaker-script.md) opening thesis aloud
 - [ ] Read closing summary aloud
 - [ ] Time yourself on slides 1-6 (target: 15 min)
@@ -77,7 +78,18 @@ All statistics in the presentation have been verified against primary sources:
 - [ ] Check response times -- should be under 30 seconds per case
 - [ ] Verify confidence scores are in reasonable range (0.0-1.0)
 - [ ] Verify reasoning includes evidence citations
-- [ ] Have backup plan if demo fails: "Let me walk you through the architecture using the diagrams instead"
+- [ ] **Fallback plan**: If dashboard fails → demo via Swagger UI (`/docs`); if that fails → CLI (`make review`); if all fail → walk through architecture diagrams
+- [ ] **Backup recording**: Screenshot or recording of a successful demo run in case of API outage
+
+---
+
+## Before Presenting -- Teams Screen Share
+
+- [ ] **This desktop is the demo machine** — no separate laptop needed
+- [ ] **Test screen share resolution**: Start a Teams test call → Share screen → confirm text is crisp and readable
+- [ ] **Close distracting apps**: Slack, email, personal browser tabs, notifications (Focus Assist ON)
+- [ ] **Pre-load browser**: Open `http://localhost:8000` and `http://localhost:8000/docs` in separate tabs before the call
+- [ ] **`.env` verified**: Valid API key, Docker running, `make install` done, internet connected
 
 ---
 
