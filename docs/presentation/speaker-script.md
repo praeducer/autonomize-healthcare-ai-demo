@@ -54,9 +54,9 @@ I'll take you through the architecture in tiers -- executive context, then techn
 **After demo**: "What you just saw is Phase 0 of the roadmap. The same engine would integrate with your PA Copilot on Genesis."
 
 ### Slide 5: System Context
-**Core (30 sec)**: "Four actors, one AI platform in the middle. Providers submit through existing channels. Determinations flow back to payer core."
-**Expanded**: Generic-first design. Integration points labeled. No new workflows for providers.
-**For Suresh**: "These are the standard patterns I've seen at scale."
+**Core (30 sec)**: "Four actors, one platform. Providers submit PA requests. Payer Core provides eligibility and receives determinations. Clinical data feeds in via FHIR R4. CMS gets compliance reporting. Autonomize PA Copilot sits in the center."
+**For Suresh**: "Standard integration patterns — bidirectional with Payer Core is the critical path."
+**Don't elaborate**: No protocol details here — those are in the appendix.
 
 ### Slide 6: Solution Architecture
 **Core (30 sec)**: "Ten components with Azure labels. AI engine is Autonomize's PA Copilot -- I'm integrating it, not rebuilding it."
@@ -78,8 +78,8 @@ I'll take you through the architecture in tiers -- executive context, then techn
 **For Ujjwal**: "This is zero trust for AI -- verify every input, validate every output, log everything."
 
 ### Slide 9: Progressive Delivery
-**Core (30 sec)**: "Four phases, each producing something real. AI features front-loaded."
-**Don't elaborate**: No specific week numbers or team sizes. If asked: "Depends on discovery findings and team composition."
+**Core (30 sec)**: "Four phases over 12 weeks. Each phase: design, build, test, demo, decision gate. Real performance data drives scope — not assumptions. Phase 0 is what you just saw. Phase 1 puts it in production with a single LOB."
+**Don't elaborate**: Team sizes and exact timelines depend on discovery. If asked: "Agile sprints, 2-week cadence — scope adjusts based on what we learn."
 
 ### Slide 10: Discussion Starters
 **Core**: "These are questions I'd ask in real discovery. Love to explore any of these with you."
