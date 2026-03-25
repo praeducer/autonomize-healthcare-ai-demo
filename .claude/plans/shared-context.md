@@ -2,6 +2,16 @@
 
 > **For Claude Code**: Read this file once before starting any build step. Then read the specific `step-N-*.md` file. All coding standards, FHIR conventions, and architecture rules are in `.claude/rules/` (auto-loaded).
 
+## Build Step Status
+
+| Step | Deliverable | Status | Tag |
+|------|------------|--------|-----|
+| 1 | CLI review engine + 5 PA cases | **COMPLETED** | `v0.1.0` |
+| 2 | FastAPI + HAPI FHIR + audit store | **COMPLETED** | `v0.2.0` |
+| 3 | Web dashboard (Jinja2 + HTMX) | **COMPLETED** | `v0.3.0` |
+| 4 | Docker + Azure deployment | **READY — next step** | — |
+| 5 | Azure-native services | Not started (stretch) | — |
+
 ---
 
 ## Claude Code Automation

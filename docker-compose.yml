@@ -6,24 +6,41 @@ services:
     ports:
       - "8080:8080"
     environment:
+      # HAPI FHIR application settings
       hapi.fhir.default_encoding: json
       hapi.fhir.allow_multiple_delete: "true"
       hapi.fhir.allow_external_references: "true"
-      # Performance tuning for demo workload
       hapi.fhir.bulk_export_enabled: "false"
       hapi.fhir.narrative_enabled: "false"
+      # JVM tuning for demo workload — HAPI FHIR is a Spring Boot Java app
+      # 1GB heap is sufficient for 10-patient Synthea dataset with fast startup
+      JAVA_TOOL_OPTIONS: >-
+        -Xms512m
+        -Xmx1024m
+        -XX:+UseG1GC
+        -XX:+UseStringDeduplication
+    # Health check: HAPI FHIR metadata endpoint (FHIR CapabilityStatement)
+    # Java/Spring startup takes 30-60s; retries cover cold starts reliably
     healthcheck:
-      test: ["CMD-SHELL", "wget -qO- http://localhost:8080/fhir/metadata || exit 1"]
-      interval: 15s
-      timeout: 10s
-      retries: 20
-      start_period: 120s
+      test: ["CMD", "wget", "--spider", "--quiet", "http://localhost:8080/fhir/metadata"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 60s
+    # Resource limits — prevent runaway JVM from starving the demo host
     deploy:
       resources:
         limits:
-          memory: 4g
+          memory: 2g
           cpus: "2.0"
         reservations:
           memory: 1g
           cpus: "0.5"
+    # Named volume for persistent H2 database across container restarts
+    # Synthea data survives `docker compose down` / `docker compose up`
+    volumes:
+      - hapi-fhir-data:/data/hapi
 
+volumes:
+  hapi-fhir-data:
+    name: hapi-fhir-demo-data

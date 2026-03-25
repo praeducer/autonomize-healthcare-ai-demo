@@ -99,7 +99,7 @@ All statistics in the presentation have been verified against primary sources:
 |------|-----------|--------|------------|
 | Paul goes over time (known tendency) | High | Medium | Priority-tiered slides. 3-minute rule per slide. Coaching doc has time awareness tips. |
 | Paul tells stories instead of answering directly | High | Medium | "Don't elaborate" flags on each slide. Pivot phrases in speaker-script.md. |
-| Panel asks about FHIR Da Vinci / SMART on FHIR details | Medium | Medium | Redirect: "That's a discovery-phase activity with clinical informaticists." Don't fabricate depth. |
+| Panel asks about FHIR Da Vinci / SMART on FHIR details | Medium | Medium | Redirect: "That's a discovery-phase activity with the implementation team." Don't fabricate depth. |
 | Panel asks about EDI X12 parsing | Low | Low | Redirect: "Integration-build detail for discovery phase." Not in Paul's depth. |
 | Panel asks about traditional ML metrics (KS, PSI) | Medium | Medium | Bridge: "Those apply if we add a triage classifier. The LLM monitoring is eval-driven, not distribution-driven." |
 

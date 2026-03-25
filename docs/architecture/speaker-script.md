@@ -10,7 +10,7 @@
 
 "I'm Paul Prae. I've spent 15 years building AI systems in healthcare -- most recently at Arine, where our platform served 50 million members across 45 health plans, and before that as an ML Solutions Architect at AWS.
 
-I designed this architecture to answer a specific question: how does a large US health plan integrate Autonomize AI's PA Copilot safely and effectively into its existing IT environment?
+I designed this architecture to answer a specific question: how does a large US health plan integrate Autonomize AI's PA Copilot safely and effectively? I've also built a working proof of concept to demonstrate the core review flow.
 
 The answer is a 10-component Azure-native system that automates PA intake, clinical review, and determination -- with human oversight built in at every exception case. Based on Altais's February 2026 results: 45% faster reviews, 54% fewer errors, 50% auto-determination rate.
 
@@ -22,12 +22,10 @@ I'll take you through the architecture in tiers -- executive context, then techn
 
 | Time Remaining | Action |
 |---|---|
-| 30+ min | Tier A (slides 1-6) at full pace, then invite questions |
-| 15-20 min | Tier A only. Skip slide 4 detail if already explained verbally |
-| 10-15 min | Slides 1-3 + 5 only. "Happy to go deeper on anything" |
-| Under 10 min | Opening thesis only. Offer to take questions |
-| Tier B (7-9) | Only if 10+ min remain after Tier A |
-| Tier C (10-11) | Appendix only. Never present proactively |
+| 30+ min | Slides 1-3, live demo (5 min), slides 4-8, discussion |
+| 20-25 min | Slides 1-3, live demo (3 cases only), slides 6-7, discussion |
+| 15-20 min | Slides 1-3, abbreviated demo (1 case), key architecture points |
+| Under 15 min | Opening thesis + 1 demo case. Offer to go deeper. |
 
 **3-minute rule**: If you've been on one slide for 3 minutes without a question, stop and ask "Is this the right level of detail?"
 
@@ -40,54 +38,45 @@ I'll take you through the architecture in tiers -- executive context, then techn
 **Don't elaborate**: Resist going deep on any single past role. 60 seconds max on intro.
 **Pivot**: If asked about specific experience -- "Let me walk through the architecture -- I'll connect each decision to experience as we go."
 
-### Slide 2: Why This Architecture
-**Core (30 sec)**: "Manual PA is expensive and slow. Altais proved Autonomize cuts review time 45%, errors 54%. My architecture integrates that with safety controls."
-**Expanded**: CAQH Index — $10.97 provider labor cost per manual PA, $3.52 payer side, $0.05 electronic. That's $3.47 savings per payer transaction ($3.52 − $0.05). CMS-0057-F Phase 1 live. Clinicians keep final authority.
-**For Kris**: This answers "why should I care?" -- lead with business outcomes.
-**Don't elaborate**: Don't dive into CAQH methodology or CMS rule details. If asked: "CAQH measures labor costs — salaries, benefits, overhead — per transaction via annual industry survey."
+### Slide 2: PA Request Lifecycle
+**Core (30 sec)**: "Six-step process, standard PA workflow per AMA and CAQH. The innovation is in steps 4 and 5 -- AI-driven clinical review with confidence-based routing."
+**Key point**: This is the business process we're automating. Everything in this architecture serves this flow.
+**For Kris**: This connects directly to the 45% review time reduction Altais achieved.
 
-### Slide 3: System Context
+### Slide 3: Demo -- Proof of Concept
+**Core (30 sec)**: "I built this to validate the architecture. Same clinical review engine, FHIR R4 data models, real ICD-10 and CMS coverage criteria. Three interfaces -- CLI, API with Swagger, and a web dashboard."
+**Transition to demo**: "Let me show you it working." Then follow docs/demo-script.md for the 5-minute CLI walkthrough.
+**After demo**: "What you just saw is Phase 0 of the roadmap. The same engine would integrate with your PA Copilot on Genesis."
+
+### Slide 4: System Context
 **Core (30 sec)**: "Four actors, one AI platform in the middle. Providers submit through existing channels. Determinations flow back to payer core."
 **Expanded**: Generic-first design. Integration points labeled. No new workflows for providers.
 **For Suresh**: "These are the standard patterns I've seen at scale."
 
-### Slide 4: Component Architecture
+### Slide 5: Component Architecture
 **Core (30 sec)**: "Ten components with Azure labels. AI engine is Autonomize's PA Copilot -- I'm integrating it, not rebuilding it."
 **Expanded**: Azure Service Bus for async (simpler than Kafka, HIPAA-covered on Premium). Every service has AWS equivalent.
 **For Ujjwal**: "Azure because Autonomize is Azure-native. My AWS background translates directly -- patterns identical, service names change."
 **Don't elaborate**: Don't list all 10 components. Let the diagram speak.
 
-### Slide 5: PA Processing Flow
-**Core (30 sec)**: "Six steps, standard PA process per AMA/CAQH. Innovation in steps 4-5: AI review with confidence-based routing."
-**Key point**: Confidence threshold configurable per LOB. Start conservative. Auto-denial NOT enabled Phase 1.
-**For Suresh**: "Process follows CAQH CORE operating rules -- I didn't invent a new workflow."
-**Don't elaborate**: No X12 278 parsing details. If asked: "Integration-build detail for discovery."
+### Slide 6: Why This Architecture
+**Core (30 sec)**: "Manual PA is expensive and slow. Altais proved Autonomize cuts review time 45%, errors 54%. My architecture integrates that with safety controls."
+**Expanded**: CAQH Index -- $10.97 provider labor cost per manual PA, $3.52 payer side, $0.05 electronic. That's $3.47 savings per payer transaction ($3.52 - $0.05). CMS-0057-F Phase 1 live. Clinicians keep final authority.
+**For Kris**: This answers "why should I care?" -- lead with business outcomes.
+**Don't elaborate**: Don't dive into CAQH methodology or CMS rule details. If asked: "CAQH measures labor costs -- salaries, benefits, overhead -- per transaction via annual industry survey."
 
-### Slide 6: Security & Zero Trust
+### Slide 7: Security Risks & Mitigations
 **Core (30 sec)**: "Three risks, three architectural mitigations. AI-specific controls first -- that's the novel attack surface."
 **Risk 1**: PHI tokenization -- LLM sees clinical facts without patient identity.
 **Risk 2**: Prompt injection defense -- output validation requires evidence citations. Injected content can't produce evidence-backed determination.
 **Risk 3**: Tamper-proof audit trail -- model version, input hash, reasoning, evidence, confidence. 7-year retention.
 **For Ujjwal**: "This is zero trust for AI -- verify every input, validate every output, log everything."
 
-### Slide 7: Clinical Data Integration
-**Core (30 sec)**: "Two worlds -- FHIR R4 and legacy. Aggregation service presents unified context. FHIR at label level."
-**Don't elaborate**: No Da Vinci IG, no SMART on FHIR scopes, no FHIR resource schemas. If asked: "Discovery-phase activity with clinical informaticists."
-
-### Slide 8: LLMOps Pipeline
-**Core (30 sec)**: "LLMOps not MLOps. Monitoring LLM output quality -- evals, guardrails, human feedback."
-**Key distinction**: Drift = coverage criteria changed, not model weights shifted. Overturn rate is the key metric.
-**For Ujjwal**: "Traditional ML drift metrics (KS, PSI) apply if we add a triage classifier. LLM monitoring is eval-driven."
-
-### Slide 9: Implementation Roadmap
+### Slide 8: Progressive Delivery
 **Core (30 sec)**: "Four phases, each producing something real. AI features front-loaded."
 **Don't elaborate**: No specific week numbers or team sizes. If asked: "Depends on discovery findings and team composition."
 
-### Slide 10: Scaling to 20 LOBs
-**Core (30 sec)**: "Multi-tenant with per-LOB config as starting point. Separate instances only for regulatory isolation."
-**Key framing**: Trade-off discussion, not prescriptive answer. Discovery questions determine the right approach.
-
-### Slide 11: Discussion Starters
+### Slide 9: Discussion Starters
 **Core**: "These are questions I'd ask in real discovery. Love to explore any of these with you."
 
 ---
@@ -104,7 +93,7 @@ I'll take you through the architecture in tiers -- executive context, then techn
 
 ## Closing Summary (30 seconds -- land this no matter what)
 
-"Let me land on the core: a system where Autonomize's PA Copilot integrates safely into the health plan's ecosystem -- reliable intake from fax, portal, and EDI; AI-driven clinical review with human oversight for exceptions; full audit trail for regulatory defense. Phase 0 proves the concept immediately. Phase 1 puts it in production. Progressive delivery from there. I'm excited about this problem space and I'd love to dig into how Autonomize is solving it in production."
+"You've seen the architecture and the demo -- a system where Autonomize's PA Copilot integrates safely into the health plan's ecosystem. Reliable intake, AI-driven clinical review with human oversight, full audit trail. The proof of concept validates the core flow. Phase 1 puts it in production. I'm excited about this problem space."
 
 ---
 
@@ -112,14 +101,15 @@ I'll take you through the architecture in tiers -- executive context, then techn
 
 | Topic | Brief Redirect |
 |---|---|
-| FHIR Da Vinci IG | "Clinical informatics discovery work -- beyond this architecture's scope" |
+| FHIR Da Vinci IG | "Discovery-phase activity with the implementation team -- beyond this architecture's scope" |
 | NIST control IDs | "I design to principles; control ID mapping follows the architecture" |
-| SageMaker | "AWS ML training -- this uses Azure AI Foundry Agent Service" |
 | EDI X12 segments | "Handled by gateway -- translator-tool territory" |
 | KS test / PSI | "LLMOps is behavioral -- overturn rates and eval regression" |
 | Snowflake / dbt | "Not in scope -- PA processing is transactional, not analytical" |
 | InterQual vs MCG | "Clinical governance decision -- the AI matches whatever the client uses" |
 | TriZetto Facets API | "Discovery question -- designed around assumed REST interface" |
+| Demo internals | "Happy to walk through the code -- it's on GitHub" |
+| Why not LangChain | "Direct Anthropic SDK -- simpler, more control, no framework abstraction" |
 
 ---
 
@@ -133,7 +123,7 @@ I'll take you through the architecture in tiers -- executive context, then techn
 
 ## Live Demo Walkthrough (5-6 minutes)
 
-> Use during the presentation after the architecture slides. Run all 5 cases in order 1→4→3→5→2.
+> Use during the presentation after the architecture slides. Run all 5 cases in order 1->4->3->5->2.
 
 **Opening** (30 seconds):
 "To validate the architecture I'm proposing, I built a working proof-of-concept this morning. It demonstrates the core AI-driven PA review flow -- the same pattern that would integrate with Autonomize's PA Copilot in production."
@@ -148,10 +138,29 @@ I'll take you through the architecture in tiers -- executive context, then techn
 "This is the most interesting case -- a 2-level spinal fusion. The AI finds that some criteria are met -- MRI confirms stenosis, EMG confirms radiculopathy -- but flags specific gaps: only 8 PT sessions versus the 12 typically required, no epidural steroid injections attempted, and the patient's A1C of 8.2% creates surgical risk. Rather than approve or deny, it routes to the medical director with a structured summary for a peer-to-peer call. This is where AI augments the clinical reviewer instead of replacing them."
 
 **Case 5 -- Urgent Oncology** (60 seconds):
-"An urgent case -- first-line Keytruda for Stage IIIB non-small cell lung cancer. The AI recognizes the NCCN Category 1 recommendation for PD-L1-high NSCLC, confirms the clinical evidence, and approves within the 72-hour urgent timeline mandated by CMS-0057-F. The audit trail captures the full reasoning chain, model version, and evidence citations -- that's your 7-year HIPAA compliance trail."
+"An urgent case -- first-line Keytruda for Stage IIIA non-small cell lung cancer. The AI recognizes the NCCN Category 1 recommendation for PD-L1-high NSCLC, confirms the clinical evidence, and approves within the 72-hour urgent timeline mandated by CMS-0057-F. The audit trail captures the full reasoning chain, model version, and evidence citations -- that's your 7-year HIPAA compliance trail."
 
 **Case 2 -- Cosmetic Rhinoplasty Denial** (30 seconds):
 "Finally, a clear denial -- rhinoplasty with a mismatched diagnosis code. The AI catches the mismatch between actinic keratosis and rhinoplasty, identifies the lack of functional indication, and generates a denial with the specific clinical reason required by CMS-0057-F. In Phase 1 production, this would still route to a human reviewer before finalizing the denial."
 
 **Bridge to Architecture** (60 seconds):
 "What you just saw is Phase 0 of the roadmap. The clinical review engine uses Claude's tool use to check NPI registries, validate ICD-10 codes, and look up CMS coverage criteria -- real data sources, not hardcoded rules. The FHIR R4 data model means this plugs directly into your existing health plan integrations. Phase 1 would connect this to Autonomize's PA Copilot on the Genesis Platform, replace the mock eligibility service with a real Facets integration, and add the clinical review dashboard you already have in AI Studio."
+
+---
+
+## Appendix Notes
+
+> These notes cover appendix slides. Do not present proactively -- use only if asked or if significant time remains.
+
+### Appendix A: Clinical Data Integration
+**Core (30 sec)**: "Two worlds -- FHIR R4 and legacy. Aggregation service presents unified context. FHIR at label level."
+**Don't elaborate**: No Da Vinci IG, no SMART on FHIR scopes, no FHIR resource schemas. If asked: "Discovery-phase activity with the implementation team."
+
+### Appendix B: AI Model Monitoring & Feedback
+**Core (30 sec)**: "LLMOps not MLOps. Monitoring LLM output quality -- evals, guardrails, human feedback."
+**Key distinction**: Drift = coverage criteria changed, not model weights shifted. Overturn rate is the key metric.
+**For Ujjwal**: "Traditional ML drift metrics (KS, PSI) apply if we add a triage classifier. LLM monitoring is eval-driven."
+
+### Appendix C: Scaling to 20 LOBs
+**Core (30 sec)**: "Multi-tenant with per-LOB config as starting point. Separate instances only for regulatory isolation."
+**Key framing**: Trade-off discussion, not prescriptive answer. Discovery questions determine the right approach.

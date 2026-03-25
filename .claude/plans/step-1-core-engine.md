@@ -1,10 +1,21 @@
 # Build Step 1: Core Clinical Review Engine
 
+> **Status: COMPLETED** — All implementation, tests, and UAT passed. Tagged `v0.1.0`.
+>
 > **Prerequisites**: Read `shared-context.md` first (includes Claude Code automation reference). Coding standards, FHIR conventions, and architecture rules are auto-loaded from `.claude/rules/`.
 
 **Tag**: `v0.1.0` | **Branch**: `release/step-1-core-engine`
 **Dependencies**: `anthropic`, `fhir.resources`, `pydantic-settings`
 **Demo mode**: CLI terminal
+
+## What Was Delivered
+
+- Clinical review engine with Claude tool use (5 tools: NPI validation, ICD-10 lookup, CMS coverage, eligibility check, clinical data retrieval)
+- 5 realistic PA cases as FHIR R4 Claim bundles (Da Vinci PAS aligned)
+- CLI with color-coded output (`make review`, `make review-all`)
+- ICD-10-CM 2026 validation from CDC data
+- Confidence-based determination routing (auto-approve >= 0.85, human review 0.60-0.84)
+- Full test suite: data quality, unit, and e2e tests
 
 ## Claude Code Tooling for This Step
 

@@ -53,35 +53,35 @@ download-synthea:
 
 up:
 	docker compose up -d
-	@echo "Waiting for HAPI FHIR server to be healthy..."
-	@timeout=120; while [ $$timeout -gt 0 ]; do \
-		if docker inspect --format='{{.State.Health.Status}}' hapi-fhir-demo 2>/dev/null | grep -q healthy; then \
-			echo "HAPI FHIR server is healthy!"; \
-			break; \
+	@echo "Waiting for HAPI FHIR server to be ready..."
+	@elapsed=0; while [ $$elapsed -lt 180 ]; do \
+		if curl -sf http://localhost:8080/fhir/metadata > /dev/null 2>&1; then \
+			echo "HAPI FHIR server is ready! ($$elapsed seconds)"; \
+			exit 0; \
 		fi; \
-		sleep 2; \
-		timeout=$$((timeout - 2)); \
+		sleep 5; \
+		elapsed=$$((elapsed + 5)); \
+		printf "\r  Waiting... %ds" $$elapsed; \
 	done; \
-	if [ $$timeout -le 0 ]; then \
-		echo "ERROR: FHIR server did not become healthy in 120s"; \
-		docker compose logs fhir-server | tail -20; \
-		exit 1; \
-	fi
+	echo ""; \
+	echo "ERROR: FHIR server did not become ready in 180s"; \
+	docker compose logs fhir-server | tail -20; \
+	exit 1
 
 down:
 	docker compose down
 
 fhir-reset:
-	docker compose down -v
+	docker compose down
 	docker compose up -d
-	@$(MAKE) --no-print-directory up 2>/dev/null || true
-	@echo "FHIR data volume cleared. Run 'make load-fhir-data' to reload."
+	@echo "FHIR server restarted (in-memory DB cleared). Run 'make load-fhir-data' to reload."
 
 load-fhir-data:
 	python -m prior_auth_demo.mock_healthcare_services.load_fhir_data
 
 fhir-status:
-	@docker inspect --format='Container: {{.Name}} | Status: {{.State.Status}} | Health: {{.State.Health.Status}}' hapi-fhir-demo 2>/dev/null || echo "HAPI FHIR container not running"
+	@docker inspect --format='Container: {{.Name}} | Status: {{.State.Status}}' hapi-fhir-demo 2>/dev/null || echo "HAPI FHIR container not running"
+	@curl -sf http://localhost:8080/fhir/metadata > /dev/null 2>&1 && echo "FHIR API: responding" || echo "FHIR API: not responding"
 
 setup-fhir: up load-fhir-data
 	@echo ""

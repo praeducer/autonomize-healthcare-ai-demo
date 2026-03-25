@@ -86,9 +86,9 @@ The critical unknown here is what API interface the Payer Core System actually e
 
 Why defer it? Because legacy integration is a per-system discovery effort. Every legacy database has its own schema, its own auth model, its own data quality issues. Scope that before committing to timelines, not after.
 
-At Booz Allen and in my AWS practice, legacy clinical system integration was consistently the longest-tail work -- not because it's architecturally hard, but because it requires clinical informaticists to map source data to the target schema, and that's domain expert work that can't be engineered around.
+At Booz Allen and in my AWS practice, legacy clinical system integration was consistently the longest-tail work -- not because it's architecturally hard, but because it requires the implementation team to map source data to the target schema, and that's domain expert work that can't be engineered around.
 
-The Phase 2 approach: clinical informaticists scope each legacy source, we build per-system adapters behind a unified aggregation layer. The AI engine never sees the legacy system -- it always gets normalized FHIR-compatible format."
+The Phase 2 approach: the implementation team scope each legacy source, we build per-system adapters behind a unified aggregation layer. The AI engine never sees the legacy system -- it always gets normalized FHIR-compatible format."
 
 ---
 
@@ -270,7 +270,7 @@ These aren't gaps in my architecture -- they're the questions that require a rea
 
 | If Asked About... | Say This |
 |---|---|
-| FHIR Da Vinci | "Discovery-phase activity with clinical informaticists" |
+| FHIR Da Vinci | "Discovery-phase activity with the implementation team" |
 | EDI X12 details | "Integration-build detail -- translator-tool territory" |
 | KS test / PSI | "LLMOps is eval-driven, not distribution-driven" |
 | Autonomize internals | "No public API docs -- discovery question for onboarding" |

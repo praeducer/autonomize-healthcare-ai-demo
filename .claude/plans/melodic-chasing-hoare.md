@@ -1,210 +1,154 @@
-# Build Step 3: Web Dashboard — Implementation Plan
+# Presentation Overhaul — Implementation Plan
 
 > **For Claude:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task.
 
-**Goal:** Add an interview-ready web dashboard at `localhost:8000` using Jinja2 + HTMX + Pico CSS — no npm, no build step.
+**Goal:** Restructure the presentation to lead with the demo, fix diagram clarity issues, remove AWS content, and ensure perfect consistency across all presentation materials.
 
-**Architecture:** Dashboard routes return HTML (not JSON). `POST /dashboard/review` calls the engine, renders an HTML result fragment, and returns it via HTMX swap. The existing JSON API (`/api/v1/...`) and Swagger (`/docs`) are untouched. CLI continues to work independently.
-
-**Tech Stack:** Jinja2 templates, HTMX (CDN), Pico CSS (CDN), FastAPI HTMLResponse
+**Architecture:** Single-source-of-truth flow: `solution-architecture.md` → `presentation.md` → `speaker-script.md` → `slide-generation-prompts.md`. Changes propagate downstream.
 
 ---
 
 ## Context
 
-Step 2 (v0.2.0) delivered the REST API with Swagger, FHIR server, and audit trail. Step 3 adds the interview demo surface — a single-page dashboard where Paul can submit PA cases and show results on a projector. This is the final pre-cloud step.
+Paul is presenting via Microsoft Teams screen share for an Autonomize AI Solutions Architect interview. The demo (Steps 1-3, v0.3.0) is working. The presentation needs restructuring based on Paul's feedback:
+- Lead with the PA Request Lifecycle (the business process being automated)
+- Open with demo right after the system design overview
+- Remove AWS Equivalent content (only present final Azure decisions)
+- Fix diagram clarity (actor vs role, generic component vs Azure service)
+- Ensure cross-file consistency
+- Don't discuss legacy integrations unless assignment-required
+- Don't be overly strict about team compositions
 
-**Critical constraints:**
-- Dashboard routes are ADDITIVE — `/api/v1/*`, `/docs`, `/health`, and CLI all keep working
-- No npm, no JS build step — HTMX and Pico CSS via CDN
-- All dynamic content Jinja2-escaped (no XSS)
-- Readable at 1920x1080 on a projector
-
-**Dependencies already installed:** `jinja2`, `python-multipart` (in pyproject.toml since Step 0)
+**Interviewers:** Kris Nair (COO), Suresh Gopalakrishnan (SA), Ujjwal Rajbhandari (VP Engineering)
 
 ---
-
-## Files to Create
-
-| File | Purpose |
-|------|---------|
-| `src/prior_auth_demo/web_dashboard/templates/review_dashboard.html` | Main dashboard page |
-| `src/prior_auth_demo/web_dashboard/templates/fragments/result_card.html` | HTMX result fragment |
-| `src/prior_auth_demo/web_dashboard/templates/fragments/history_row.html` | HTMX history fragment |
-| `src/prior_auth_demo/web_dashboard/dashboard_routes.py` | Dashboard FastAPI router |
-| `tests/test_web_dashboard.py` | Dashboard tests |
 
 ## Files to Modify
 
-| File | Change |
-|------|--------|
-| `src/prior_auth_demo/healthcare_api_server.py` | Mount dashboard router, configure Jinja2, update version to 0.3.0 |
+| File | Changes |
+|------|---------|
+| `docs/architecture/presentation.md` | Restructure slide order, remove AWS column, add demo slide, fix diagrams |
+| `docs/architecture/speaker-script.md` | Align with new slide order, add demo context, update per-slide notes |
+| `docs/architecture/slide-generation-prompts.md` | Align prompt numbers with new slide order |
+| `docs/architecture/solution-architecture.md` | Minor fixes for consistency (FHIR team composition, legacy justification) |
 
-## Key Design Decisions
+## New Slide Order
 
-1. **Dashboard routes return HTML, API routes return JSON.** HTMX expects HTML fragments. The dashboard has its own `POST /dashboard/review` endpoint that calls the engine and returns a rendered HTML fragment. The JSON API is untouched.
-2. **Three template files:** One full page (`review_dashboard.html`), two fragments (`result_card.html` for review results, `history_row.html` for history table rows). Fragments are what HTMX swaps in.
-3. **No inline JavaScript.** HTMX attributes handle all interactivity. Pico CSS handles all styling. Zero custom JS.
-4. **Case selector uses descriptive names** not filenames. Map: "Lumbar MRI — Clear Approval" → `01_lumbar_mri_clear_approval.json`.
-5. **Demo order in dropdown:** 1→4→3→5→2 (clear approval → missing docs → ambiguous → urgent → denial). Tells a clinical story.
+| # | Slide | Was | Change |
+|---|-------|-----|--------|
+| 1 | Title & Introduction | Slide 1 | Keep |
+| 2 | PA Request Lifecycle | Slide 5 | **Moved to front** — opens with the business process |
+| 3 | Demo: Proof of Concept | NEW | High-level system diagram of demo + "this is a PoC" framing |
+| 4 | **LIVE DEMO** | Was in speaker notes only | 5-minute CLI demo per `docs/demo-script.md` |
+| 5 | System Context | Slide 3 | Fix: differentiate actor vs role in diagram |
+| 6 | Component Architecture | Slide 4 | Fix: differentiate generic vs Azure. **Remove AWS column** |
+| 7 | Why This Architecture | Slide 2 | Moved after diagrams — now answers "why these choices?" |
+| 8 | Security Risks & Mitigations | Slide 6 | Keep |
+| 9 | Progressive Delivery | Slide 9 | Keep (combines with demo context) |
+| 10 | Discussion Starters | Slide 11 | Keep |
 
----
-
-## Task 1: Dashboard Routes
-
-**Files:**
-- Create: `src/prior_auth_demo/web_dashboard/dashboard_routes.py`
-- Create: `tests/test_web_dashboard.py`
-
-**Step 1:** Write tests (`@pytest.mark.unit`). Use `httpx.ASGITransport`:
-- `test_dashboard_root_returns_200_html` — GET `/` → 200 with `text/html` content type
-- `test_dashboard_contains_case_selector` — HTML contains all 5 case names
-- `test_dashboard_contains_htmx_attributes` — HTML contains `hx-post`, `hx-target`
-- `test_swagger_still_accessible` — GET `/docs` → 200
-- `test_api_health_still_works` — GET `/health` → 200 with JSON
-- `test_api_sample_cases_still_works` — GET `/api/v1/prior-auth/sample-cases` → 200 with JSON list
-
-**Step 2:** Run tests — FAIL
-
-**Step 3:** Implement `dashboard_routes.py`:
-- FastAPI `APIRouter` with `tags=["Dashboard"]`
-- `GET /` → renders `review_dashboard.html` with case list context
-- `POST /dashboard/review` → accepts form data (case_name), loads bundle, calls `review_prior_auth_request()`, stores in audit, renders `result_card.html` fragment
-- `GET /dashboard/history` → queries audit store, renders `history_row.html` fragments for each determination
-
-**Step 4:** Mount on API server — modify `healthcare_api_server.py`:
-- Add `from fastapi.templating import Jinja2Templates`
-- Add `from starlette.staticfiles import StaticFiles` (if needed)
-- Configure Jinja2 template directory
-- Include dashboard router
-- Update version to `0.3.0`
-
-**Step 5:** Run tests — PASS
-
-**Step 6:** Commit: `feat: add dashboard routes with HTMX endpoints`
+**Removed slides:** Clinical Data Integration (7), AI Model Monitoring (8), Scaling to 20 LOBs (10) — moved to appendix or speaker notes only. These are deep-dive topics for Q&A, not core presentation.
 
 ---
 
-## Task 2: Dashboard HTML Template
+## Task 1: Restructure presentation.md
 
-**Files:**
-- Create: `src/prior_auth_demo/web_dashboard/templates/review_dashboard.html`
-- Create: `src/prior_auth_demo/web_dashboard/templates/fragments/result_card.html`
-- Create: `src/prior_auth_demo/web_dashboard/templates/fragments/history_row.html`
+**Step 1:** Reorder slides per the new order above.
 
-**Step 1:** Create main template (`review_dashboard.html`):
+**Step 2:** Remove the AWS Equivalent table from Slide 6 (Component Architecture). Only show Azure services.
 
-Layout (single page, Pico CSS semantic HTML):
-- `<header>`: "Prior Authorization Review — AI-Driven Clinical Decision Support"
-- `<main>` with two-column grid:
-  - **Left column**: Case selector form
-    - `<select>` with 5 cases (descriptive names, values = filenames)
-    - "Submit for Review" button
-    - `hx-post="/dashboard/review"` with `hx-target="#result-panel"` `hx-swap="innerHTML"`
-    - `hx-indicator="#spinner"` for loading state
-  - **Right column**: `<div id="result-panel">` (empty initially, filled by HTMX)
-- `<section>`: History table
-  - `hx-get="/dashboard/history"` with `hx-trigger="load, every 15s"` `hx-target="#history-body"`
-  - Table headers: Case, Determination, Confidence, Time, Date
-- `<footer>`: "Phase 0 Demo | Autonomize AI"
-- CDN links: Pico CSS, HTMX (pinned versions)
+**Step 3:** Add new Slide 3: "Demo: Proof of Concept"
+- Simple architecture diagram of what the demo actually implements:
+  ```
+  CLI / API / Dashboard → Clinical Review Engine → Claude (tool use)
+                                                    ├── ICD-10 Lookup
+                                                    ├── NPI Validation
+                                                    ├── CMS Coverage
+                                                    └── Clinical Data
+  → ClinicalReviewResult → Audit Trail → FHIR ClaimResponse
+  ```
+- Frame as: "I built a working proof of concept to validate this architecture. It demonstrates the core clinical review flow — steps 4 and 5 of the lifecycle you just saw."
+- Note limitations honestly: "Mock eligibility, local coverage criteria, synthetic data. Production would connect to Autonomize's PA Copilot on Genesis."
 
-**Step 2:** Create result fragment (`fragments/result_card.html`):
-- Determination badge: `<mark>` with data attribute for color (green/red/yellow)
-- Confidence: `<progress>` element with percentage label
-- Clinical rationale: `<blockquote>`
-- Guideline citations: `<ul>`
-- Missing documentation (if pended): highlighted `<ul>`
-- Processing time: small text
+**Step 4:** Fix System Context diagram — use format `**Actor Name**\n_Role Description_` to differentiate the two text elements.
 
-**Step 3:** Create history fragment (`fragments/history_row.html`):
-- One `<tr>` per determination
-- Columns: case_name, determination (with color), confidence %, processing time, timestamp
+**Step 5:** Fix Component Architecture diagram — use format `**Generic Component**\nAzure: Service Name` with visual differentiation.
 
-**Step 4:** Verify dashboard renders: `make dev` → open `http://localhost:8000`
+**Step 6:** Update "Why This Architecture" to be a justification slide that follows the diagrams, not leads them.
 
-**Step 5:** Commit: `feat: add dashboard HTML with HTMX and Pico CSS`
+**Step 7:** Move Clinical Data Integration, AI Model Monitoring, and Scaling to 20 LOBs to an "Appendix" section at the bottom.
+
+**Step 8:** Fix FHIR implementation wording — change "activity with clinical informaticists" to "discovery-phase activity with the implementation team" (broader).
+
+**Step 9:** Remove or minimize legacy integration discussion — only mention it if directly referenced in the assignment.
+
+**Step 10:** Commit.
 
 ---
 
-## Task 3: Presentation Polish
+## Task 2: Update speaker-script.md
 
-**Files:**
-- Modify: templates as needed
+**Step 1:** Reorder per-slide notes to match new slide order.
 
-**Step 1:** Style adjustments for projector readability:
-- Minimum font size 16px for body text
-- Large determination badges (24px+ bold)
-- High contrast colors: green `#2ecc40`, red `#e74c3c`, yellow/amber `#f39c12`
-- Confidence bar uses Pico `<progress>` with color matching determination
-- Max-width container (1200px) centered
-- No horizontal scroll at 1920x1080
+**Step 2:** Add demo transition notes between Slide 3 (PoC overview) and Slide 4 (live demo). Reference `docs/demo-script.md` for the full CLI walkthrough.
 
-**Step 2:** Demo flow order in dropdown: Cases appear as:
-1. "1 — Lumbar MRI (Clear Approval)"
-2. "4 — Humira (Missing Documentation)"
-3. "3 — Spinal Fusion (Complex Review)"
-4. "5 — Keytruda (Urgent Oncology)"
-5. "2 — Rhinoplasty (Cosmetic Denial)"
+**Step 3:** Update opening thesis to mention the demo upfront: "...and I've built a working proof of concept to demonstrate the core review flow."
 
-**Step 3:** Add loading spinner (HTMX `hx-indicator` with Pico CSS `aria-busy`)
+**Step 4:** Update the "Don't Elaborate" table — remove legacy topics, add demo-specific redirects.
 
-**Step 4:** Commit: `feat: polish dashboard for projector presentation`
+**Step 5:** Update closing summary to reference the demo: "You saw the AI review 5 cases in real-time..."
+
+**Step 6:** Commit.
 
 ---
 
-## Task 4: Verification & Commit Gate
+## Task 3: Update slide-generation-prompts.md
 
-**Step 1:** Run full verification:
-```bash
-ruff check src/ tests/ && mypy src/prior_auth_demo/
-pytest tests/ -m unit -v
-make review          # CLI still works
-```
+**Step 1:** Renumber all prompts to match new slide order.
 
-**Step 2:** Manual check: `make dev` → open `http://localhost:8000`:
-- Dashboard loads with case selector
-- Swagger at `/docs` still works
-- API at `/api/v1/prior-auth/sample-cases` still returns JSON
+**Step 2:** Add prompt for new Slide 3 (Demo: Proof of Concept).
 
-**Step 3:** Update `pyproject.toml` version to `0.3.0`
+**Step 3:** Remove prompts for slides moved to appendix (unless kept as optional).
 
-**Step 4:** Commit gate:
-```bash
-git tag -a v0.3.0 -m "Step 3: Web dashboard — interview-ready local demo"
-git checkout -b release/step-3-web-dashboard
-git checkout main
-git push origin main --tags
-git push origin release/step-3-web-dashboard
-```
+**Step 4:** Commit.
+
+---
+
+## Task 4: Cross-File Consistency Check
+
+**Step 1:** Verify all claims, facts, and numbers match between:
+- `solution-architecture.md` (source of truth)
+- `presentation.md` (presentation view)
+- `speaker-script.md` (delivery guide)
+- `demo-script.md` (CLI walkthrough)
+
+**Step 2:** Verify all Mermaid diagrams have correct arrow directions and clear labels.
+
+**Step 3:** Run a mock interview simulation with stakeholder personas (Kris, Suresh, Ujjwal) — identify any content that would prompt questions Paul can't confidently answer based on `career-data.json`.
+
+**Step 4:** Fix any consistency issues found.
+
+**Step 5:** Commit all changes, push.
 
 ---
 
 ## Verification
 
-| Command | Expected |
-|---------|----------|
-| `make lint` | Clean |
-| `make test-unit` | All pass (49 existing + ~6 new dashboard tests) |
-| `make review` | CLI works exactly as Steps 1-2 |
-| `http://localhost:8000` | Dashboard with case selector |
-| `http://localhost:8000/docs` | Swagger UI still works |
-| `GET /health` | JSON with status, version 0.3.0, fhir_server |
-| `GET /api/v1/prior-auth/sample-cases` | JSON list (not HTML) |
-
-## Regression Checks
-
-| Check | Why |
+| Check | How |
 |-------|-----|
-| `make review` works without Docker | CLI independence |
-| `/docs` renders Swagger UI | API not shadowed by dashboard |
-| `/api/v1/...` returns JSON | API not converted to HTML |
-| All Step 1+2 tests pass | No breaking changes |
+| Slide order matches plan | Read presentation.md |
+| No AWS column in component architecture | Grep for "AWS Equivalent" |
+| Demo slide exists (Slide 3) | Read presentation.md |
+| Speaker script matches slide order | Compare section headers |
+| All CAQH/AMA/CMS numbers consistent | Cross-reference sources table |
+| No legacy integration emphasis | Grep for "legacy" |
+| FHIR team composition is broad | Check wording |
+| Demo script references match CLI output | Run `make review` and compare |
 
 ## Execution Batches
 
 | Batch | Tasks |
 |-------|-------|
-| 1 | Task 1 (routes + tests) + Task 2 (templates) — can be parallel |
-| 2 | Task 3 (polish) |
-| 3 | Task 4 (verification + commit gate) |
+| 1 | Task 1 (presentation restructure) — largest change |
+| 2 | Tasks 2-3 (speaker script + prompts) — depend on Task 1 |
+| 3 | Task 4 (consistency check + mock interview) |
