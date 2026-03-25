@@ -333,6 +333,74 @@ class TestFhirServerEnrichment:
 
 
 @pytest.mark.unit
+class TestParseDetermination:
+    """Tests for Claude response JSON parsing — the most fragile function."""
+
+    def test_parses_json_in_markdown_fences(self) -> None:
+        """JSON wrapped in ```json ... ``` code blocks is extracted."""
+        import json as json_mod
+
+        from prior_auth_demo.clinical_review_engine import _parse_determination
+
+        payload = json_mod.dumps(
+            {
+                "determination": "APPROVED",
+                "confidence_score": 0.92,
+                "clinical_rationale": "Meets criteria.",
+                "guideline_citations": ["LCD L35028"],
+            }
+        )
+        text = f"Here is my analysis:\n```json\n{payload}\n```"
+        result = _parse_determination(text)
+        assert result["determination"] == "APPROVED"
+        assert result["confidence_score"] == 0.92
+
+    def test_parses_raw_json(self) -> None:
+        """Raw JSON object in text is extracted."""
+        import json as json_mod
+
+        from prior_auth_demo.clinical_review_engine import _parse_determination
+
+        payload = json_mod.dumps(
+            {
+                "determination": "DENIED",
+                "confidence_score": 0.95,
+                "clinical_rationale": "Cosmetic.",
+                "guideline_citations": ["NCD 160.16"],
+            }
+        )
+        result = _parse_determination(f"Based on my review: {payload}")
+        assert result["determination"] == "DENIED"
+
+    def test_fallback_on_unparseable_text(self) -> None:
+        """Unparseable text falls back to PENDED_FOR_REVIEW with 0.0 confidence."""
+        from prior_auth_demo.clinical_review_engine import _parse_determination
+
+        result = _parse_determination("This is not JSON at all.")
+        assert result["determination"] == "PENDED_FOR_REVIEW"
+        assert result["confidence_score"] == 0.0
+
+    def test_parses_nested_json(self) -> None:
+        """JSON with nested objects (missing_documentation list) is parsed."""
+        import json as json_mod
+
+        from prior_auth_demo.clinical_review_engine import _parse_determination
+
+        payload = json_mod.dumps(
+            {
+                "determination": "PENDED_MISSING_INFO",
+                "confidence_score": 0.6,
+                "clinical_rationale": "Incomplete.",
+                "guideline_citations": ["LCD L33822"],
+                "missing_documentation": ["methotrexate dose", "DAS28 score"],
+            }
+        )
+        result = _parse_determination(payload)
+        assert result["determination"] == "PENDED_MISSING_INFO"
+        assert len(result["missing_documentation"]) == 2
+
+
+@pytest.mark.unit
 class TestCliModule:
     """Tests for command_line_demo module."""
 

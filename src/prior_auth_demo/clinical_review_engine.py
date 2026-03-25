@@ -488,26 +488,29 @@ def _dispatch_tool(
     bundle: Bundle,
 ) -> Any:
     """Dispatch a tool call to the appropriate handler."""
-    if tool_name == "validate_npi":
-        return validate_npi(tool_input["npi"])
-    elif tool_name == "lookup_icd10_code":
-        result = lookup_icd10_code(tool_input["code"])
-        if result is None:
-            return {"code": tool_input["code"], "found": False, "description": "Code not found in reference data"}
-        return {**result, "found": True}
-    elif tool_name == "check_cms_coverage":
-        result = check_cms_coverage(tool_input["procedure_code"])
-        if result is None:
-            return {
-                "procedure_code": tool_input["procedure_code"],
-                "found": False,
-                "message": "No coverage criteria found",
-            }
-        return {**result, "found": True}
-    elif tool_name == "retrieve_clinical_data":
-        return retrieve_clinical_data(bundle)
-    else:
-        return {"error": f"Unknown tool: {tool_name}"}
+    try:
+        if tool_name == "validate_npi":
+            return validate_npi(tool_input["npi"])
+        elif tool_name == "lookup_icd10_code":
+            result = lookup_icd10_code(tool_input["code"])
+            if result is None:
+                return {"code": tool_input["code"], "found": False, "description": "Code not found in reference data"}
+            return {**result, "found": True}
+        elif tool_name == "check_cms_coverage":
+            result = check_cms_coverage(tool_input["procedure_code"])
+            if result is None:
+                return {
+                    "procedure_code": tool_input["procedure_code"],
+                    "found": False,
+                    "message": "No coverage criteria found",
+                }
+            return {**result, "found": True}
+        elif tool_name == "retrieve_clinical_data":
+            return retrieve_clinical_data(bundle)
+        else:
+            return {"error": f"Unknown tool: {tool_name}"}
+    except KeyError as e:
+        return {"error": f"Missing required input for {tool_name}: {e}"}
 
 
 def _extract_claim_from_bundle(bundle: Bundle) -> dict[str, Any]:

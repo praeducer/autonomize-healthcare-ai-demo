@@ -14,7 +14,7 @@ from pathlib import Path
 from typing import Any
 
 import httpx
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Query
 from fhir.resources.R4B.bundle import Bundle
 from pydantic import ValidationError
 
@@ -152,7 +152,10 @@ async def review_pa_request(request_body: dict[str, Any]) -> dict[str, Any]:
 
 
 @app.get("/api/v1/prior-auth/determinations")
-async def list_determinations(limit: int = 50, offset: int = 0) -> list[dict[str, Any]]:
+async def list_determinations(
+    limit: int = Query(default=50, ge=1, le=200),
+    offset: int = Query(default=0, ge=0),
+) -> list[dict[str, Any]]:
     """List stored determinations from the audit trail."""
     _, audit_store = await _ensure_initialized()
     return await audit_store.list_determinations(limit=limit, offset=offset)
