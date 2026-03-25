@@ -92,9 +92,10 @@ src/prior_auth_demo/
 
 | Skill | Description |
 |-------|-------------|
-| `/get-pa-cases` | List the 5 sample PA cases with diagnoses and expected outcomes |
-| `/invoke-pa-review <case>` | Review a PA case by number (1-5) or name (e.g., "keytruda") |
-| `/invoke-pa-review-all` | Review all 5 cases and show a summary table |
+| `/get-pa-cases` | List available PA cases (reads from `data/sample_pa_cases/README.md`) |
+| `/inspect-pa-case <case>` | Show a case's clinical data — no AI, no API calls |
+| `/invoke-pa-review <case>` | Run AI review on a case by number (1-5) or name |
+| `/invoke-pa-review-all` | Run AI review on all cases and show summary |
 
 Skills are defined in `.claude/skills/` using the modern SKILL.md format with YAML frontmatter.
 
