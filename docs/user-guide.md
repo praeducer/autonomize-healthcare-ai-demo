@@ -22,10 +22,11 @@ The most natural way to interact during development. Requires Claude Code CLI.
 
 | Command | What it does |
 |---------|-------------|
-| `/get-pa-cases` | List the 5 sample PA cases |
-| `/invoke-pa-review 1` | Review case 1 (lumbar MRI) |
-| `/invoke-pa-review keytruda` | Review case 5 by name |
-| `/invoke-pa-review-all` | Review all 5 cases with summary |
+| `/get-pa-cases` | List available PA cases (reads from `data/sample_pa_cases/README.md`) |
+| `/inspect-pa-case 1` | Show case 1's clinical data — no AI, no API calls |
+| `/invoke-pa-review 1` | Run AI review on case 1 (lumbar MRI) |
+| `/invoke-pa-review keytruda` | Run AI review on case 5 by name |
+| `/invoke-pa-review-all` | Run AI review on all cases and show summary |
 
 You can also ask conversationally: "Review the spinal fusion case" or "Run all PA cases and summarize."
 
@@ -36,17 +37,20 @@ Direct terminal commands. Works standalone — no Docker, no API server needed.
 **Bash:**
 
 ```bash
-make review         # Single case (case 1 — lumbar MRI)
-make review-all     # All 5 cases
+make review         # Run AI review on case 1 (lumbar MRI)
+make review-all     # Run AI review on all 5 cases
 ```
 
 **PowerShell:**
 
 ```powershell
-# Single case (case 1 — lumbar MRI)
+# Inspect a case's clinical data (no AI, no API calls)
+python -m prior_auth_demo.command_line_demo --inspect data/sample_pa_cases/01_lumbar_mri_clear_approval.json
+
+# Run AI review on a single case
 python -m prior_auth_demo.command_line_demo --case data/sample_pa_cases/01_lumbar_mri_clear_approval.json
 
-# All 5 cases
+# Run AI review on all 5 cases
 python -m prior_auth_demo.command_line_demo --all
 ```
 
