@@ -388,7 +388,7 @@ These are the ones that look like serial numbers. You **will** be expected to kn
 |---|---|---|
 | **FHIR** | Fast Healthcare Interoperability Resources | HL7's modern API standard for health data exchange. Pronounced "fire." Uses REST + JSON. Replaced HL7 v2 messages and CDA documents. |
 | **Da Vinci** | HL7 Da Vinci Project | Not a person — an HL7 initiative creating FHIR Implementation Guides for payer/provider data exchange. Da Vinci PAS = PA-specific IG. |
-| **SMART on FHIR** | Substitutable Medical Applications, Reusable Technologies on FHIR | OAuth 2.0 authorization framework specifically for FHIR APIs. The "SMART" is a backronym. Enables apps to authenticate against EHRs. |
+| **SMART on FHIR** | Substitutable Medical Applications, Reusable Technologies on FHIR | OAuth 2.0 authorization framework specifically for FHIR APIs. The "SMART" is a backronym. When our aggregation service reads patient records from a hospital's FHIR endpoint, it authenticates via SMART on FHIR — request a token with scoped permissions (e.g., "read this patient's conditions"), use the token to call the API. Entra ID supports this natively; that's an Azure advantage over Cognito. Don't go deeper — say "implementation details are discovery-phase." |
 | **Synthea** | Synthetic Patient Generator | Open-source tool that generates realistic (but fake) FHIR patient records. Used for testing when you can't use real PHI. Not a company. |
 | **HAPI FHIR** | HL7 API FHIR Reference Implementation | Open-source Java-based FHIR server. "HAPI" is the project name (originally "HL7 Application Programming Interface"). Production-grade. |
 | **InterQual** | (Proprietary name, no expansion) | Clinical decision support criteria owned by Change Healthcare. Payers use it to determine medical necessity. Competitor to MCG. |
@@ -421,7 +421,7 @@ These are the ones that look like serial numbers. You **will** be expected to kn
 | **NPI** | National Provider Identifier | 10-digit number assigned to every US healthcare provider. Two types: NPI-1 (individual), NPI-2 (organization). Validated via Luhn check digit. |
 | **EDI** | Electronic Data Interchange | The umbrella term for all X12 transactions (278, 837, 270/271, 835). "EDI" = structured electronic healthcare data exchange, not a specific format. |
 | **DME** | Durable Medical Equipment | Wheelchairs, CPAP machines, oxygen equipment — physical devices covered by Medicare Part B. Governed by NCDs/LCDs. |
-| **LOB** | Line of Business | An insurance product line: Commercial, Medicare Advantage, Medicaid, Exchange. One payer can have 20+ LOBs with different PA rules. |
+| **LOB** | Line of Business | An insurance product line: Commercial, Medicare Advantage, Medicaid, Exchange. One payer can have 20+ LOBs with different PA rules. **Scaling link:** The assignment asks about 20 LOBs — the question is whether to run one system with per-LOB configuration (multi-tenant, our recommendation) or 20 separate copies (multi-instance). Each LOB can have different coverage criteria, so the AI engine needs LOB-specific config. |
 | **RBAC** | Role-Based Access Control | Access permissions assigned by role (e.g., "clinical reviewer" can see PA queue, "admin" can change thresholds). Implemented via Entra ID in this architecture. |
 | **RAG** | Retrieval-Augmented Generation | Pattern where the LLM retrieves external documents (clinical guidelines, coverage policies) before generating a response. Not a product — a design pattern. |
 | **OCR** | Optical Character Recognition | Converting fax images (TIFF/PDF) to machine-readable text. First step in the fax ingestion pipeline. Azure AI Document Intelligence does this. |
@@ -473,6 +473,20 @@ These appear in the 5 PA test cases and Claude's tool use. Know them for the liv
 | **NaviHealth ruling (Feb 2024)** | Federal judge ruled against UnitedHealth for using AI (NaviHealth) to deny claims without adequate human oversight. Sets legal precedent: AI-assisted denial without human review = legal risk. This is why auto-denial is disabled in Phase 1. |
 | **Minimum necessary standard** | HIPAA principle: only access the minimum PHI needed for the task. The clinical data aggregation service should only pull FHIR resources for the specific member in the PA request — not broader queries. |
 | **Immutable audit trail** | Not a regulation name, but a compliance pattern. CMS-0057-F and HIPAA both require tamper-proof records of PA decisions. Azure Blob Storage immutable policies + append-only SQLite implement this. 7-year retention. |
+
+### Architecture & Deployment Concepts Used in This Solution
+
+These are not healthcare-specific, but they appear in the architecture and you should be able to explain them simply.
+
+| Term | What It Is in This Architecture |
+|---|---|
+| **Payer Core System** | The health plan's central admin system — source of truth for enrollment, benefits, and contract rules. Products: TriZetto Facets, QNXT, Amisys. Our architecture reads eligibility from it and writes determinations back to it via REST API. "REST API" is an assumption — we won't know the real interface until discovery. |
+| **Coverage criteria** | The rules that define when a service is medically necessary and covered. Sources: CMS NCDs (national), CMS LCDs (regional), and health plan-specific policies (often InterQual or MCG). The AI matches clinical evidence against these rules to produce a determination. This is the core of "AI clinical review." |
+| **Determination** | The decision on a PA request: APPROVED, DENIED, PENDED_FOR_REVIEW, or PENDED_MISSING_INFO. The AI *proposes* a determination; a human reviewer *confirms or overrides* it for low-confidence cases and all denials. High-confidence approvals can stand without human review. |
+| **Determination Router** | Azure Functions (serverless compute) + simple if/else routing logic: confidence ≥ 0.85 → auto-approve, < 0.60 → human review queue, missing info → pend. "Rules" just means the business logic — not a rules engine product. Thresholds are configurable by clinical governance, not hardcoded. |
+| **Service account + VNet** | How we connect to legacy databases securely. Service account = a dedicated system login with read-only permissions (no human credentials, managed via Azure Managed Identity). VNet = Azure's private network — traffic never crosses the public internet. Two layers: identity (least privilege) + network isolation (private). |
+| **Blue-green deployment** | Run two copies of the system: Blue (current) and Green (new). Shift traffic gradually: 10% → 25% → 100%. If metrics degrade at any step, shift back to Blue in under a minute. Used when deploying new model versions — no PA request is lost because Service Bus queues everything. |
+| **Evals** | Automated tests for AI output quality — like unit tests for AI behavior. A "golden test set" of PA cases with known-correct outcomes (validated by clinical experts). Run on schedule and on every model update. Measure: accuracy, guideline citation correctness, hallucination rate, consistency. Thresholds are business decisions set by clinical governance (e.g., "≥95% accuracy required before production"). This is LLMOps — we monitor output quality, not model weights. |
 
 ### Autonomize-Specific Vocabulary
 
