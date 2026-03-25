@@ -21,6 +21,7 @@ from pathlib import Path
 from pptx import Presentation
 from pptx.dml.color import RGBColor
 from pptx.enum.text import MSO_ANCHOR, PP_ALIGN
+from pptx.oxml.ns import qn
 from pptx.util import Emu, Inches, Pt
 
 # ---------------------------------------------------------------------------
@@ -246,7 +247,7 @@ def _add_callout_block(slide, text: str, y: int, label: str = "", font_size=FONT
     bar.fill.fore_color.rgb = ACCENT
     bar.line.fill.background()
 
-    # Text
+    # Text — vertically centered in the callout box
     tx_box = slide.shapes.add_textbox(
         Emu(MARGIN.emu + Inches(0.15).emu),
         Emu(y),
@@ -255,6 +256,9 @@ def _add_callout_block(slide, text: str, y: int, label: str = "", font_size=FONT
     )
     tf = tx_box.text_frame
     tf.word_wrap = True
+    tf.auto_size = None
+    # Vertically center text in the callout box (OOXML bodyPr anchor attribute)
+    tf._txBody.bodyPr.set(qn("a:anchor"), "ctr")
     p = tf.paragraphs[0]
     if label:
         run_label = p.add_run()
@@ -476,23 +480,14 @@ SLIDES: list[dict] = [
         "body": [
             {
                 "type": "text",
-                "text": "\u2022 Safety-first routing \u2014 confidence thresholds route low-certainty cases to human reviewers; no auto-deny without clinical review",
-            },
-            {
-                "type": "text",
-                "text": "\u2022 Configurable thresholds \u2014 start conservative, tune with real performance data",
-            },
-            {
-                "type": "text",
-                "text": "\u2022 CMS-0057-F compliance \u2014 FHIR R4 foundation meets Jan 2027 API deadline without re-architecture",
-            },
-            {
-                "type": "text",
-                "text": "\u2022 Azure-native \u2014 leverages Autonomize\u2019s Azure ecosystem, Pegasus Program, and Marketplace presence",
-            },
-            {
-                "type": "text",
-                "text": "\u2022 Full audit trail \u2014 every determination records model version, input hash, reasoning, evidence, and confidence for 7-year retention",
+                "font_size": 13,
+                "text": (
+                    "\u2022 Safety-first routing \u2014 confidence thresholds route low-certainty cases to human reviewers; no auto-deny without clinical review\n\n"
+                    "\u2022 Configurable thresholds \u2014 start conservative, tune with real performance data\n\n"
+                    "\u2022 CMS-0057-F compliance \u2014 FHIR R4 foundation meets Jan 2027 API deadline without re-architecture\n\n"
+                    "\u2022 Azure-native \u2014 leverages Autonomize\u2019s Azure ecosystem, Pegasus Program, and Marketplace presence\n\n"
+                    "\u2022 Full audit trail \u2014 every determination records model version, input hash, reasoning, evidence, and confidence for 7-year retention"
+                ),
             },
         ],
     },
