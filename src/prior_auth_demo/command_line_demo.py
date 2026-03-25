@@ -12,9 +12,12 @@ import asyncio
 import io
 import json
 import sys
+import textwrap
+import threading
+import time
 from pathlib import Path
 
-# Ensure stdout handles Unicode on Windows (Claude often uses symbols like >= in output)
+# Ensure stdout handles Unicode on Windows
 if sys.stdout.encoding and sys.stdout.encoding.lower() != "utf-8":
     sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="replace")
 
@@ -28,10 +31,25 @@ GREEN = "\033[92m"
 RED = "\033[91m"
 YELLOW = "\033[93m"
 CYAN = "\033[96m"
+DIM = "\033[2m"
 BOLD = "\033[1m"
 RESET = "\033[0m"
 
 SAMPLE_CASES_DIR = Path(__file__).resolve().parent.parent.parent / "data" / "sample_pa_cases"
+
+# Human-readable case labels
+CASE_LABELS: dict[str, str] = {
+    "01_lumbar_mri_clear_approval.json": "Lumbar MRI — Conservative Treatment Failure",
+    "02_cosmetic_rhinoplasty_denial.json": "Rhinoplasty — Cosmetic (Diagnosis Mismatch)",
+    "03_spinal_fusion_complex_review.json": "Spinal Fusion — Complex (Ambiguous Criteria)",
+    "04_humira_missing_documentation.json": "Humira — Missing Step Therapy Documentation",
+    "05_keytruda_urgent_oncology.json": "Keytruda — Urgent Oncology (NSCLC)",
+}
+
+
+def _case_label(filename: str) -> str:
+    """Get a human-readable label for a case filename."""
+    return CASE_LABELS.get(Path(filename).name, Path(filename).name)
 
 
 def format_determination_badge(determination: str) -> str:
@@ -46,23 +64,60 @@ def format_determination_badge(determination: str) -> str:
     return f"{BOLD}{color}[{determination}]{RESET}"
 
 
+def _spinner(stop_event: threading.Event, label: str) -> None:
+    """Show a spinner while waiting for the AI review."""
+    frames = [".", "..", "...", "   "]
+    i = 0
+    start = time.monotonic()
+    while not stop_event.is_set():
+        elapsed = time.monotonic() - start
+        sys.stderr.write(f"\r{DIM}  {label}{frames[i % len(frames)]} ({elapsed:.0f}s){RESET}  ")
+        sys.stderr.flush()
+        i += 1
+        stop_event.wait(0.5)
+    sys.stderr.write("\r" + " " * 60 + "\r")
+    sys.stderr.flush()
+
+
 def print_result(result: ClinicalReviewResult, case_path: str) -> None:
     """Pretty-print a clinical review result to the terminal."""
-    print(f"\n{'=' * 70}")
-    print(f"{BOLD}Case:{RESET} {Path(case_path).name}")
-    print(f"{BOLD}Determination:{RESET} {format_determination_badge(result.determination)}")
-    print(f"{BOLD}Confidence:{RESET} {result.confidence_score:.0%}")
-    print(f"{BOLD}Processing Time:{RESET} {result.review_duration_seconds:.1f}s")
-    print(f"\n{BOLD}Clinical Rationale:{RESET}")
-    print(f"  {result.clinical_rationale}")
-    print(f"\n{BOLD}Guideline Citations:{RESET}")
+    label = _case_label(case_path)
+    width = 70
+
+    print(f"\n{'=' * width}")
+    print(f"{BOLD}  {label}{RESET}")
+    print(f"{'=' * width}")
+    print(f"  {BOLD}Determination:{RESET}  {format_determination_badge(result.determination)}")
+    print(f"  {BOLD}Confidence:{RESET}     {result.confidence_score:.0%}")
+    print(f"  {BOLD}Review Time:{RESET}    {result.review_duration_seconds:.1f}s")
+
+    if result.determination in ("PENDED_FOR_REVIEW", "PENDED_MISSING_INFO"):
+        print(f"\n  {YELLOW}{BOLD}>> Would route to human clinical reviewer{RESET}")
+
+    # Wrap rationale to terminal width for readability
+    print(f"\n{BOLD}  Clinical Rationale{RESET}")
+    print(f"  {'-' * (width - 4)}")
+    wrapped = textwrap.fill(result.clinical_rationale, width=width - 4)
+    for line in wrapped.split("\n"):
+        print(f"  {line}")
+
+    print(f"\n{BOLD}  Guideline Citations{RESET}")
+    print(f"  {'-' * (width - 4)}")
     for citation in result.guideline_citations:
-        print(f"  - {citation}")
+        wrapped_cite = textwrap.fill(citation, width=width - 6)
+        first = True
+        for line in wrapped_cite.split("\n"):
+            prefix = "  * " if first else "    "
+            print(f"{prefix}{line}")
+            first = False
+
     if result.missing_documentation:
-        print(f"\n{BOLD}{YELLOW}Missing Documentation:{RESET}")
+        print(f"\n  {YELLOW}{BOLD}Missing Documentation{RESET}")
+        print(f"  {'-' * (width - 4)}")
         for item in result.missing_documentation:
-            print(f"  - {item}")
-    print(f"{'=' * 70}\n")
+            print(f"  {YELLOW}* {item}{RESET}")
+
+    print(f"{'=' * width}\n")
 
 
 async def review_single_case(case_path: str, settings: ApplicationSettings) -> ClinicalReviewResult:
@@ -72,11 +127,24 @@ async def review_single_case(case_path: str, settings: ApplicationSettings) -> C
         print(f"{RED}Error: File not found: {case_path}{RESET}", file=sys.stderr)
         sys.exit(1)
 
+    label = _case_label(case_path)
+    print(f"\n{CYAN}{BOLD}Submitting:{RESET} {label}")
+
+    # Start spinner
+    stop = threading.Event()
+    spinner = threading.Thread(target=_spinner, args=(stop, "AI clinical review in progress"), daemon=True)
+    spinner.start()
+
     with path.open() as f:
         data = json.load(f)
 
     bundle = Bundle.model_validate(data)
     result = await review_prior_auth_request(bundle, settings)
+
+    # Stop spinner
+    stop.set()
+    spinner.join()
+
     print_result(result, case_path)
     return result
 
@@ -88,23 +156,24 @@ async def review_all_cases(settings: ApplicationSettings) -> list[ClinicalReview
         print(f"{RED}Error: No JSON files found in {SAMPLE_CASES_DIR}{RESET}", file=sys.stderr)
         sys.exit(1)
 
-    print(f"\n{BOLD}{CYAN}Reviewing {len(case_files)} PA cases...{RESET}\n")
+    print(f"\n{BOLD}{CYAN}{'=' * 70}")
+    print("  Prior Authorization Review — AI-Driven Clinical Decision Support")
+    print(f"{'=' * 70}{RESET}")
+    print(f"  Reviewing {len(case_files)} PA cases using Claude with FHIR R4 tool use\n")
+
     results = []
     for case_file in case_files:
         result = await review_single_case(str(case_file), settings)
         results.append(result)
 
     # Print summary
-    print(f"\n{BOLD}{'=' * 70}")
-    print(f"SUMMARY: {len(results)} cases reviewed")
+    print(f"{BOLD}{CYAN}{'=' * 70}")
+    print(f"  SUMMARY — {len(results)} cases reviewed")
     print(f"{'=' * 70}{RESET}")
-    for i, (case_file, result) in enumerate(zip(case_files, results)):
-        print(
-            f"  {i + 1}. {case_file.name}: "
-            f"{format_determination_badge(result.determination)} "
-            f"({result.confidence_score:.0%})"
-        )
-    print()
+    for case_file, result in zip(case_files, results):
+        label = _case_label(str(case_file))
+        print(f"  {format_determination_badge(result.determination):45s} {result.confidence_score:.0%}  {label}")
+    print(f"{CYAN}{'=' * 70}{RESET}\n")
     return results
 
 
@@ -115,16 +184,8 @@ def main() -> None:
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
     group = parser.add_mutually_exclusive_group(required=True)
-    group.add_argument(
-        "--case",
-        type=str,
-        help="Path to a single PA case JSON file",
-    )
-    group.add_argument(
-        "--all",
-        action="store_true",
-        help="Review all 5 sample PA cases",
-    )
+    group.add_argument("--case", type=str, help="Path to a single PA case JSON file")
+    group.add_argument("--all", action="store_true", help="Review all 5 sample PA cases")
     args = parser.parse_args()
 
     settings = ApplicationSettings()  # type: ignore[call-arg]
