@@ -18,7 +18,7 @@ But the cost story isn't even the strongest argument. CMS-0057-F Phase 1 is alre
 
 My architecture integrates those capabilities with the right safety controls -- no auto-denial in Phase 1, human reviewers retain final authority, full audit trail for regulatory defense."
 
-**Bridge to slide**: Slide 2 (Why This Architecture) -- the three Altais metrics are on that slide.
+**Bridge to slide**: Slide 2 (The Problem & Opportunity) -- the three Altais metrics are on that slide.
 
 ---
 
@@ -58,7 +58,7 @@ The confidence threshold is a business parameter, not a technical one. If the cl
 
 When the AI is wrong -- and it will be sometimes -- the overturn rate becomes a key metric. Human corrections feed back into the eval dataset. The LLMOps pipeline monitors this continuously. Systematic errors trigger model revalidation before anything else goes to production."
 
-**Bridge to slide**: Slide 6 (Security & Zero Trust) -- the third risk row covers auditability.
+**Bridge to slide**: Slide 8 (Security & Zero Trust) -- the third risk row covers auditability.
 
 ---
 
@@ -74,7 +74,7 @@ I've added Redis caching with a 15-minute TTL to protect the Payer Core API from
 
 The critical unknown here is what API interface the Payer Core System actually exposes. TriZetto Facets, QNXT, and custom builds all have different contract structures. That's a discovery question I'd ask on day one -- what does the Payer Core API specification look like?"
 
-**Bridge to slide**: Slide 7 (Clinical Data Integration) shows the integration layer.
+**Bridge to slide**: Appendix A (Clinical Data Integration) shows the integration layer.
 
 ---
 
@@ -116,7 +116,7 @@ When any signal exceeds thresholds, the pipeline triggers: no model changes to p
 
 The practical driver of 'drift' here isn't model degradation -- it's coverage criteria changes. Clinical guidelines update quarterly. If the coverage criteria the AI was trained against are stale, accuracy drops. That's a knowledge base update problem, not a model problem."
 
-**Bridge to slide**: Slide 8 (AI Model Monitoring & Feedback).
+**Bridge to slide**: Appendix B (AI Model Monitoring & Feedback).
 
 ---
 
@@ -164,13 +164,13 @@ Pattern transferability: Every AWS pattern I know -- SQS maps to Service Bus, Cl
 
 **Answer (55 sec):**
 
-"Start multi-tenant with per-LOB configuration -- that's the recommendation on slide 10. It's lower cost, lower operational complexity, and Autonomize's Genesis Platform already supports multi-tenant LOB isolation via configuration.
+"Start multi-tenant with per-LOB configuration -- that's the recommendation in Appendix C. It's lower cost, lower operational complexity, and Autonomize's Genesis Platform already supports multi-tenant LOB isolation via configuration.
 
 The only reason to move to separate instances is regulatory isolation. If a specific LOB is subject to different state regulations, or a specific contract requires data not commingled with other LOB data -- those are cases for separate instances. That's a compliance question, not a technical preference.
 
 The architectural safeguard in multi-tenant: every PA record is tagged with LOB identifier from the moment it enters the ingestion gateway. All queries, all audit logs, all reporting are LOB-scoped. Data isolation is enforced at the application and database level, not just at the instance level. That gives you the cost benefits of multi-tenant with auditable per-LOB boundaries."
 
-**Bridge to slide**: Slide 10 (Scaling to 20 LOBs) -- the trade-off table is there.
+**Bridge to slide**: Appendix C (Scaling to 20 LOBs) -- the trade-off table is there.
 
 ---
 
@@ -186,7 +186,7 @@ Second, system prompt isolation. The AI engine's coverage criteria and instructi
 
 Third, and most important: output validation. Every determination must include specific evidence citations from the clinical record. An injected instruction can't produce evidence-backed reasoning -- if the output lacks clinical citations, it's flagged as invalid and routed to human review. That's the architectural control that actually defends against a real injection attack."
 
-**Bridge to slide**: Slide 6 (Security & Zero Trust) -- row 2 of the risk table.
+**Bridge to slide**: Slide 8 (Security & Zero Trust) -- row 2 of the risk table.
 
 ---
 
@@ -214,7 +214,7 @@ AI-specific -- the LLMOps plane: overturn rate by LOB and procedure type, confid
 
 The key insight is that AI drift in this system is rarely a technical failure -- it's a clinical knowledge base problem. The LLMOps dashboard is the early warning system that tells you when coverage criteria changes are making the AI wrong before you find out from claims disputes."
 
-**Bridge to slide**: Slide 8 (AI Model Monitoring & Feedback).
+**Bridge to slide**: Appendix B (AI Model Monitoring & Feedback).
 
 ---
 

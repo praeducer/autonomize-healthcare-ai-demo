@@ -39,7 +39,7 @@ flowchart LR
 The full enterprise architecture covers 10 components across 5 layers — ingestion, integration, AI engine, human review, and response — all on HIPAA-compliant Azure-native services.
 
 - [Solution Architecture](docs/architecture/solution-architecture.md) — master reference
-- [Presentation Deck](docs/presentation/presentation.md) — 11 slides, priority-tiered
+- [Presentation Deck](docs/presentation/presentation.md) — 10 slides, priority-tiered
 - [Architecture Diagrams](docs/architecture/diagrams/) — 6 progressive views
 
 ## Quick Start

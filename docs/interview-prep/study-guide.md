@@ -115,7 +115,7 @@ Paul has not deployed production systems on Azure. He has designed Azure archite
 
 ## 2. Per-Diagram Talking Points
 
-### Diagram 1: System Context (Slide 3)
+### Diagram 1: System Context (Slide 5)
 
 **What it shows**: Four external actors, one AI platform in the middle. The executive view.
 
@@ -126,10 +126,10 @@ Paul has not deployed production systems on Azure. He has designed Azure archite
 4. **"Compliance reporting flows to regulators as output, not as an afterthought."** CMS-0057-F metrics are a first-class output, not a reporting bolt-on. That's an architectural decision showing regulators this isn't a last-minute compliance patch.
 
 **If asked to go deeper:**
-- "What's the data flow for a single PA request?" -- "Let me take you to slide 5 -- the PA processing flow is the detailed view of that."
-- "How does the PA Copilot actually connect to the health plan's systems?" -- "That's the integration detail on slide 7 -- three specific integration points, each with the protocol and auth model."
+- "What's the data flow for a single PA request?" -- "Let me take you to slide 3 -- the PA request lifecycle is the detailed view of that."
+- "How does the PA Copilot actually connect to the health plan's systems?" -- "That's the integration detail in the appendix (Clinical Data Integration) -- three specific integration points, each with the protocol and auth model."
 
-### Diagram 2: Component Architecture (Slide 4)
+### Diagram 2: Solution Architecture (Slide 6)
 
 **What it shows**: 10 components across 5 layers, with data flow arrows and Azure service labels.
 
@@ -143,7 +143,7 @@ Paul has not deployed production systems on Azure. He has designed Azure archite
 - "How does the Document Processing pipeline handle different file types?" -- "OCR for faxes is Azure AI Document Intelligence. PDFs from the portal go through the same pipeline. EDI bypasses OCR entirely -- it's already structured. The output in all cases is a canonical JSON PA record on Service Bus."
 - "Why Azure Container Apps over AKS?" -- "Container Apps is managed Kubernetes -- autoscaling and container orchestration without managing control plane infrastructure. AKS is the right choice if you need deep Kubernetes customization. At PA volumes of 1-3M/month, Container Apps handles it. AKS is a Phase 3 consideration."
 
-### Diagram 3: PA Processing Flow (Slide 5)
+### Diagram 3: PA Processing Flow (Slide 3)
 
 **What it shows**: The 6-step PA lifecycle from provider submission to determination, with three routing outcomes.
 
@@ -156,7 +156,7 @@ Paul has not deployed production systems on Azure. He has designed Azure archite
 - "What happens to the PA request that gets pended?" -- "The system notifies the provider with a specific request for additional clinical information needed. It's queued for reprocessing when the provider responds. CMS-0057-F mandates the response timing, so the pend state has a clock attached."
 - "What about urgent PA requests -- different flow?" -- "Same steps, different SLA clock. CMS-0057-F requires 24-hour turnaround for urgent vs. 72 hours for standard. The system tags urgency at ingestion and the confidence threshold for auto-routing can be adjusted for urgent cases."
 
-### Diagram 4: Clinical Data Integration (Slide 7)
+### Diagram 4: Clinical Data Integration (Appendix A)
 
 **What it shows**: Two-source clinical data architecture -- FHIR R4 for modern EMRs, legacy DB connectors for older systems.
 
@@ -169,7 +169,7 @@ Paul has not deployed production systems on Azure. He has designed Azure archite
 - "What specific FHIR resources does the AI receive?" -- "Patient (tokenized), Encounter, Observation, DiagnosticReport, Condition, MedicationRequest. Those six resources give the AI the clinical narrative for coverage matching. Additional resources -- CarePlan, Procedure history -- are Phase 2 additions."
 - "How does SMART on FHIR auth work in this architecture?" -- "The aggregation service authenticates to each FHIR endpoint using a service account with read-only scope. Entra ID manages the credentials and enforces conditional access. Minimum necessary access -- it can read clinical resources for the specific member in the PA request, nothing broader."
 
-### Diagram 5: LLMOps Pipeline (Slide 8)
+### Diagram 5: LLMOps Pipeline (Appendix B)
 
 **What it shows**: The four-step feedback loop for monitoring and maintaining AI output quality over time.
 
@@ -182,7 +182,7 @@ Paul has not deployed production systems on Azure. He has designed Azure archite
 - "How do you decide when to trigger model revalidation?" -- "Three triggers: overturn rate exceeds baseline by more than X% over a rolling window; confidence distribution shifts detectably; or eval pass rate drops below acceptance threshold. Specific thresholds are business parameters set by clinical governance."
 - "What if a new model version is worse -- rollback?" -- "Blue-green deployment means the previous version is still running. Traffic shift is incremental -- 10%, then 25%, then 100%. If metrics degrade at any shift point, we shift traffic back. Rollback time is under a minute."
 
-### Diagram 6: Security & Zero Trust (Slide 6)
+### Diagram 6: Security & Zero Trust (Slide 8)
 
 **What it shows**: Three top security risks with architectural mitigations. Table format rather than flow diagram.
 

@@ -23,10 +23,10 @@
 ### Presentation (`presentation/`)
 | File | Description |
 |------|-------------|
-| [presentation.md](presentation/presentation.md) | 11-slide deck — standalone, GitHub-renderable, no speaker notes |
+| [presentation.md](presentation/presentation.md) | 10-slide deck — standalone, GitHub-renderable, no speaker notes |
 | [speaker-script.md](presentation/speaker-script.md) | Speaking notes, timing, coaching, pivot guides — references presentation slides |
 | [demo-script.md](presentation/demo-script.md) | 5-minute CLI demo walkthrough for live presentation |
-| [slide-generation-prompts.md](presentation/slide-generation-prompts.md) | All 11 prompts referencing presentation.md as source of truth |
+| [slide-generation-prompts.md](presentation/slide-generation-prompts.md) | All 10 prompts referencing presentation.md as source of truth |
 
 ### Demo (understand → use → test)
 | File | Description |

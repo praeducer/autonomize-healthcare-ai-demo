@@ -61,7 +61,7 @@ This project's architecture was produced across two iterations of engagement `en
 | 3. Architecture | `/architecture` | 10 components, 6 Mermaid diagrams (3 formats each), Azure-primary stack |
 | 4. Security | `/security-review` | 8 STRIDE threats, 5-layer defense-in-depth, HIPAA/SOC2/CMS-0057-F mapping |
 | 5. Project Plan | `/project-plan` | 4-phase progressive delivery roadmap, 3 decision gates |
-| 6. Proposal | `/proposal` | 11-slide presentation, speaker script, email draft |
+| 6. Proposal | `/proposal` | 10-slide presentation, speaker script, email draft |
 | 7. Review | `/review` | 9.1/10 score, 0 blockers |
 | 8. Interview Prep | (custom assembly) | Study guide, Q&A reference (18 questions), pre-show checklist |
 
