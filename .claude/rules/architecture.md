@@ -15,6 +15,7 @@
 | `application_settings.py` | Pydantic Settings: all config from environment variables |
 | `determination_audit_store.py` | SQLite: append-only audit trail of every determination |
 | `mock_healthcare_services/member_eligibility.py` | Mock: returns FHIR CoverageEligibilityResponse |
+| `mock_healthcare_services/load_fhir_data.py` | Load Synthea FHIR bundles into HAPI FHIR server |
 | `web_dashboard/dashboard_routes.py` | Jinja2 template routes for the review dashboard |
 
 ## Progressive Build Steps

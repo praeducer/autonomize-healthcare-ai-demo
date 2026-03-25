@@ -59,12 +59,16 @@ src/prior_auth_demo/
 ├── determination_audit_store.py      # SQLite audit trail
 ├── mock_healthcare_services/
 │   ├── __init__.py
+│   ├── load_fhir_data.py             # Load Synthea bundles into HAPI FHIR
 │   └── member_eligibility.py         # Mock: FHIR CoverageEligibilityResponse
 └── web_dashboard/
     ├── __init__.py
     ├── dashboard_routes.py           # FastAPI Jinja2 template routes
     └── templates/
-        └── review_dashboard.html     # HTMX + Pico CSS
+        ├── review_dashboard.html     # HTMX + Pico CSS main page
+        └── fragments/
+            ├── history_row.html      # HTMX partial: history table row
+            └── result_card.html      # HTMX partial: determination result
 ```
 
 ## Demo Build Steps

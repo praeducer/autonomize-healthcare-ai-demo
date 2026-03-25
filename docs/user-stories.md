@@ -14,4 +14,4 @@ Canonical reference for all demo user stories. Each story maps to one or more in
 | US-6 | Operations | Access PA review via REST API with Swagger docs | We can integrate the engine with other systems | API | 2+ |
 | US-7 | Compliance officer | Have every determination in an immutable audit trail | We have a tamper-proof record for regulators | API | 2+ |
 | US-8 | Clinical reviewer | Use a web dashboard to submit and review cases | I have a visual, intuitive interface for demos and daily work | Dashboard | 3+ |
-| US-9 | Presenter | Demo the system on a projector at 1920x1080 | The interview audience can read everything clearly | Dashboard | 3+ |
+| US-9 | Presenter | Demo the system readable during Teams screen share | The interview audience can read everything clearly | Dashboard | 3+ |

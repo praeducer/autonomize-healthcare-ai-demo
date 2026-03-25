@@ -32,8 +32,8 @@ Each task includes the Claude Code command to run once the human task is done.
 - [ ] **Full demo walkthrough**: Submit cases in order 1→4→3→5→2
   - *Target*: 5-6 minutes total, each case < 60 seconds
   - *Narrative*: "Clear approval → missing docs → ambiguous → urgent oncology → denial"
-- [ ] **Projector test**: Fullscreen at 1920x1080 — all text readable? Badges visible?
-  - *This is UAT-only* — no automated test can verify projector readability
+- [ ] **Screen share test**: Start a Teams test call → Share screen → verify all text readable, badges visible
+  - *This is UAT-only* — no automated test can verify screen share readability
 - [ ] **History panel**: After 5 cases, verify history table shows all 5 with correct determinations
 - [ ] **Swagger regression**: Open `http://localhost:8000/docs` — Swagger still works alongside dashboard
 - [ ] **CLI regression**: `make review` in a separate terminal — CLI still works independently
@@ -49,14 +49,18 @@ Each task includes the Claude Code command to run once the human task is done.
   - "How does this scale?" → Azure Container Apps, Service Bus, PostgreSQL (solution architecture §2)
   - "What about real PHI?" → All data synthetic (Synthea), PHI tokenization before LLM in production
 - [ ] **Fallback plan**: If Step 3 fails → demo via Swagger UI (Step 2); if that fails → CLI (Step 1)
-- [ ] **Demo machine check**: `.env` has valid API key, Docker running, `make install` done, internet connected
 - [ ] **Backup recording**: Screenshot or recording of a successful demo run in case of API outage
 
-## Infrastructure Checklist
+## Teams Screen Share Prep
+
+- [ ] **This desktop is the demo machine** — no separate laptop needed
+- [ ] **Test screen share resolution**: Start a Teams test call → Share screen → confirm text is crisp and readable
+- [ ] **Close distracting apps**: Slack, email, personal browser tabs, notifications (Focus Assist ON)
+- [ ] **Pre-load browser**: Open `http://localhost:8000` and `http://localhost:8000/docs` in separate tabs before the call
+- [ ] **`.env` verified**: Valid API key, Docker running, `make install` done, internet connected
+
+## Infrastructure Prerequisites
 
 - [ ] Docker Desktop installed and running
 - [ ] Python 3.12+ installed
-- [ ] `make install` completed
-- [ ] `.env` file configured with valid `ANTHROPIC_API_KEY`
-- [ ] Internet connectivity for Claude API calls
 - [ ] HAPI FHIR loaded: `docker compose up -d && make load-fhir-data`

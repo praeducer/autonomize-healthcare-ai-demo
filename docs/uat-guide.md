@@ -86,9 +86,9 @@ Open `http://localhost:8000`. Submit all 5 cases in demo order: **1 → 4 → 3 
 
 ---
 
-## US-9: Projector readability (Step 3+)
+## US-9: Screen share readability (Step 3+)
 
-Fullscreen the browser at 1920x1080. All text readable? Badges visible? No horizontal scrolling? This is your interview surface.
+Share your screen via Teams. All text readable? Badges visible? No horizontal scrolling? This is your interview surface.
 
 ---
 
@@ -117,4 +117,4 @@ After each new step, verify previous interfaces still work:
 | US-6 | Swagger works | HTTP 200: yes. Usable UI: **no — UAT only** |
 | US-7 | Audit trail | Records exist: yes. Data integrity over time: **no — UAT only** |
 | US-8 | Dashboard UX | Renders: yes. Professional appearance: **no — UAT only** |
-| US-9 | Projector display | N/A: **UAT only** |
+| US-9 | Screen share readability | N/A: **UAT only** |
