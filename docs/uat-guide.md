@@ -1,8 +1,16 @@
 # UAT Guide — Prior Authorization Demo
 
+> **SSOT for**: How to manually test each user story — what to check and what "good" looks like.
+>
 > **Purpose**: Walk through every user-facing feature and verify it works as a human would experience it. Automated tests cover correctness — this guide covers *experience*.
 >
 > **When to run**: After each build step, and before any demo or interview.
+
+**Related documents:**
+
+- Story definitions (IDs, roles, acceptance criteria): [`docs/user-stories.md`](user-stories.md)
+- Interface setup and usage commands: [`docs/user-guide.md`](user-guide.md)
+- Pre-interview checklist: [`docs/plans/human-tasks.md`](plans/human-tasks.md)
 
 LLM outputs are non-deterministic. If a case gives an unexpected result, re-run once. Consistent wrong results = bug.
 
@@ -35,7 +43,7 @@ Run `make review-all` (or `/invoke-pa-review-all` in Claude Code) and read each 
 | 4 — Humira | Lists missing items (methotrexate dose, labs, DAS28) |
 | 5 — Keytruda | Mentions NCCN, PD-L1, or oncology urgency |
 
-**What you're judging**: Does the rationale read like a clinical reviewer wrote it? Would you trust this explanation?
+**What you're judging**: Does the rationale read like a clinical reviewer wrote it? Would you trust this explanation? Would an ex-Elevance (or similar payer) reviewer find the ICD-10 codes, scenarios, and tone realistic?
 
 ---
 
@@ -84,11 +92,13 @@ After submitting cases via any interface, verify they appear in `GET /api/v1/pri
 
 Open `http://localhost:8000`. Submit all 5 cases in demo order: **1 → 4 → 3 → 5 → 2** (clear approval → missing docs → ambiguous → urgent → denial). This order tells a clinical story.
 
+**Timing**: Target 5-6 minutes total for all 5 cases, each case under 60 seconds. After all 5 cases, verify the history table shows all 5 with correct determinations.
+
 ---
 
 ## US-9: Screen share readability (Step 3+)
 
-Share your screen via Teams. All text readable? Badges visible? No horizontal scrolling? This is your interview surface.
+Share your screen via Teams. All text readable? Badges visible? No horizontal scrolling? This is your interview surface. Have someone else watch — are badges and rationale clear to a non-technical viewer?
 
 ---
 

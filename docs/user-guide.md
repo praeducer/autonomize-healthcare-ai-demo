@@ -1,6 +1,14 @@
 # User Guide
 
+> **SSOT for**: How to set up and use each interface (CLI, Claude Code, API, Dashboard).
+
 Four ways to interact with the PA review engine. All interfaces call the same engine and produce the same results.
+
+**Related documents:**
+
+- What user stories these interfaces serve: [`docs/user-stories.md`](user-stories.md)
+- How to manually test each story: [`docs/uat-guide.md`](uat-guide.md)
+- Pre-interview checklist: [`docs/plans/human-tasks.md`](plans/human-tasks.md)
 
 ## 1. Claude Code (conversational)
 

@@ -1,53 +1,42 @@
 # Human Tasks — Pre-Interview Checklist
 
+> **SSOT for**: The ordered checklist of human tasks to complete before the Autonomize AI interview.
+>
 > **Owner**: Paul Prae | **Status**: In Progress
-> **Scope**: Everything you need to do before the Autonomize AI interview demo
 
-Each task includes the Claude Code command to run once the human task is done.
+**Related documents (SSOT for their domains):**
+
+- Interface setup and commands: [`docs/user-guide.md`](../user-guide.md)
+- Manual test procedures by user story: [`docs/uat-guide.md`](../uat-guide.md)
+- User story definitions: [`docs/user-stories.md`](../user-stories.md)
+- Interview prep (statistics, Q&A, risks): [`docs/interview-prep/`](../interview-prep/)
+- Case definitions and expected outcomes: [`data/sample_pa_cases/README.md`](../../data/sample_pa_cases/README.md)
 
 ---
 
 ## After Step 1 (CLI Engine) — v0.1.0
 
-- [ ] **Run UAT**: `make review-all` — verify all 5 cases produce expected results
-  - *Then run*: `make test-unit` to confirm automated tests agree
-- [ ] **Read rationale quality**: Read each case's rationale aloud — does it sound like a clinical reviewer wrote it?
-  - *This is UAT-only* — automated tests check keywords but can't judge clinical tone
-- [ ] **Clinical realism check**: Would an ex-Elevance reviewer find the ICD-10 codes and scenarios realistic?
-  - *Reference*: `data/sample_pa_cases/README.md` for case definitions
+- [ ] **Run automated tests**: `make test-unit`
+- [ ] **Run UAT**: Follow US-1 through US-5 in [`docs/uat-guide.md`](../uat-guide.md)
 
 ## After Step 2 (REST API) — v0.2.0
 
-- [ ] **Start Docker**: `docker compose up -d && make load-fhir-data`
-  - *Then run*: `make test-integration` to verify FHIR server connectivity
-- [ ] **Swagger walkthrough**: Open `http://localhost:8000/docs` — try each endpoint
-  - *Then run*: `make test-e2e` to run API E2E tests
-- [ ] **CLI independence**: `make down && make review` — CLI must work without Docker
-  - *This validates the decoupling architecture*
+- [ ] **Start Docker**: `make setup-fhir` (starts HAPI FHIR, waits for health check, loads Synthea data)
+- [ ] **Run automated tests**: `make test-integration && make test-e2e`
+- [ ] **Run UAT**: Follow US-6, US-7, and Regression section in [`docs/uat-guide.md`](../uat-guide.md)
 
 ## After Step 3 (Web Dashboard) — v0.3.0
 
-- [ ] **Dashboard smoke test**: `make dev` → open `http://localhost:8000`
-  - *Verify*: Case selector loads, 5 cases in demo order, no console errors
-- [ ] **Full demo walkthrough**: Submit cases in order 1→4→3→5→2
-  - *Target*: 5-6 minutes total, each case < 60 seconds
-  - *Narrative*: "Clear approval → missing docs → ambiguous → urgent oncology → denial"
-- [ ] **Screen share test**: Start a Teams test call → Share screen → verify all text readable, badges visible
-  - *This is UAT-only* — no automated test can verify screen share readability
-- [ ] **History panel**: After 5 cases, verify history table shows all 5 with correct determinations
-- [ ] **Swagger regression**: Open `http://localhost:8000/docs` — Swagger still works alongside dashboard
-- [ ] **CLI regression**: `make review` in a separate terminal — CLI still works independently
-- [ ] **Audience test**: Have someone else watch the demo — are badges and rationale clear to a non-technical viewer?
+- [ ] **Start server**: `make dev`
+- [ ] **Run UAT**: Follow US-8, US-9, and Regression section in [`docs/uat-guide.md`](../uat-guide.md)
 
 ## Before Interview
 
-- [ ] **Architecture prep**: 2-minute overview from `docs/architecture/solution-architecture.md`
-- [ ] **Key numbers**: $3.47 savings per automated PA (CAQH 2024), $10.97 provider cost, 93% of physicians report PA delays (AMA 2024)
-- [ ] **Anticipated questions**:
-  - "Why not auto-deny?" → CMS-0057-F compliance, clinical safety, liability
-  - "Why Claude?" → Tool use pattern, FHIR-native reasoning, Anthropic safety alignment
-  - "How does this scale?" → Azure Container Apps, Service Bus, PostgreSQL (solution architecture §2)
-  - "What about real PHI?" → All data synthetic (Synthea), PHI tokenization before LLM in production
+For key statistics, Q&A preparation, and risk awareness, see [`docs/interview-prep/pre-show-checklist.md`](../interview-prep/pre-show-checklist.md) and [`docs/interview-prep/study-guide.md`](../interview-prep/study-guide.md).
+
+- [ ] **Architecture prep**: 2-minute overview from [`docs/architecture/solution-architecture.md`](../architecture/solution-architecture.md)
+- [ ] **Review key numbers**: CAQH 2024 and AMA 2024 statistics — verified in [`docs/interview-prep/pre-show-checklist.md`](../interview-prep/pre-show-checklist.md)
+- [ ] **Review anticipated questions**: See Q&A section in [`docs/interview-prep/study-guide.md`](../interview-prep/study-guide.md)
 - [ ] **Fallback plan**: If Step 3 fails → demo via Swagger UI (Step 2); if that fails → CLI (Step 1)
 - [ ] **Backup recording**: Screenshot or recording of a successful demo run in case of API outage
 
@@ -63,4 +52,4 @@ Each task includes the Claude Code command to run once the human task is done.
 
 - [ ] Docker Desktop installed and running
 - [ ] Python 3.12+ installed
-- [ ] HAPI FHIR loaded: `docker compose up -d && make load-fhir-data`
+- [ ] HAPI FHIR loaded: `make setup-fhir`

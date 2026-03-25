@@ -1,6 +1,14 @@
 # User Stories
 
-Canonical reference for all demo user stories. Each story maps to one or more interfaces and is verified via UAT (see `docs/uat-guide.md`).
+> **SSOT for**: What user stories exist, who they serve, and which interfaces/steps they apply to.
+
+Canonical reference for all demo user stories. Each story maps to one or more interfaces and is verified via UAT.
+
+**Related documents:**
+
+- How to test each story: [`docs/uat-guide.md`](uat-guide.md)
+- How to use each interface: [`docs/user-guide.md`](user-guide.md)
+- Pre-interview checklist: [`docs/plans/human-tasks.md`](plans/human-tasks.md)
 
 ## Stories
 
