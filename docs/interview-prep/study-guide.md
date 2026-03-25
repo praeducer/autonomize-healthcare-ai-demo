@@ -433,6 +433,36 @@ These are the ones that look like serial numbers. You **will** be expected to kn
 | **HEDIS** | Healthcare Effectiveness Data and Information Set | Quality measures maintained by NCQA. Health plans are scored on HEDIS metrics. Not directly PA-related but comes up in payer conversations. |
 | **NCQA** | National Committee for Quality Assurance | Accredits health plans and maintains HEDIS quality measures. If someone says "NCQA accredited" they mean the plan passed quality review. |
 
+### Clinical & Coding Acronyms Used in the Demo
+
+These appear in the 5 PA test cases and Claude's tool use. Know them for the live demo.
+
+| Term | Expansion | What It Actually Is |
+|---|---|---|
+| **CMS** | Centers for Medicare & Medicaid Services | The federal agency that administers Medicare, Medicaid, and the ACA marketplace. Sets coverage policies (NCDs), certifies providers, and enforces regulations like CMS-0057-F. |
+| **CDC** | Centers for Disease Control and Prevention | Federal public health agency. Publishes the official ICD-10-CM code set used in this demo for diagnosis validation. |
+| **ICD-10-CM** | International Classification of Diseases, 10th Revision, Clinical Modification | US standard for classifying diagnoses. Each code maps to a specific condition (e.g., `M54.5` = low back pain, `C34.11` = malignant neoplasm of upper lobe, right bronchus or lung). "CM" = Clinical Modification (US-specific adaptation of the WHO's ICD-10). |
+| **CPT** | Current Procedural Terminology | Coding system for medical procedures, maintained by the AMA (American Medical Association). Level I of HCPCS. Examples: `72148` = lumbar MRI without contrast, `22612` = lumbar spinal fusion. |
+| **HCPCS** | Healthcare Common Procedure Coding System | Two-level coding system for procedures and services billed to Medicare. Level I = CPT codes (numeric). Level II = codes starting with letters — most notably J-codes for injectable drugs (e.g., `J9271` = pembrolizumab/Keytruda). Pronounced "hick-picks." |
+| **J-code** | HCPCS Level II, J series | Codes for injectable/infusible drugs administered by a provider (not self-administered oral drugs). J9271 = pembrolizumab (Keytruda). The "J" stands for "drugs administered other than oral method." |
+| **NCD** | National Coverage Determination | CMS-issued national coverage policy that applies to all of Medicare. Example: NCD for lumbar MRI defines when it's medically necessary. |
+| **LCD** | Local Coverage Determination | Regional coverage policy issued by a MAC (Medicare Administrative Contractor). Fills gaps where no NCD exists. Example: LCD L35028 = spine MRI coverage criteria. The "L" prefix + 5 digits is the LCD identifier format. |
+| **NCCN** | National Comprehensive Cancer Network | Alliance of leading US cancer centers that publishes clinical practice guidelines. NCCN Category 1 = highest level of evidence + consensus. Used in the Keytruda (Case 5) approval rationale. |
+| **PD-L1** | Programmed Death-Ligand 1 | A protein on cell surfaces. When a tumor has high PD-L1 expression (measured as TPS — Tumor Proportion Score, e.g., 65%), it indicates the cancer may respond to immunotherapy drugs like Keytruda. PD-L1 ≥ 50% is a key criterion for first-line Keytruda approval. |
+| **EGFR** | Epidermal Growth Factor Receptor | A gene that, when mutated, drives certain lung cancers. EGFR-positive patients get targeted therapy (e.g., osimertinib), NOT immunotherapy. The Keytruda case specifies "no EGFR mutations" to confirm immunotherapy is appropriate. |
+| **ALK** | Anaplastic Lymphoma Kinase | Another gene mutation that drives certain lung cancers. Like EGFR, ALK-positive patients get targeted therapy instead of immunotherapy. "No ALK rearrangement" confirms Keytruda eligibility. |
+| **ECOG** | Eastern Cooperative Oncology Group (Performance Status) | A scale from 0–5 measuring how well a cancer patient can perform daily activities. ECOG 0 = fully active. ECOG 1 = restricted but ambulatory. ECOG 5 = dead. The Keytruda case has ECOG 1 — the patient is functional enough for treatment. |
+| **DAS28** | Disease Activity Score using 28 joints | A clinical score measuring rheumatoid arthritis disease activity. Counts tender/swollen joints, blood markers (ESR or CRP), and patient assessment. DAS28 > 5.1 = high disease activity. Missing from the Humira case (Case 4) — that's why it pends. |
+| **A1C** | Hemoglobin A1C (glycated hemoglobin) | Blood test measuring average blood sugar over 2-3 months. A1C > 6.5% = diabetes. Elevated A1C is a surgical risk factor flagged in the spinal fusion case (Case 3) because diabetes impairs wound healing. |
+| **ESI** | Epidural Steroid Injection | A conservative treatment for back/spine pain where steroids are injected into the epidural space. Many coverage policies require ESI failure before approving spinal fusion surgery. |
+| **PT** | Physical Therapy | Conservative treatment for musculoskeletal conditions. Coverage criteria for procedures like lumbar MRI or spinal fusion typically require documented PT failure (e.g., 6-12 sessions without adequate improvement). |
+| **NSAID** | Non-Steroidal Anti-Inflammatory Drug | Over-the-counter or prescription pain medications (ibuprofen, naproxen, celecoxib). A first-line conservative treatment — coverage criteria often require documented NSAID trial before approving advanced imaging or surgery. |
+| **BMI** | Body Mass Index | Weight-to-height ratio. BMI ≥ 30 = obese. Elevated BMI is a surgical risk factor for spinal fusion — some coverage criteria require BMI documentation or weight management before elective spine surgery. |
+| **AMA** | American Medical Association | The largest physician professional organization in the US. Maintains CPT codes, publishes the annual PA burden survey (93% of physicians say PA delays care), and advocates for PA reform. |
+| **HL7** | Health Level Seven International | The standards organization that develops healthcare data exchange standards: HL7 v2 (legacy messaging), CDA (clinical documents), and FHIR (modern REST APIs). The "7" refers to Layer 7 (application layer) of the OSI model. |
+| **LLM** | Large Language Model | The class of AI model Claude belongs to. Trained on large text corpora, capable of reasoning over clinical evidence. In this architecture, Claude is the LLM that powers the PA Copilot's clinical review. |
+| **SDK** | Software Development Kit | A library for integrating with a service via code. This demo uses the Anthropic SDK (Python) to call Claude's API with tool use — no AI framework wrappers (no LangChain, no LlamaIndex). |
+
 ### Regulation & Compliance Deep Cuts
 
 | Term | What You Need to Know |

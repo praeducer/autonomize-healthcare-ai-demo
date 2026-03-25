@@ -74,6 +74,21 @@ python -m prior_auth_demo.mock_healthcare_services.load_fhir_data
 uvicorn prior_auth_demo.healthcare_api_server:app --reload --port 8000
 ```
 
+## How It Works — Claude Tool Use
+
+Claude reviews each PA (Prior Authorization) request by calling 4 tools in sequence, like a human clinical reviewer consulting reference systems:
+
+| Tool | What It Does | Data Source |
+|------|-------------|-------------|
+| `retrieve_clinical_data` | Extracts patient demographics, diagnoses, coverage, and clinical narratives from the PA request | FHIR R4 Bundle |
+| `validate_npi` | Validates the provider's NPI (National Provider Identifier) via Luhn-10 check digit | Local algorithm (CMS 80840 prefix) |
+| `lookup_icd10_code` | Verifies ICD-10-CM (diagnosis) codes and retrieves descriptions | CDC 2026 reference data (local TSV) |
+| `check_cms_coverage` | Looks up coverage criteria for CPT/HCPCS procedure codes | CMS LCD/NCD criteria (local JSON) |
+
+After gathering evidence, Claude analyzes the clinical picture against coverage criteria, then returns a determination with a confidence score. High confidence (≥0.85) = auto-approve. Lower confidence = route to human review. The system **never auto-denies** — all denials require human review.
+
+For detailed explanations of all acronyms and terminology, see the [Study Guide](docs/interview-prep/study-guide.md#5-vocabulary-flashcards).
+
 ## Tech Stack
 
 | Layer | Technology |

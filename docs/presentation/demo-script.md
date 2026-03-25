@@ -39,6 +39,19 @@ Switch to terminal.
 
 ---
 
+## What Claude Does During Each Review
+
+When a PA (Prior Authorization) case is submitted, Claude calls 4 tools in sequence — the same reference systems a human clinical reviewer would consult:
+
+1. **`retrieve_clinical_data`** — Parses the FHIR R4 Bundle to extract the patient's demographics, diagnoses (ICD-10-CM codes), insurance coverage, provider info, and supporting clinical narratives
+2. **`validate_npi`** — Validates the requesting provider's NPI (National Provider Identifier) using the Luhn-10 check digit algorithm with the CMS 80840 prefix (per 45 CFR 162.406)
+3. **`lookup_icd10_code`** — Looks up each ICD-10-CM (International Classification of Diseases, 10th Revision, Clinical Modification) diagnosis code against the 2026 CDC reference data to verify validity and understand the conditions
+4. **`check_cms_coverage`** — Looks up CMS (Centers for Medicare & Medicaid Services) coverage criteria for each CPT (Current Procedural Terminology) or HCPCS (Healthcare Common Procedure Coding System) procedure code — returns requirements, approval criteria, denial criteria, and guideline references
+
+After gathering all evidence, Claude analyzes the clinical picture against coverage criteria, then returns a determination with a confidence score. The engine routes the result: ≥0.85 confidence = auto-approve, <0.85 = human review, never auto-deny.
+
+---
+
 ## Demo Flow (5 minutes)
 
 ### Case 1: Clear Approval — Lumbar MRI (60s)
