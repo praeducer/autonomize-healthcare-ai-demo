@@ -1,13 +1,5 @@
 {
   "mcpServers": {
-    "docker-mcp": {
-      "type": "stdio",
-      "command": "uvx",
-      "args": [
-        "mcp-server-docker"
-      ],
-      "env": {}
-    },
     "cms-coverage-db": {
       "type": "http",
       "url": "https://mcp.deepsense.ai/cms_coverage/mcp"
