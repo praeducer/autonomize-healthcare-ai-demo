@@ -39,9 +39,8 @@ Full tool descriptions and acronym definitions: **[User Guide — Architecture](
 > File: `01_lumbar_mri_clear_approval.json`
 
 ```
-make review
+python -m prior_auth_demo.command_line_demo --case data/sample_pa_cases/01_lumbar_mri_clear_approval.json
 ```
-Or: `python -m prior_auth_demo.command_line_demo --case data/sample_pa_cases/01_lumbar_mri_clear_approval.json`
 
 > "This is a lumbar MRI request for radiculopathy. The patient has 12 sessions of physical therapy, tried NSAIDs with only partial improvement, and has documented radiculopathy. Watch how Claude uses tools — it validates the NPI, looks up the ICD-10 codes, checks CMS coverage criteria, then produces a determination."
 
@@ -73,7 +72,7 @@ python -m prior_auth_demo.command_line_demo --case data/sample_pa_cases/03_spina
 
 > "A spinal fusion with mixed signals — some criteria met, but only 8 PT sessions instead of 12, elevated A1C, no second epidural injection."
 
-**Point out**: PENDED_FOR_REVIEW (not DENIED), identifies specific gaps.
+**Point out**: PENDED_MISSING_INFO (not DENIED), identifies specific gaps — A1C too high, incomplete ESI trial, missing psych clearance.
 
 > "Key design decision: ambiguous cases always go to a human reviewer — the system never converts a borderline case into a denial. The confidence threshold is 0.85 for auto-approval."
 

@@ -172,48 +172,20 @@ flowchart LR
 
 ```mermaid
 flowchart LR
-    subgraph "Providers"
-        PROV["`**Healthcare Providers**
-*Physicians, Facilities*`"]
-    end
+    PROV["`**Healthcare Providers**`"]
+    CORE["`**Payer Core System**`"]
+    CLIN["`**Clinical Data Sources**`"]
+    PA_COPILOT["`**Autonomize PA Copilot**`"]
+    CMS["`**CMS / Regulators**`"]
 
-    subgraph "Health Plan Systems"
-        CORE["`**Payer Core System**
-*Enrollment, Benefits, Contracts*`"]
-        CLIN["`**Clinical Data Sources**
-*FHIR R4 + Legacy DB Connector*`"]
-    end
-
-    subgraph "Autonomize AI Platform"
-        PA_COPILOT["`**PA Copilot**
-*AI-Driven Review Engine*`"]
-    end
-
-    subgraph "Regulatory"
-        CMS["`**CMS / State Regulators**
-*Compliance Reporting*`"]
-    end
-
-    PROV -->|"PA Requests
-Fax, Portal, X12 278"| PA_COPILOT
-    CORE -->|"Eligibility + Benefits
-REST API"| PA_COPILOT
-    CLIN -->|"Clinical Records
-FHIR R4 API"| PA_COPILOT
-    PA_COPILOT -->|"Determinations
-REST API"| CORE
-    PA_COPILOT -->|"Compliance Metrics
-CMS-0057-F"| CMS
-    PA_COPILOT -->|"Status Updates
-Portal / Fax"| PROV
+    PROV -->|"PA Requests"| PA_COPILOT
+    CORE <-->|"Eligibility + Determinations"| PA_COPILOT
+    CLIN -->|"Clinical Records (FHIR R4)"| PA_COPILOT
+    PA_COPILOT -->|"Status Updates"| PROV
+    PA_COPILOT -->|"Compliance Reporting"| CMS
 ```
 
-| Actor | Role | Integration |
-|-------|------|-------------|
-| Healthcare Providers | Submit PA requests via multiple channels | Fax, Portal, X12 278 |
-| Autonomize AI Platform | AI-driven clinical review engine | PA Copilot on Genesis |
-| Health Plan Systems | Eligibility, benefits, clinical data | REST API, FHIR R4 |
-| Regulators (CMS) | Compliance reporting and oversight | CMS-0057-F metrics |
+> **"Four actors, one platform."** Providers submit PA requests. The Payer Core provides eligibility and receives determinations. Clinical data sources feed FHIR R4 records. CMS receives compliance reporting. Autonomize PA Copilot sits in the center — automating the clinical review, not replacing it.
 
 ---
 
@@ -319,32 +291,30 @@ flowchart TB
 
 ---
 
-## Slide 9: Progressive Delivery
+## Slide 9: Progressive Delivery — Agile, Iterative, Data-Driven
 
-| Phase | Focus | Key Deliverable |
-|-------|-------|-----------------|
-| **Phase 0: Demo** | Prove the concept | Working AI PA review with mock data |
-| **Phase 1: MVP** | Single LOB, single channel | Production PA processing with human review |
-| **Phase 2: Scale** | Multi-channel, multi-LOB | Fax OCR, legacy data, LOB configuration |
-| **Phase 3: Enterprise** | Full scale, compliance | All channels, 20 LOBs, CMS reporting |
+| Phase | Duration | What We Deliver | How We Work |
+|-------|----------|----------------|-------------|
+| **Phase 0: Demo** | Weeks 1-2 | Working AI PA review with mock data | Spike + validate core architecture |
+| **Phase 1: MVP** | Weeks 3-6 | Single LOB, single channel in production | 2-week sprints, daily standups, human review on all cases |
+| **Phase 2: Scale** | Weeks 7-10 | Multi-channel, multi-LOB | Iterate on real performance data, add fax OCR + legacy connectors |
+| **Phase 3: Enterprise** | Weeks 11-12 | All channels, 20 LOBs, CMS reporting | Harden, load test, compliance validation |
 
-Each phase produces a deployable, demonstrable system. Decision gates between phases use real performance data to scope the next phase.
+**Each phase**: Design → Build → Test → Demo → Decision Gate. No phase starts without stakeholder sign-off on the previous one. Real performance data (accuracy, overturn rate, processing time) drives scope decisions — not assumptions.
 
 ---
 
 ## Slide 10: Discussion Starters
 
-**Business Strategy:**
-- How does the ServiceNow partnership change the payer integration strategy?
-- What is the target auto-determination rate for Phase 1?
+**For the team:**
+- Which LOB would be the best Phase 1 candidate — and why?
+- What auto-determination rate should we target for Phase 1?
+- What's been the biggest integration surprise with existing payer deployments?
 
-**Technical Depth:**
-- How does the Genesis Platform handle coverage criteria updates?
-- What's the Azure AI Foundry Agent Service integration status?
-
-**Implementation:**
-- Which LOB is the ideal Phase 1 candidate?
-- What's been the biggest integration challenge with existing payer deployments?
+**What I'd want to learn in discovery:**
+- How does Genesis handle coverage criteria updates today?
+- What does the ServiceNow partnership mean for payer workflow integration?
+- What Autonomize platform components are available for a new engagement?
 
 ---
 
@@ -381,9 +351,7 @@ Each phase produces a deployable, demonstrable system. Decision gates between ph
 | **Multi-tenant** | Lower | Logical | Lower |
 | **Multi-instance** | Higher | Physical | Higher |
 
-**Recommendation:** Start multi-tenant with per-LOB configuration. Autonomize Genesis Platform already supports it. Deploy separate instances only where regulation requires physical isolation.
-
-**Honest unknowns:** The right answer depends on actual LOB rule complexity and regulatory requirements — both are discovery questions.
+**Recommendation:** Multi-tenant with per-LOB configuration. Separate instances only where regulation requires physical isolation. The right answer depends on actual LOB rule complexity — a discovery question.
 
 ---
 
