@@ -70,29 +70,21 @@ All statistics in the presentation have been verified against primary sources:
 
 ### Infrastructure (10 minutes before)
 - [ ] Docker Desktop running (open it; takes ~30s to start)
-- [ ] Start HAPI FHIR + load data:
-  - Bash: `make setup-fhir`
-  - PowerShell: `docker compose up -d` then `python -m prior_auth_demo.mock_healthcare_services.load_fhir_data`
+- [ ] Start HAPI FHIR + load data per [User Guide — REST API](../user-guide.md#3-rest-api--swagger-step-2)
 - [ ] Verify FHIR is responding: open `http://localhost:8080/fhir/metadata` in browser
-- [ ] Start FastAPI server:
-  - Bash: `make dev`
-  - PowerShell: `uvicorn prior_auth_demo.healthcare_api_server:app --reload --port 8000`
+- [ ] Start FastAPI server per [User Guide — Web Dashboard](../user-guide.md#4-web-dashboard-step-3)
 - [ ] `.env` has valid `ANTHROPIC_API_KEY` and `FHIR_SERVER_URL=http://localhost:8080/fhir`
 
 ### Smoke Test (5 minutes before)
-- [ ] Single case produces APPROVED determination:
-  - Bash: `make review`
-  - PowerShell: `python -m prior_auth_demo.command_line_demo --case data/sample_pa_cases/01_lumbar_mri_clear_approval.json`
-- [ ] All 5 cases produce expected outcomes (approve, deny, pend, complex, urgent):
-  - Bash: `make review-all`
-  - PowerShell: `python -m prior_auth_demo.command_line_demo --all`
+- [ ] Single case produces APPROVED: run single case per [User Guide — CLI](../user-guide.md#2-cli-terminal)
+- [ ] All 5 cases produce expected outcomes: run all cases per [User Guide — CLI](../user-guide.md#2-cli-terminal)
 - [ ] Open `http://localhost:8000` — dashboard loads, case dropdown populated
 - [ ] Open `http://localhost:8000/docs` — Swagger UI renders all endpoints
 - [ ] Open `http://localhost:8080` — HAPI FHIR welcome page shows
 - [ ] Check response times — should be under 30 seconds per case
 - [ ] Verify confidence scores are in reasonable range (0.0-1.0)
 - [ ] Verify reasoning includes evidence citations
-- [ ] **Fallback plan**: If dashboard fails → demo via Swagger UI (`/docs`); if that fails → CLI (bash: `make review` / PowerShell: `python -m prior_auth_demo.command_line_demo --case data/sample_pa_cases/01_lumbar_mri_clear_approval.json`); if all fail → walk through architecture diagrams
+- [ ] **Fallback plan**: If dashboard fails → demo via Swagger UI (`/docs`); if that fails → CLI (see [User Guide](../user-guide.md#2-cli-terminal)); if all fail → walk through architecture diagrams
 - [ ] **Backup recording**: Screenshot or recording of a successful demo run in case of API outage
 
 ---

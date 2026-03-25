@@ -44,50 +44,19 @@ The full enterprise architecture covers 10 components across 5 layers — ingest
 
 ## Quick Start
 
-**Bash (Linux/macOS/WSL) — `make` shortcuts available:**
-
 ```bash
-make install        # Install dependencies + pre-commit hooks
-make review         # Run a single PA case through AI review (CLI)
+make install        # Install dependencies (bash). PowerShell: pip install -e ".[dev]"
+make review         # Run a single PA case through AI review
 make review-all     # Run all 5 PA cases
-make setup-fhir     # Start HAPI FHIR server (Docker) + load Synthea patients
-make dev            # Start the FastAPI server + web dashboard
 ```
 
-**PowerShell (Windows) — direct commands:**
+Full setup, PowerShell equivalents, and all interfaces: **[User Guide](docs/user-guide.md)**
 
-```powershell
-pip install -e ".[dev]"                # Install dependencies
-pre-commit install                     # Install pre-commit hooks
+## How It Works
 
-# Run a single PA case through AI review (CLI)
-python -m prior_auth_demo.command_line_demo --case data/sample_pa_cases/01_lumbar_mri_clear_approval.json
+Claude reviews each PA request by calling 4 tools — `retrieve_clinical_data`, `validate_npi`, `lookup_icd10_code`, `check_cms_coverage` — to gather evidence from FHIR bundles, CDC reference data, and CMS coverage criteria before rendering a determination. The system **never auto-denies**; low-confidence cases always route to human review.
 
-# Run all 5 PA cases
-python -m prior_auth_demo.command_line_demo --all
-
-# Start HAPI FHIR server (Docker) + load Synthea patients (Step 2+)
-docker compose up -d
-python -m prior_auth_demo.mock_healthcare_services.load_fhir_data
-
-# Start the FastAPI server + web dashboard
-uvicorn prior_auth_demo.healthcare_api_server:app --reload --port 8000
-```
-
-## How It Works — Claude Tool Use
-
-Claude reviews each PA (Prior Authorization) request by calling 4 tools in sequence, like a human clinical reviewer consulting reference systems:
-
-| Tool | What It Does | Data Source |
-|------|-------------|-------------|
-| `retrieve_clinical_data` | Extracts patient demographics, diagnoses, coverage, and clinical narratives from the PA request | FHIR R4 Bundle |
-| `validate_npi` | Validates the provider's NPI (National Provider Identifier) via Luhn-10 check digit | Local algorithm (CMS 80840 prefix) |
-| `lookup_icd10_code` | Verifies ICD-10-CM (diagnosis) codes and retrieves descriptions | CDC 2026 reference data (local TSV) |
-| `check_cms_coverage` | Looks up coverage criteria for CPT/HCPCS procedure codes | CMS LCD/NCD criteria (local JSON) |
-
-After gathering evidence, Claude analyzes the clinical picture against coverage criteria, then returns a determination with a confidence score. High confidence (≥0.85) = auto-approve. Lower confidence = route to human review. The system **never auto-denies** — all denials require human review.
-
-For detailed explanations of all acronyms and terminology, see the [Study Guide](docs/interview-prep/study-guide.md#5-vocabulary-flashcards).
+Full tool descriptions, confidence routing, and architecture: **[User Guide — Architecture](docs/user-guide.md#architecture)** | Acronyms and terminology: **[Study Guide — Flashcards](docs/interview-prep/study-guide.md#5-vocabulary-flashcards)**
 
 ## Tech Stack
 

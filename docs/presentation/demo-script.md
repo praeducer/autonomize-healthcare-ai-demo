@@ -8,22 +8,7 @@
 
 ## Prerequisites (10 minutes before)
 
-**Bash:**
-
-```bash
-# Start Docker Desktop, then:
-make setup-fhir     # HAPI FHIR + Synthea patients (~60s first time)
-make dev            # FastAPI server on localhost:8000
-```
-
-**PowerShell:**
-
-```powershell
-# Start Docker Desktop, then:
-docker compose up -d
-python -m prior_auth_demo.mock_healthcare_services.load_fhir_data
-uvicorn prior_auth_demo.healthcare_api_server:app --reload --port 8000
-```
+Start Docker Desktop, then follow the **REST API + Swagger** setup in [`docs/user-guide.md`](../user-guide.md#3-rest-api--swagger-step-2).
 
 Verify: `http://localhost:8000` (dashboard), `http://localhost:8080/fhir` (HAPI FHIR).
 
@@ -41,14 +26,9 @@ Switch to terminal.
 
 ## What Claude Does During Each Review
 
-When a PA (Prior Authorization) case is submitted, Claude calls 4 tools in sequence — the same reference systems a human clinical reviewer would consult:
+Claude calls 4 tools in sequence — `retrieve_clinical_data`, `validate_npi`, `lookup_icd10_code`, `check_cms_coverage` — to gather evidence before rendering a determination. High confidence = auto-approve. Low confidence = human review. Never auto-deny.
 
-1. **`retrieve_clinical_data`** — Parses the FHIR R4 Bundle to extract the patient's demographics, diagnoses (ICD-10-CM codes), insurance coverage, provider info, and supporting clinical narratives
-2. **`validate_npi`** — Validates the requesting provider's NPI (National Provider Identifier) using the Luhn-10 check digit algorithm with the CMS 80840 prefix (per 45 CFR 162.406)
-3. **`lookup_icd10_code`** — Looks up each ICD-10-CM (International Classification of Diseases, 10th Revision, Clinical Modification) diagnosis code against the 2026 CDC reference data to verify validity and understand the conditions
-4. **`check_cms_coverage`** — Looks up CMS (Centers for Medicare & Medicaid Services) coverage criteria for each CPT (Current Procedural Terminology) or HCPCS (Healthcare Common Procedure Coding System) procedure code — returns requirements, approval criteria, denial criteria, and guideline references
-
-After gathering all evidence, Claude analyzes the clinical picture against coverage criteria, then returns a determination with a confidence score. The engine routes the result: ≥0.85 confidence = auto-approve, <0.85 = human review, never auto-deny.
+Full tool descriptions and acronym definitions: **[User Guide — Architecture](../user-guide.md#architecture)** | **[Study Guide — Flashcards](../interview-prep/study-guide.md#5-vocabulary-flashcards)**
 
 ---
 
@@ -58,12 +38,10 @@ After gathering all evidence, Claude analyzes the clinical picture against cover
 
 > File: `01_lumbar_mri_clear_approval.json`
 
-```bash
-make review  # bash
 ```
-```powershell
-python -m prior_auth_demo.command_line_demo --case data/sample_pa_cases/01_lumbar_mri_clear_approval.json  # PowerShell
+make review
 ```
+Or: `python -m prior_auth_demo.command_line_demo --case data/sample_pa_cases/01_lumbar_mri_clear_approval.json`
 
 > "This is a lumbar MRI request for radiculopathy. The patient has 12 sessions of physical therapy, tried NSAIDs with only partial improvement, and has documented radiculopathy. Watch how Claude uses tools — it validates the NPI, looks up the ICD-10 codes, checks CMS coverage criteria, then produces a determination."
 
@@ -75,8 +53,8 @@ python -m prior_auth_demo.command_line_demo --case data/sample_pa_cases/01_lumba
 
 > File: `04_humira_missing_documentation.json`
 
-```bash
-python -m prior_auth_demo.command_line_demo --case data/sample_pa_cases/04_humira_missing_documentation.json  # bash & PowerShell
+```
+python -m prior_auth_demo.command_line_demo --case data/sample_pa_cases/04_humira_missing_documentation.json
 ```
 
 > "Now a Humira request for rheumatoid arthritis. The provider says the patient 'failed methotrexate' but doesn't include dose, duration, or reason for discontinuation."
@@ -89,8 +67,8 @@ python -m prior_auth_demo.command_line_demo --case data/sample_pa_cases/04_humir
 
 > File: `03_spinal_fusion_complex_review.json`
 
-```bash
-python -m prior_auth_demo.command_line_demo --case data/sample_pa_cases/03_spinal_fusion_complex_review.json  # bash & PowerShell
+```
+python -m prior_auth_demo.command_line_demo --case data/sample_pa_cases/03_spinal_fusion_complex_review.json
 ```
 
 > "A spinal fusion with mixed signals — some criteria met, but only 8 PT sessions instead of 12, elevated A1C, no second epidural injection."
@@ -103,8 +81,8 @@ python -m prior_auth_demo.command_line_demo --case data/sample_pa_cases/03_spina
 
 > File: `05_keytruda_urgent_oncology.json`
 
-```bash
-python -m prior_auth_demo.command_line_demo --case data/sample_pa_cases/05_keytruda_urgent_oncology.json  # bash & PowerShell
+```
+python -m prior_auth_demo.command_line_demo --case data/sample_pa_cases/05_keytruda_urgent_oncology.json
 ```
 
 > "Keytruda for stage IIIA lung cancer. PD-L1 at 65%, no EGFR or ALK mutations, ECOG 1. This is an NCCN Category 1 recommendation — the gold standard."
@@ -117,8 +95,8 @@ python -m prior_auth_demo.command_line_demo --case data/sample_pa_cases/05_keytr
 
 > File: `02_cosmetic_rhinoplasty_denial.json`
 
-```bash
-python -m prior_auth_demo.command_line_demo --case data/sample_pa_cases/02_cosmetic_rhinoplasty_denial.json  # bash & PowerShell
+```
+python -m prior_auth_demo.command_line_demo --case data/sample_pa_cases/02_cosmetic_rhinoplasty_denial.json
 ```
 
 > "A rhinoplasty coded with a skin condition diagnosis — actinic keratosis. There's no functional indication, no nasal obstruction documented."

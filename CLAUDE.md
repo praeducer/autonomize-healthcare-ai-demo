@@ -29,8 +29,6 @@ Interview exercise for Autonomize AI demonstrating AI-driven prior authorization
 
 ## Build & Run
 
-**Bash (Linux/macOS/WSL) — `make` shortcuts available:**
-
 ```bash
 make install           # Install deps + pre-commit hooks
 make review            # Run single PA review (CLI)
@@ -39,37 +37,10 @@ make dev               # Start FastAPI dev server
 make test              # Run all tests
 make lint              # Ruff check + format check + mypy
 make download-synthea  # Download Synthea FHIR patients
+make diagrams          # Render all .mmd diagrams to PNG + SVG
 ```
 
-**PowerShell (Windows) — direct commands:**
-
-```powershell
-pip install -e ".[dev]"          # Install deps
-pre-commit install               # Install pre-commit hooks
-
-# CLI review
-python -m prior_auth_demo.command_line_demo --case data/sample_pa_cases/01_lumbar_mri_clear_approval.json
-python -m prior_auth_demo.command_line_demo --all    # All 5 cases
-
-# FastAPI dev server
-uvicorn prior_auth_demo.healthcare_api_server:app --reload --port 8000
-
-# Tests
-pytest -v                                            # All tests
-pytest tests/ -m unit -v                             # Unit only
-
-# Lint
-ruff check src/prior_auth_demo/ tests/
-ruff format --check src/prior_auth_demo/ tests/
-mypy src/prior_auth_demo/
-
-# HAPI FHIR (Docker, Step 2+)
-docker compose up -d
-python -m prior_auth_demo.mock_healthcare_services.load_fhir_data
-
-# Download Synthea FHIR patients
-git clone --branch 10-patients --single-branch --depth 1 https://github.com/smart-on-fhir/sample-bulk-fhir-datasets.git data/synthea_fhir_patients/raw
-```
+PowerShell equivalents and full setup instructions: **[`docs/user-guide.md`](docs/user-guide.md)**
 
 ## CI/CD
 

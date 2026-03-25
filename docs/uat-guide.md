@@ -22,8 +22,7 @@ LLM outputs are non-deterministic. If a case gives an unexpected result, re-run 
 
 | Interface | How to test | What to look for |
 |-----------|------------|-----------------|
-| CLI (bash) | `make review` | APPROVED badge, confidence %, rationale, citations, processing time |
-| CLI (PowerShell) | `python -m prior_auth_demo.command_line_demo --case data/sample_pa_cases/01_lumbar_mri_clear_approval.json` | Same as above |
+| CLI | Run single case per [User Guide — CLI](user-guide.md#2-cli-terminal) | APPROVED badge, confidence %, rationale, citations, processing time |
 | Claude Code | `/invoke-pa-review` | Same output, conversational context |
 | API (Step 2+) | POST `/api/v1/prior-auth/review` via Swagger | JSON response with determination, confidence, rationale |
 | Dashboard (Step 3+) | Select case → Submit | Loading spinner → result card with badge, confidence bar, rationale |
@@ -34,7 +33,7 @@ LLM outputs are non-deterministic. If a case gives an unexpected result, re-run 
 
 **Goal**: Every determination includes clinical rationale (2+ sentences) and guideline citations.
 
-Run `make review-all` (bash) or `python -m prior_auth_demo.command_line_demo --all` (PowerShell) or `/invoke-pa-review-all` (Claude Code) and read each result:
+Run all cases per [User Guide — CLI](user-guide.md#2-cli-terminal) or `/invoke-pa-review-all` (Claude Code) and read each result:
 
 | Case | Check rationale for... |
 |------|----------------------|
@@ -112,12 +111,12 @@ Share your screen via Teams. All text readable? Badges visible? No horizontal sc
 
 After each new step, verify previous interfaces still work:
 
-| Check | Bash | PowerShell |
-|-------|------|------------|
-| CLI works standalone | `make review` | `python -m prior_auth_demo.command_line_demo --case data/sample_pa_cases/01_lumbar_mri_clear_approval.json` |
-| CLI works without Docker | `make down && make review` | `docker compose down; python -m prior_auth_demo.command_line_demo --case data/sample_pa_cases/01_lumbar_mri_clear_approval.json` |
-| Swagger still renders (Step 2+) | Open `/docs` | Open `/docs` |
-| API returns JSON, not HTML (Step 3+) | `GET /api/v1/prior-auth/sample-cases` | `GET /api/v1/prior-auth/sample-cases` |
+| Check | How |
+|-------|-----|
+| CLI works standalone | Run single case per [User Guide — CLI](user-guide.md#2-cli-terminal) |
+| CLI works without Docker | Stop Docker (`docker compose down`), then run CLI — should still work |
+| Swagger still renders (Step 2+) | Open `http://localhost:8000/docs` |
+| API returns JSON, not HTML (Step 3+) | `GET /api/v1/prior-auth/sample-cases` — should return JSON, not dashboard HTML |
 
 ---
 

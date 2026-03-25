@@ -1,6 +1,8 @@
 # User Guide
 
-> **SSOT for**: How to set up and use each interface (CLI, Claude Code, API, Dashboard).
+> **SSOT for**: Setup, commands, tool descriptions, and architecture for all interfaces (CLI, Claude Code, API, Dashboard).
+>
+> Other docs reference this file for commands and technical details — update here first.
 
 Four ways to interact with the PA review engine. All interfaces call the same engine and produce the same results.
 
@@ -9,6 +11,10 @@ Four ways to interact with the PA review engine. All interfaces call the same en
 - What user stories these interfaces serve: [`docs/user-stories.md`](user-stories.md)
 - How to manually test each story: [`docs/uat-guide.md`](uat-guide.md)
 - Pre-interview checklist: [`docs/plans/human-tasks.md`](plans/human-tasks.md)
+- Confidence thresholds and determination rules: [`.claude/rules/healthcare-standards.md`](../.claude/rules/healthcare-standards.md)
+- Acronyms and terminology: [`docs/interview-prep/study-guide.md`](interview-prep/study-guide.md#5-vocabulary-flashcards)
+- Data flow and service boundaries: [`.claude/rules/architecture.md`](../.claude/rules/architecture.md)
+- PA case definitions and expected outcomes: [`data/sample_pa_cases/README.md`](../data/sample_pa_cases/README.md)
 
 ## 1. Claude Code (conversational)
 
@@ -146,7 +152,7 @@ Claude receives the FHIR (Fast Healthcare Interoperability Resources) Bundle and
 
 ### Confidence-Based Routing
 
-After Claude calls all tools and analyzes the evidence, it returns a determination with a confidence score (0.0–1.0). The engine then applies routing rules:
+After Claude calls all tools and analyzes the evidence, it returns a determination with a confidence score (0.0–1.0). The engine then applies routing rules (thresholds defined in [healthcare-standards.md](../.claude/rules/healthcare-standards.md)):
 
 | Confidence | Result |
 |-----------|--------|
