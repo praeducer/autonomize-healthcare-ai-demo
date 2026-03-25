@@ -194,3 +194,4 @@ These are questions a thorough SA would ask before committing to implementation.
 | Version | Date | Description |
 |---|---|---|
 | 2.0 | 2026-03-23 | Azure-native architecture, single orchestrator pattern, assignment-aligned scope |
+| 2.1 | 2026-03-25 | Alignment pass — terminology, metrics, source verification, demo/enterprise distinction |
