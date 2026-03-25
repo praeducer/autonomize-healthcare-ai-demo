@@ -1,9 +1,9 @@
 # AI-Driven Prior Authorization — Solution Architecture
 ## Autonomize AI | Paul Prae | www.paulprae.com
 
-> 9 slides + appendix | Priority-tiered for conversational format | Under 30 minutes
+> 10 slides + appendix | Priority-tiered for conversational format | Under 30 minutes
 >
-> **Tier A** (Must Present): Slides 1-3 + Live Demo | **Tier B** (Architecture): Slides 4-8 | **Tier C** (Appendix): Appendix slides
+> **Tier A** (Must Present): Slides 1-4 + Live Demo | **Tier B** (Architecture): Slides 5-9 | **Tier C** (Appendix): Slide 10 + Appendix slides
 
 ---
 
@@ -17,42 +17,65 @@ www.paulprae.com
 
 ---
 
-## Slide 2: PA Request Lifecycle
+## Slide 2: The Problem & Opportunity
+
+**The Problem:** Manual PA processing costs **$10.97 in labor per provider transaction** ([CAQH 2024 Index](https://www.caqh.org/hubfs/Index/2024%20Index%20Report/CAQH_IndexReport_2024_FINAL.pdf)), takes days, and burns out clinical staff — **93% of physicians** say PA delays patient care ([AMA 2024 Survey](https://www.ama-assn.org/system/files/prior-authorization-survey.pdf)). On the payer side, each manual transaction costs **$3.52** versus roughly **$0.05** when fully electronic.
+
+**The Opportunity — Altais + Autonomize AI** ([BusinessWire Feb 2026](https://www.businesswire.com/news/home/20260224376992/en/Altais-Cuts-Prior-Authorization-Review-Time-by-45-and-Reduces-Manual-Errors-by-54-with-Autonomize-AI)):
+- **45%** reduction in PA review time
+- **54%** reduction in manual errors
+- **50%** auto-determination rate
+
+**Why Autonomize AI:**
+- Already live at **3 of the 5 largest US health plans** ([BusinessWire Feb 2026](https://www.businesswire.com/news/home/20260226730170/en/Autonomize-AI-Strengthens-Leadership-with-Senior-Healthcare-Marketing-and-Regulatory-Hires))
+- PA Copilot available on **Azure Marketplace** ([listing](https://azuremarketplace.microsoft.com/en-us/marketplace/apps/284109.autonomize-prior-auth-copilot)), backed by **Microsoft Pegasus Program** membership ([BusinessWire Nov 2025](https://www.businesswire.com/news/home/20251105084154/en/Autonomize-AI-selected-to-join-the-Microsoft-for-Startups-Pegasus-Program-to-Expand-Enterprise-AI-Impact-in-Healthcare-and-Life-Sciences))
+- **ServiceNow partnership** extends reach into payer workflows ([BusinessWire Mar 2026](https://www.businesswire.com/news/home/20260305091710/en/Autonomize-AI-Partners-with-ServiceNow-to-Build-AI-Driven-Healthcare-Solutions-for-Payers))
+- **CMS-0057-F** regulatory deadline (Jan 2027) creates urgency — FHIR R4 APIs required for PA
+
+---
+
+## Slide 3: PA Request Lifecycle
 
 ```mermaid
 flowchart LR
     subgraph "1. Submission"
-        FAX["Fax / Scan"]
-        PORTAL["Web Portal"]
-        EDI["X12 278 EDI"]
+        FAX["`**Fax / Scan**`"]
+        PORTAL["`**Web Portal**`"]
+        EDI["`**X12 278 EDI**`"]
     end
 
     subgraph "2. Intake"
-        INGEST["Ingestion Gateway"]
-        OCR["Document Processing<br/>OCR + Extraction"]
-        NORM["Normalize to<br/>Canonical Format"]
+        INGEST["`**Ingestion Gateway**`"]
+        OCR["`**Document Processing**
+OCR + Extraction`"]
+        NORM["`**Normalize**
+Canonical Format`"]
     end
 
     subgraph "3. Validation"
-        ELIG_CHK["Eligibility Check"]
-        PA_REQ["PA Required?"]
+        ELIG_CHK["`**Eligibility Check**`"]
+        PA_REQ["`**PA Required?**`"]
     end
 
     subgraph "4. AI Review"
-        CLIN_DATA["Retrieve Clinical Data"]
-        AI_REVIEW["AI Clinical Review<br/>Coverage Matching"]
-        CONF["Confidence Scoring"]
+        CLIN_DATA["`**Retrieve Clinical Data**`"]
+        AI_REVIEW["`**AI Clinical Review**
+Coverage Matching`"]
+        CONF["`**Confidence Scoring**`"]
     end
 
     subgraph "5. Determination"
-        AUTO["Auto-Approve<br/>High Confidence"]
-        HUMAN["Human Review<br/>Low Confidence"]
-        PEND["Pend for Info<br/>Missing Data"]
+        AUTO["`**Auto-Approve**
+High Confidence`"]
+        HUMAN["`**Human Review**
+Low Confidence`"]
+        PEND["`**Pend for Info**
+Missing Data`"]
     end
 
     subgraph "6. Response"
-        WRITE["Write to Payer Core"]
-        NOTIFY["Notify Provider"]
+        WRITE["`**Write to Payer Core**`"]
+        NOTIFY["`**Notify Provider**`"]
     end
 
     FAX --> INGEST
@@ -79,7 +102,7 @@ flowchart LR
 
 ---
 
-## Slide 3: Demo — Proof of Concept
+## Slide 4: Demo — Proof of Concept
 
 > "I built a working proof of concept to validate this architecture. It demonstrates the core clinical review flow — steps 4 and 5 of the lifecycle."
 
@@ -88,25 +111,34 @@ flowchart LR
 ```mermaid
 flowchart LR
     subgraph "Interfaces"
-        CLI["CLI Terminal"]
-        API["REST API<br/>Swagger UI"]
-        DASH["Web Dashboard<br/>HTMX + Pico CSS"]
+        CLI["`**CLI Terminal**`"]
+        API["`**REST API**
+*Swagger UI*`"]
+        DASH["`**Web Dashboard**
+*HTMX + Pico CSS*`"]
     end
 
     subgraph "Core Engine"
-        ENGINE["Clinical Review Engine<br/>Python + Anthropic SDK"]
+        ENGINE["`**Clinical Review Engine**
+*Python + Anthropic SDK*`"]
     end
 
     subgraph "Claude Tool Use"
-        ICD["ICD-10 Lookup<br/>Local CDC Data"]
-        NPI["NPI Validation<br/>Luhn-10 Check"]
-        CMS["Coverage Criteria<br/>CMS LCD/NCD"]
-        CLIN["Clinical Data<br/>FHIR R4 Bundle"]
+        ICD["`**ICD-10 Lookup**
+*Local CDC Data*`"]
+        NPI["`**NPI Validation**
+*Luhn-10 Check*`"]
+        CMS["`**Coverage Criteria**
+*CMS LCD/NCD*`"]
+        CLIN["`**Clinical Data**
+*FHIR R4 Bundle*`"]
     end
 
     subgraph "Output"
-        RESULT["ClinicalReviewResult<br/>FHIR ClaimResponse"]
-        AUDIT["Audit Trail<br/>SQLite"]
+        RESULT["`**ClinicalReviewResult**
+*FHIR ClaimResponse*`"]
+        AUDIT["`**Audit Trail**
+*SQLite*`"]
     end
 
     CLI --> ENGINE
@@ -132,37 +164,48 @@ flowchart LR
 - Synthetic patient data (production: real clinical records via FHIR)
 - Single-user demo (production: Azure Container Apps with auto-scaling)
 
-> **[LIVE DEMO]** — See [demo-script.md](demo-script.md) for the 5-minute CLI walkthrough
+> **[LIVE DEMO]** — See [demo-script.md](https://github.com/praeducer/autonomize-healthcare-ai-demo/blob/main/docs/presentation/demo-script.md) for the 5-minute CLI walkthrough
 
 ---
 
-## Slide 4: System Context
+## Slide 5: System Context
 
 ```mermaid
 flowchart LR
     subgraph "Providers"
-        PROV["**Healthcare Providers**<br/><i>Physicians, Facilities</i>"]
+        PROV["`**Healthcare Providers**
+*Physicians, Facilities*`"]
     end
 
     subgraph "Health Plan Systems"
-        CORE["**Payer Core System**<br/><i>Enrollment, Benefits, Contracts</i>"]
-        CLIN["**Clinical Data Sources**<br/><i>FHIR R4 + Legacy DB Connector</i>"]
+        CORE["`**Payer Core System**
+*Enrollment, Benefits, Contracts*`"]
+        CLIN["`**Clinical Data Sources**
+*FHIR R4 + Legacy DB Connector*`"]
     end
 
     subgraph "Autonomize AI Platform"
-        PA_COPILOT["**PA Copilot**<br/><i>AI-Driven Review Engine</i>"]
+        PA_COPILOT["`**PA Copilot**
+*AI-Driven Review Engine*`"]
     end
 
     subgraph "Regulatory"
-        CMS["**CMS / State Regulators**<br/><i>Compliance Reporting</i>"]
+        CMS["`**CMS / State Regulators**
+*Compliance Reporting*`"]
     end
 
-    PROV -->|"PA Requests<br/>Fax, Portal, X12 278"| PA_COPILOT
-    CORE -->|"Eligibility + Benefits<br/>REST API"| PA_COPILOT
-    CLIN -->|"Clinical Records<br/>FHIR R4 API"| PA_COPILOT
-    PA_COPILOT -->|"Determinations<br/>REST API"| CORE
-    PA_COPILOT -->|"Compliance Metrics<br/>CMS-0057-F"| CMS
-    PA_COPILOT -->|"Status Updates<br/>Portal / Fax"| PROV
+    PROV -->|"PA Requests
+Fax, Portal, X12 278"| PA_COPILOT
+    CORE -->|"Eligibility + Benefits
+REST API"| PA_COPILOT
+    CLIN -->|"Clinical Records
+FHIR R4 API"| PA_COPILOT
+    PA_COPILOT -->|"Determinations
+REST API"| CORE
+    PA_COPILOT -->|"Compliance Metrics
+CMS-0057-F"| CMS
+    PA_COPILOT -->|"Status Updates
+Portal / Fax"| PROV
 ```
 
 | Actor | Role | Integration |
@@ -174,33 +217,43 @@ flowchart LR
 
 ---
 
-## Slide 5: Component Architecture
+## Slide 6: Solution Architecture
 
 ```mermaid
 flowchart TB
     subgraph "Ingestion Layer"
-        GW["**PA Ingestion Gateway**<br/><small>Azure API Mgmt + Functions</small>"]
-        DOC["**Document Processing**<br/><small>Azure AI Document Intelligence</small>"]
+        GW["`**PA Ingestion Gateway**
+*Azure API Mgmt + Functions*`"]
+        DOC["`**Document Processing**
+*Azure AI Document Intelligence*`"]
     end
 
     subgraph "Integration Layer"
-        ELIG["**Eligibility Service**<br/><small>Payer Core REST API</small>"]
-        CLIN_AGG["**Clinical Data Aggregation**<br/><small>Azure Health Data Services</small>"]
-        SB["**Message Queue**<br/><small>Azure Service Bus Premium</small>"]
+        ELIG["`**Eligibility Service**
+*Payer Core REST API*`"]
+        CLIN_AGG["`**Clinical Data Aggregation**
+*Azure Health Data Services*`"]
+        SB["`**Message Queue**
+*Azure Service Bus Premium*`"]
     end
 
     subgraph "AI Engine"
-        COPILOT["**Autonomize PA Copilot**<br/><small>Genesis Platform + Claude</small>"]
-        ROUTER["**Determination Router**<br/><small>Confidence-Based Routing</small>"]
+        COPILOT["`**Autonomize PA Copilot**
+*Genesis Platform + Claude*`"]
+        ROUTER["`**Determination Router**
+*Confidence-Based Routing*`"]
     end
 
     subgraph "Human Review"
-        DASH["**Clinical Review Dashboard**<br/><small>Autonomize AI Studio</small>"]
+        DASH["`**Clinical Review Dashboard**
+*Autonomize AI Studio*`"]
     end
 
     subgraph "Response Layer"
-        RESP["**Determination Response**<br/><small>Azure Functions</small>"]
-        AUDIT["**Audit + Compliance**<br/><small>Immutable Blob Storage</small>"]
+        RESP["`**Determination Response**
+*Azure Functions*`"]
+        AUDIT["`**Audit + Compliance**
+*Immutable Blob Storage*`"]
     end
 
     GW --> DOC
@@ -229,26 +282,19 @@ flowchart TB
 
 ---
 
-## Slide 6: Why This Architecture
+## Slide 7: Why This Architecture
 
-**Now that you've seen the architecture and the demo**, here's why these specific choices matter.
+**Key business benefits of these specific technical choices:**
 
-**The Problem:** Manual PA processing costs **$10.97 in labor per provider transaction** ([CAQH 2024 Index, Prior Authorization row](https://www.caqh.org/hubfs/Index/2024%20Index%20Report/CAQH_IndexReport_2024_FINAL.pdf)), takes days, and burns out clinical staff — **93% of physicians** say PA delays patient care ([AMA 2024 Survey, p. 5](https://www.ama-assn.org/system/files/prior-authorization-survey.pdf)).
-
-**The Opportunity — Altais + Autonomize AI** ([BusinessWire Feb 2026](https://www.businesswire.com/news/home/20260224376992/en/Altais-Cuts-Prior-Authorization-Review-Time-by-45-and-Reduces-Manual-Errors-by-54-with-Autonomize-AI)):
-- **45%** reduction in PA review time
-- **54%** reduction in manual errors
-- **50%** auto-determination rate
-
-**Why These Specific Choices:**
-- AI-driven clinical review with human oversight — confidence thresholds route low-certainty cases to human reviewers, never auto-deny
-- Configurable confidence thresholds — start conservative, tune with real data
-- CMS-0057-F compliance readiness — FHIR R4 foundation meets Jan 2027 deadline
-- Azure-native deployment — leverages Autonomize's Azure ecosystem
+- **Safety-first determination routing** — confidence thresholds route low-certainty cases to human reviewers; no case is ever auto-denied without clinical review
+- **Configurable confidence thresholds** — start conservative, tune with real performance data as the system learns
+- **CMS-0057-F compliance readiness** — FHIR R4 foundation meets the Jan 2027 API deadline without re-architecture
+- **Azure-native deployment** — leverages Autonomize's existing Azure ecosystem, Pegasus Program membership, and Marketplace presence
+- **Full audit trail** — every determination records model version, input hash, reasoning, evidence, and confidence for 7-year regulatory retention
 
 ---
 
-## Slide 7: Top 3 Security Risks & Mitigations
+## Slide 8: Top 3 Security Risks & Mitigations
 
 | # | Risk | Mitigation 1: Architectural | Mitigation 2: Operational |
 | --- | ------ | ------------------------------ | --------------------------- |
@@ -260,7 +306,7 @@ flowchart TB
 
 ---
 
-## Slide 8: Progressive Delivery
+## Slide 9: Progressive Delivery
 
 | Phase | Focus | Key Deliverable |
 |-------|-------|-----------------|
@@ -273,7 +319,7 @@ Each phase produces a deployable, demonstrable system. Decision gates between ph
 
 ---
 
-## Slide 9: Discussion Starters
+## Slide 10: Discussion Starters
 
 **Business Strategy:**
 - How does the ServiceNow partnership change the payer integration strategy?

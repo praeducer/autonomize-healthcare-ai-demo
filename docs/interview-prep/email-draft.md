@@ -22,7 +22,7 @@ I'm sharing my materials ahead of our conversation tomorrow so you can review at
 
 ATTACHED:
 
-- autonomize-ai-pa-solution-architecture-paul-prae-2026-03-24.docx -- Latest draft of my solution architecture presentation (9 slides + appendix with 4 architecture diagrams). I'll polish it up and export it to PowerPoint tomorrow before our discussion.
+- autonomize-ai-pa-solution-architecture-paul-prae-2026-03-24.docx -- Latest draft of my solution architecture presentation (10 slides + appendix with 4 architecture diagrams). I'll polish it up and export it to PowerPoint tomorrow before our discussion.
 
 
 ON GITHUB:
@@ -47,7 +47,7 @@ A few highlights from the architecture:
 
 I'm excited to share this solution with you and looking forward to talking shop tomorrow afternoon.
 
-Best,
+All the best,
 
 Paul Prae
 www.paulprae.com

@@ -22,9 +22,9 @@ I'll take you through the architecture in tiers -- executive context, then techn
 
 | Time Remaining | Action |
 |---|---|
-| 30+ min | Slides 1-3, live demo (5 min), slides 4-8, discussion |
-| 20-25 min | Slides 1-3, live demo (3 cases only), slides 6-7, discussion |
-| 15-20 min | Slides 1-3, abbreviated demo (1 case), key architecture points |
+| 30+ min | Slides 1-4, live demo (5 min), slides 5-9, discussion |
+| 20-25 min | Slides 1-4, live demo (3 cases only), slides 7-8, discussion |
+| 15-20 min | Slides 1-4, abbreviated demo (1 case), key architecture points |
 | Under 15 min | Opening thesis + 1 demo case. Offer to go deeper. |
 
 **3-minute rule**: If you've been on one slide for 3 minutes without a question, stop and ask "Is this the right level of detail?"
@@ -38,45 +38,50 @@ I'll take you through the architecture in tiers -- executive context, then techn
 **Don't elaborate**: Resist going deep on any single past role. 60 seconds max on intro.
 **Pivot**: If asked about specific experience -- "Let me walk through the architecture -- I'll connect each decision to experience as we go."
 
-### Slide 2: PA Request Lifecycle
+### Slide 2: The Problem & Opportunity
+**Core (30 sec)**: "Manual PA is expensive and slow. Altais proved Autonomize cuts review time 45%, errors 54%. My architecture integrates that with safety controls."
+**Key point**: This sets up the business case before showing any technical detail.
+**For Kris**: Lead with business outcomes -- the three Altais metrics are on this slide.
+
+### Slide 3: PA Request Lifecycle
 **Core (30 sec)**: "Six-step process, standard PA workflow per AMA and CAQH. The innovation is in steps 4 and 5 -- AI-driven clinical review with confidence-based routing."
 **Key point**: This is the business process we're automating. Everything in this architecture serves this flow.
 **For Kris**: This connects directly to the 45% review time reduction Altais achieved.
 
-### Slide 3: Demo -- Proof of Concept
+### Slide 4: Demo -- Proof of Concept
 **Core (30 sec)**: "I built this to validate the architecture. Same clinical review engine, FHIR R4 data models, real ICD-10 and CMS coverage criteria. Three interfaces -- CLI, API with Swagger, and a web dashboard."
 **Transition to demo**: "Let me show you it working." Then follow [demo-script.md](demo-script.md) for the 5-minute CLI walkthrough.
 **After demo**: "What you just saw is Phase 0 of the roadmap. The same engine would integrate with your PA Copilot on Genesis."
 
-### Slide 4: System Context
+### Slide 5: System Context
 **Core (30 sec)**: "Four actors, one AI platform in the middle. Providers submit through existing channels. Determinations flow back to payer core."
 **Expanded**: Generic-first design. Integration points labeled. No new workflows for providers.
 **For Suresh**: "These are the standard patterns I've seen at scale."
 
-### Slide 5: Component Architecture
+### Slide 6: Solution Architecture
 **Core (30 sec)**: "Ten components with Azure labels. AI engine is Autonomize's PA Copilot -- I'm integrating it, not rebuilding it."
 **Expanded**: Azure Service Bus for async (simpler than Kafka, HIPAA-covered on Premium). Every service has AWS equivalent.
 **For Ujjwal**: "Azure because Autonomize is Azure-native. My AWS background translates directly -- patterns identical, service names change."
 **Don't elaborate**: Don't list all 10 components. Let the diagram speak.
 
-### Slide 6: Why This Architecture
-**Core (30 sec)**: "Manual PA is expensive and slow. Altais proved Autonomize cuts review time 45%, errors 54%. My architecture integrates that with safety controls."
-**Expanded**: CAQH Index -- $10.97 provider labor cost per manual PA, $3.52 payer side, $0.05 electronic. That's $3.47 savings per payer transaction ($3.52 - $0.05). CMS-0057-F Phase 1 live. Clinicians keep final authority.
-**For Kris**: This answers "why should I care?" -- lead with business outcomes.
+### Slide 7: Why This Architecture
+**Core (30 sec)**: "Four specific choices, each with a business benefit. Azure-native, queue-based, confidence-routed, audit-complete."
+**Expanded**: Each architectural choice maps to a business outcome -- reliability, safety, compliance, cost.
+**For Kris**: This answers "why these specific choices?" -- lead with business benefits.
 **Don't elaborate**: Don't dive into CAQH methodology or CMS rule details. If asked: "CAQH measures labor costs -- salaries, benefits, overhead -- per transaction via annual industry survey."
 
-### Slide 7: Security Risks & Mitigations
+### Slide 8: Security Risks & Mitigations
 **Core (30 sec)**: "Three risks, three architectural mitigations. AI-specific controls first -- that's the novel attack surface."
 **Risk 1**: PHI tokenization -- LLM sees clinical facts without patient identity.
 **Risk 2**: Prompt injection defense -- output validation requires evidence citations. Injected content can't produce evidence-backed determination.
 **Risk 3**: Tamper-proof audit trail -- model version, input hash, reasoning, evidence, confidence. 7-year retention.
 **For Ujjwal**: "This is zero trust for AI -- verify every input, validate every output, log everything."
 
-### Slide 8: Progressive Delivery
+### Slide 9: Progressive Delivery
 **Core (30 sec)**: "Four phases, each producing something real. AI features front-loaded."
 **Don't elaborate**: No specific week numbers or team sizes. If asked: "Depends on discovery findings and team composition."
 
-### Slide 9: Discussion Starters
+### Slide 10: Discussion Starters
 **Core**: "These are questions I'd ask in real discovery. Love to explore any of these with you."
 
 ---
