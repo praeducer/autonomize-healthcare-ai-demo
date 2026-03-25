@@ -7,11 +7,13 @@
 
 | When | Open This | Purpose |
 |------|-----------|---------|
+| **First read** | [user-stories.md](user-stories.md) + [user-guide.md](user-guide.md) | Understand what the demo does and how to use each interface |
+| **Morning demo build** | [Build step plans](../.claude/plans/) + [human-tasks.md](plans/human-tasks.md) | Claude Code plans + human checklist for each step |
+| **After each build step** | [uat-guide.md](uat-guide.md) | Manual acceptance testing by user story |
 | **Night before** | [interview-prep/study-guide.md](interview-prep/study-guide.md) | Azure mapping, diagram talking points, assumptions, key numbers |
-| **1 hour before** | [interview-prep/pre-show-checklist.md](interview-prep/pre-show-checklist.md) | Checklists, risk awareness, rehearsal items |
+| **1 hour before** | [interview-prep/pre-show-checklist.md](interview-prep/pre-show-checklist.md) | Statistics, rehearsal, demo prep, Teams screen share, risk awareness |
 | **During presentation** | [presentation.md](presentation/presentation.md) + [speaker-script.md](presentation/speaker-script.md) | Slides on screen + speaking notes in hand |
 | **During Q&A** | [interview-prep/quick-reference.md](interview-prep/quick-reference.md) | 18 anticipated questions with 60-second answers |
-| **Morning demo build** | [Build step plans](../.claude/plans/) | Modular Claude Code plans (shared-context + step 1-5) |
 | **Before sending email** | [email-draft.md](interview-prep/email-draft.md) | Email to panel with attachments |
 
 ---
@@ -25,6 +27,14 @@
 | [speaker-script.md](presentation/speaker-script.md) | Speaking notes, timing, coaching, pivot guides — references presentation slides |
 | [demo-script.md](presentation/demo-script.md) | 5-minute CLI demo walkthrough for live presentation |
 | [slide-generation-prompts.md](presentation/slide-generation-prompts.md) | All 11 prompts referencing presentation.md as source of truth |
+
+### Demo (understand → use → test)
+| File | Description |
+|------|-------------|
+| [user-stories.md](user-stories.md) | 9 user stories — who benefits, what they need, which interfaces and build steps |
+| [user-guide.md](user-guide.md) | How to set up and use each interface (CLI, Claude Code, API, Dashboard) |
+| [uat-guide.md](uat-guide.md) | Manual acceptance testing by user story — what to check and what "good" looks like |
+| [human-tasks.md](plans/human-tasks.md) | Pre-interview checklist — infrastructure, automated tests, UAT, interview prep |
 
 ### Interview Prep (3 files, organized by when you use them)
 | File | When | Description |

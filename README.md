@@ -96,12 +96,20 @@ Each build step is independently demo-able. Decision gates between steps use rea
 
 All deliverables in [docs/](docs/README.md):
 
+| Document | What it covers |
+|----------|---------------|
+| [User Guide](docs/user-guide.md) | How to use each interface (CLI, Claude Code, API, Dashboard) |
+| [User Stories](docs/user-stories.md) | 9 user stories with roles, acceptance criteria, and build step |
+| [UAT Guide](docs/uat-guide.md) | Manual acceptance testing organized by user story |
+| [Human Tasks](docs/plans/human-tasks.md) | Pre-interview checklist — tests, infrastructure, prep |
+
 | Section | Contents |
 |---------|----------|
-| [Architecture](docs/architecture/) | Solution design, presentation, speaker notes, research, diagrams |
-| [Interview Prep](docs/interview-prep/) | Study guide, Q&A reference, checklist, panel email |
+| [Architecture](docs/architecture/) | Solution design, research context, requirements traceability, diagrams |
+| [Presentation](docs/presentation/) | Slide deck, speaker script, demo script |
+| [Interview Prep](docs/interview-prep/) | Study guide, Q&A reference, pre-show checklist, panel email |
 | [Inputs](docs/inputs/) | Assignment, stakeholder profiles, job description |
-| [Plans](docs/plans/) | Design doc, technical decisions |
+| [Plans](docs/plans/) | Design doc, human tasks checklist |
 
 ## License
 

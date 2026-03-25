@@ -87,4 +87,4 @@ You (any interface) → Clinical Review Engine → Claude (with 4 tools)
                                              → ClinicalReviewResult
 ```
 
-The engine is the same regardless of interface. The CLI, API, and dashboard are thin wrappers.
+The engine is the same regardless of interface. The CLI, API, and dashboard are thin wrappers. See [`docs/architecture/solution-architecture.md`](architecture/solution-architecture.md) for the full enterprise design.

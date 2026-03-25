@@ -14,29 +14,30 @@
 
 ---
 
-## After Step 1 (CLI Engine) — v0.1.0
+## 1. Infrastructure Prerequisites
+
+- [ ] Python 3.12+ installed
+- [ ] `make install` completed (dependencies + pre-commit hooks)
+- [ ] `.env` created with valid `ANTHROPIC_API_KEY`
+- [ ] Docker Desktop installed and running (Step 2+)
+
+## 2. After Step 1 (CLI Engine) — v0.1.0
 
 - [ ] **Run automated tests**: `make test-unit`
 - [ ] **Run UAT**: Follow US-1 through US-5 in [`docs/uat-guide.md`](../uat-guide.md)
 
-## After Step 2 (REST API) — v0.2.0
+## 3. After Step 2 (REST API) — v0.2.0
 
-- [ ] **Start Docker**: `make setup-fhir` (starts HAPI FHIR, waits for health check, loads Synthea data)
+- [ ] **Start FHIR server**: `make setup-fhir` (starts HAPI FHIR, waits for health check, loads Synthea data)
 - [ ] **Run automated tests**: `make test-integration && make test-e2e`
 - [ ] **Run UAT**: Follow US-6, US-7, and Regression section in [`docs/uat-guide.md`](../uat-guide.md)
 
-## After Step 3 (Web Dashboard) — v0.3.0
+## 4. After Step 3 (Web Dashboard) — v0.3.0
 
 - [ ] **Start server**: `make dev`
 - [ ] **Run UAT**: Follow US-8, US-9, and Regression section in [`docs/uat-guide.md`](../uat-guide.md)
 
-## Before Interview
+## 5. Before Interview
 
 - [ ] **Work through pre-show checklist**: [`docs/interview-prep/pre-show-checklist.md`](../interview-prep/pre-show-checklist.md) (statistics, rehearsal, demo prep, Teams screen share, fallback plan)
 - [ ] **Review study guide**: [`docs/interview-prep/study-guide.md`](../interview-prep/study-guide.md) (Q&A, risk awareness, assumptions)
-
-## Infrastructure Prerequisites
-
-- [ ] Docker Desktop installed and running
-- [ ] Python 3.12+ installed
-- [ ] HAPI FHIR loaded: `make setup-fhir`
