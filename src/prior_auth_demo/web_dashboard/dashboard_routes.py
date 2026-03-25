@@ -53,8 +53,8 @@ async def dashboard_review(request: Request, case_name: str = Form(...)) -> HTML
 
     from prior_auth_demo.healthcare_api_server import _ensure_initialized
 
-    case_path = _SAMPLE_CASES_DIR / case_name
-    if not case_path.exists():
+    case_path = (_SAMPLE_CASES_DIR / case_name).resolve()
+    if not case_path.is_relative_to(_SAMPLE_CASES_DIR.resolve()) or not case_path.exists():
         return HTMLResponse(
             '<article><p style="color:var(--color-denied);">Case file not found.</p></article>',
             status_code=404,

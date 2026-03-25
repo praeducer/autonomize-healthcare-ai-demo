@@ -99,8 +99,12 @@ async def list_sample_cases() -> list[dict[str, str]]:
 @app.get("/api/v1/prior-auth/sample-cases/{name}")
 async def get_sample_case(name: str) -> dict[str, Any]:
     """Get a sample PA case by filename."""
-    case_path = _SAMPLE_CASES_DIR / name
-    if not case_path.exists() or not case_path.suffix == ".json":
+    case_path = (_SAMPLE_CASES_DIR / name).resolve()
+    if (
+        not case_path.is_relative_to(_SAMPLE_CASES_DIR.resolve())
+        or not case_path.exists()
+        or case_path.suffix != ".json"
+    ):
         raise HTTPException(status_code=404, detail=f"Case not found: {name}")
     with case_path.open() as f:
         data: dict[str, Any] = json.load(f)

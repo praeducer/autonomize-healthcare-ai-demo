@@ -15,6 +15,7 @@ from pathlib import Path
 from typing import Any, Literal
 
 import anthropic
+import httpx
 from fhir.resources.R4B.bundle import Bundle
 from fhir.resources.R4B.claimresponse import ClaimResponse
 from fhir.resources.R4B.reference import Reference
@@ -183,8 +184,6 @@ async def retrieve_fhir_clinical_data(
         "fhir_procedures": [],
     }
     try:
-        import httpx
-
         async with httpx.AsyncClient(base_url=fhir_server_url, timeout=10.0) as client:
             for resource_type, key in [
                 ("Condition", "fhir_conditions"),
@@ -197,7 +196,7 @@ async def retrieve_fhir_clinical_data(
                     for entry in bundle_data.get("entry", []):
                         if "resource" in entry:
                             result[key].append(entry["resource"])
-    except Exception:
+    except (httpx.HTTPError, ConnectionError, TimeoutError):
         logger.debug("FHIR server unavailable at %s — using bundle data only", fhir_server_url)
     return result
 

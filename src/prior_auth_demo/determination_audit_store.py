@@ -59,7 +59,8 @@ class DeterminationAuditStore:
         full_response_json: str,
     ) -> str:
         """Store a new determination record and return its UUID."""
-        assert self._db is not None, "Call init_db() first"
+        if self._db is None:
+            raise RuntimeError("Database not initialized. Call init_db() first.")
         det_id = str(uuid.uuid4())
         created_at = datetime.now(UTC).isoformat()
         await self._db.execute(
@@ -87,7 +88,8 @@ class DeterminationAuditStore:
 
     async def get_determination(self, det_id: str) -> dict[str, Any] | None:
         """Retrieve a single determination by its UUID."""
-        assert self._db is not None, "Call init_db() first"
+        if self._db is None:
+            raise RuntimeError("Database not initialized. Call init_db() first.")
         cursor = await self._db.execute("SELECT * FROM determinations WHERE id = ?", (det_id,))
         row = await cursor.fetchone()
         if row is None:
@@ -98,7 +100,8 @@ class DeterminationAuditStore:
 
     async def list_determinations(self, limit: int = 50, offset: int = 0) -> list[dict[str, Any]]:
         """List determinations ordered newest first, with pagination."""
-        assert self._db is not None, "Call init_db() first"
+        if self._db is None:
+            raise RuntimeError("Database not initialized. Call init_db() first.")
         cursor = await self._db.execute(
             "SELECT * FROM determinations ORDER BY created_at DESC LIMIT ? OFFSET ?",
             (limit, offset),
