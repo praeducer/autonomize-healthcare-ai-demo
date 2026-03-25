@@ -3,6 +3,7 @@
 Usage:
     python -m prior_auth_demo.command_line_demo --case data/sample_pa_cases/01_lumbar_mri_clear_approval.json
     python -m prior_auth_demo.command_line_demo --all
+    python -m prior_auth_demo.command_line_demo --inspect data/sample_pa_cases/01_lumbar_mri_clear_approval.json
 """
 
 from __future__ import annotations
@@ -24,7 +25,10 @@ if sys.stdout.encoding and sys.stdout.encoding.lower() != "utf-8":
 from fhir.resources.R4B.bundle import Bundle
 
 from prior_auth_demo.application_settings import ApplicationSettings
-from prior_auth_demo.clinical_review_engine import ClinicalReviewResult, review_prior_auth_request
+from prior_auth_demo.clinical_review_engine import (
+    ClinicalReviewResult,
+    review_prior_auth_request,
+)
 
 # ANSI color codes
 GREEN = "\033[92m"
@@ -177,6 +181,120 @@ async def review_all_cases(settings: ApplicationSettings) -> list[ClinicalReview
     return results
 
 
+def inspect_case(case_path: str) -> None:
+    """Inspect a PA case's clinical data without running AI review.
+
+    Parses the FHIR Bundle and displays the clinical data that Claude
+    would analyze: patient, diagnoses, procedures, provider, and
+    supporting narratives. No API calls — purely local data extraction.
+    """
+    from prior_auth_demo.clinical_review_engine import lookup_icd10_code, retrieve_clinical_data
+
+    path = Path(case_path)
+    if not path.exists():
+        print(f"{RED}Error: File not found: {case_path}{RESET}", file=sys.stderr)
+        sys.exit(1)
+
+    label = _case_label(case_path)
+    width = 70
+
+    with path.open() as f:
+        data = json.load(f)
+
+    bundle = Bundle.model_validate(data)
+    clinical = retrieve_clinical_data(bundle)
+
+    print(f"\n{'=' * width}")
+    print(f"{BOLD}  {label}{RESET}")
+    print(f"  {DIM}Clinical data from FHIR R4 Bundle (no AI review){RESET}")
+    print(f"{'=' * width}")
+
+    # Patient
+    for patient in clinical["patients"]:
+        name_parts = []
+        for name in patient.get("name", []):
+            given = " ".join(name.get("given", []))
+            family = name.get("family", "")
+            name_parts.append(f"{given} {family}".strip())
+        name_str = ", ".join(name_parts) if name_parts else "Unknown"
+        print(f"\n{BOLD}  Patient{RESET}")
+        print(f"  {'-' * (width - 4)}")
+        print(f"  Name:    {name_str}")
+        if "birthDate" in patient:
+            print(f"  DOB:     {patient['birthDate']}")
+        if "gender" in patient:
+            print(f"  Gender:  {patient['gender']}")
+
+    # Diagnoses with ICD-10 lookup
+    conditions = clinical["conditions"]
+    if conditions:
+        print(f"\n{BOLD}  Diagnoses{RESET}")
+        print(f"  {'-' * (width - 4)}")
+        for cond in conditions:
+            for coding in cond.get("code", {}).get("coding", []):
+                code = coding.get("code", "?")
+                icd_result = lookup_icd10_code(code)
+                desc = icd_result["description"] if icd_result else coding.get("display", "Unknown")
+                print(f"  {CYAN}{code}{RESET}  {desc}")
+
+    # Claim details — procedures
+    claim = clinical["claim_details"]
+    if claim:
+        items = claim.get("item", [])
+        if items:
+            print(f"\n{BOLD}  Requested Procedures{RESET}")
+            print(f"  {'-' * (width - 4)}")
+            for item in items:
+                for coding in item.get("productOrService", {}).get("coding", []):
+                    code = coding.get("code", "?")
+                    display = coding.get("display", "")
+                    print(f"  {CYAN}{code}{RESET}  {display}")
+
+    # Provider
+    practitioners = clinical["practitioners"]
+    if practitioners:
+        print(f"\n{BOLD}  Requesting Provider{RESET}")
+        print(f"  {'-' * (width - 4)}")
+        for prac in practitioners:
+            name_parts = []
+            for name in prac.get("name", []):
+                prefix = " ".join(name.get("prefix", []))
+                given = " ".join(name.get("given", []))
+                family = name.get("family", "")
+                name_parts.append(f"{prefix} {given} {family}".strip())
+            name_str = ", ".join(name_parts) if name_parts else "Unknown"
+            print(f"  Name:  {name_str}")
+            for ident in prac.get("identifier", []):
+                if ident.get("system", "").endswith("us-npi"):
+                    print(f"  NPI:   {ident.get('value', '?')}")
+
+    # Coverage
+    coverage = clinical["coverage"]
+    if coverage:
+        print(f"\n{BOLD}  Insurance Coverage{RESET}")
+        print(f"  {'-' * (width - 4)}")
+        for cov in coverage:
+            payor_names = []
+            for payor in cov.get("payor", []):
+                payor_names.append(payor.get("display", payor.get("reference", "?")))
+            if payor_names:
+                print(f"  Payor:  {', '.join(payor_names)}")
+            if "subscriberId" in cov:
+                print(f"  Member: {cov['subscriberId']}")
+
+    # Supporting info
+    supporting = clinical["supporting_info"]
+    if supporting:
+        print(f"\n{BOLD}  Supporting Clinical Narratives{RESET}")
+        print(f"  {'-' * (width - 4)}")
+        for info in supporting:
+            wrapped = textwrap.fill(info, width=width - 4)
+            for line in wrapped.split("\n"):
+                print(f"  {line}")
+
+    print(f"{'=' * width}\n")
+
+
 def main() -> None:
     """CLI entry point for PA review demo."""
     parser = argparse.ArgumentParser(
@@ -186,13 +304,16 @@ def main() -> None:
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument("--case", type=str, help="Path to a single PA case JSON file")
     group.add_argument("--all", action="store_true", help="Review all 5 sample PA cases")
+    group.add_argument("--inspect", type=str, help="Inspect a case's clinical data (no AI review)")
     args = parser.parse_args()
 
-    settings = ApplicationSettings()  # type: ignore[call-arg]
-
-    if args.case:
+    if args.inspect:
+        inspect_case(args.inspect)
+    elif args.case:
+        settings = ApplicationSettings()  # type: ignore[call-arg]
         asyncio.run(review_single_case(args.case, settings))
     elif args.all:
+        settings = ApplicationSettings()  # type: ignore[call-arg]
         asyncio.run(review_all_cases(settings))
 
 

@@ -26,7 +26,8 @@
 | [presentation.md](presentation/presentation.md) | 10-slide deck — standalone, GitHub-renderable, no speaker notes |
 | [speaker-script.md](presentation/speaker-script.md) | Speaking notes, timing, coaching, pivot guides — references presentation slides |
 | [demo-script.md](presentation/demo-script.md) | 5-minute CLI demo walkthrough for live presentation |
-| [slide-generation-prompts.md](presentation/slide-generation-prompts.md) | All 10 prompts referencing presentation.md as source of truth |
+| [slide-generation-prompts.md](presentation/slide-generation-prompts.md) | Legacy manual prompts (superseded by `make deck`) |
+| [`scripts/generate-deck.ts`](../scripts/generate-deck.ts) | Slide data + Autonomize brand → PPTX/DOCX via `make deck` |
 
 ### Demo (understand → use → test)
 | File | Description |

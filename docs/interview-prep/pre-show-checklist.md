@@ -18,9 +18,11 @@ All statistics in the presentation have been verified against primary sources:
 
 ## Before Sending Email
 
+- [ ] Regenerate the slide deck: `make deck` (renders diagrams + generates timestamped PPTX/DOCX)
+- [ ] Open the PPTX and verify all slides render correctly in PowerPoint
 - [ ] Read `email-draft.md` -- personalize tone, check formality level
 - [ ] Verify demo link placeholder is updated (or remove if demo not deployed)
-- [ ] Confirm attachment includes slide deck (PowerPoint or PDF)
+- [ ] Confirm attachment includes the latest timestamped slide deck
 - [ ] Confirm diagram PNGs render at readable size
 - [ ] Spell-check: Paul Prae, www.paulprae.com (never misspelled)
 - [ ] Check panel names spelled correctly: Kris Nair, Suresh Gopalakrishnan, Ujjwal Rajbhandari

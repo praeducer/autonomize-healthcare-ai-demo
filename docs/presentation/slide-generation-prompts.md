@@ -1,5 +1,7 @@
 # Slide Generation Prompts for Claude for PowerPoint
 
+> **Superseded by `make deck`** — PPTX and DOCX are now auto-generated via [`scripts/generate-deck.ts`](../../scripts/generate-deck.ts). Run `make deck` to regenerate. These manual prompts are retained as a fallback for Claude for PowerPoint.
+
 Each prompt below generates one slide. Use with the Claude for PowerPoint add-in.
 
 **Workflow:**

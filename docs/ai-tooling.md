@@ -2,17 +2,19 @@
 
 How AI tools were used to design and build this project — from solution architecture through implementation. Covers the Solutions Architecture Agent plugin (upstream design), Claude Code configuration (implementation), installed plugins, MCP servers, and new contributor setup.
 
-Last updated: March 24, 2026
+Last updated: March 25, 2026
 
 ---
 
 ## Overview
 
-Two AI-assisted toolchains produced this project:
+Three AI-assisted toolchains produced this project:
 
 1. **[Solutions Architecture Agent](https://github.com/Modular-Earth-LLC/solutions-architecture-agent)** (v1.1.1) — An open-source Claude Code plugin that generated the solution architecture, presentation, diagrams, and interview prep materials in `docs/architecture/` and `docs/interview-prep/`. Used in a separate workspace; not installed in this repo.
 
 2. **[Claude Code](https://docs.anthropic.com/en/docs/claude-code)** (Anthropic's AI coding assistant CLI) — The primary implementation tool for this repo. Configured with healthcare-specific plugins, MCP servers, FHIR R4 rules, and progressive build step plans.
+
+3. **[deck-builder](../../scripts/deck-builder/)** + **`scripts/generate-deck.ts`** — Generates PPTX and DOCX from structured slide data. Runs `make deck` which renders diagrams then produces the presentation files with Autonomize AI branding.
 
 ### Configuration Files (Committed)
 
@@ -202,6 +204,26 @@ Build step plans in `.claude/plans/` were derived from the SA Agent's `demo-impl
 9. `make lint && make test` — automated verification
 10. `/code-review` — pre-commit review
 11. `/commit` — git tag, release branch
+
+---
+
+## Deck Generation
+
+The PPTX and DOCX presentation files are generated from structured slide data, not manually created.
+
+**SSOT chain:** `solution-architecture.md` → `presentation.md` → `generate-deck.ts` → PPTX/DOCX
+
+| File | Role |
+|------|------|
+| `docs/architecture/solution-architecture.md` | Ground truth for all architecture content |
+| `docs/presentation/presentation.md` | Narrative SSOT — full slide content with inline Mermaid |
+| `docs/architecture/diagrams/*.mmd` | Mermaid source files, rendered to PNG/SVG by `make diagrams` |
+| `scripts/generate-deck.ts` | Slide-optimized view — maps presentation.md content to deck-builder Block format |
+| `C:\dev\scripts\deck-builder\` | Generic renderer — produces PPTX/DOCX from `Slide[]` + `BrandTheme` |
+
+**Workflow:** Edit `presentation.md` → update `generate-deck.ts` if needed → `make deck` → timestamped PPTX/DOCX.
+
+`make deck` runs `make diagrams` first (re-renders all `.mmd` → `.png` + `.svg`), then `npx tsx scripts/generate-deck.ts`.
 
 ---
 
