@@ -58,3 +58,4 @@ data/synthea_fhir_patients/raw/
 *.db
 *.db-journal
 *.db-wal
+~$*

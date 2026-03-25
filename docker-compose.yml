@@ -19,14 +19,9 @@ services:
         -Xmx1024m
         -XX:+UseG1GC
         -XX:+UseStringDeduplication
-    # Health check: HAPI FHIR metadata endpoint (FHIR CapabilityStatement)
-    # Java/Spring startup takes 30-60s; retries cover cold starts reliably
-    healthcheck:
-      test: ["CMD", "wget", "--spider", "--quiet", "http://localhost:8080/fhir/metadata"]
-      interval: 10s
-      timeout: 5s
-      retries: 12
-      start_period: 60s
+    # Health check: HAPI v7.6.0 is a distroless image (no curl/wget/sh).
+    # Verify from host: curl -sf http://localhost:8080/fhir/metadata
+    # Spring Boot startup takes ~15-30s; restart policy handles crashes.
     # Resource limits — prevent runaway JVM from starving the demo host
     deploy:
       resources:

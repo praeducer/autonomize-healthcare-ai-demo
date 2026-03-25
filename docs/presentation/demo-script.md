@@ -6,6 +6,18 @@
 
 ---
 
+## Prerequisites (10 minutes before)
+
+```bash
+# Start Docker Desktop, then:
+make setup-fhir     # HAPI FHIR + Synthea patients (~30s)
+make dev            # FastAPI server on localhost:8000
+```
+
+Verify: `http://localhost:8000` (dashboard), `http://localhost:8080` (HAPI FHIR).
+
+---
+
 ## Opening (30 seconds)
 
 Share screen showing the solution architecture diagram or slide deck.

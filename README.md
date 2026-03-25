@@ -48,7 +48,8 @@ The full enterprise architecture covers 10 components across 5 layers — ingest
 make install        # Install dependencies + pre-commit hooks
 make review         # Run a single PA case through AI review (CLI)
 make review-all     # Run all 5 PA cases
-make dev            # Start the FastAPI server (Build Step 2+)
+make setup-fhir     # Start HAPI FHIR server (Docker) + load Synthea patients
+make dev            # Start the FastAPI server + web dashboard
 ```
 
 ## Tech Stack

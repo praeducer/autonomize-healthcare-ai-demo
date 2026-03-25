@@ -72,9 +72,9 @@ down:
 	docker compose down
 
 fhir-reset:
-	docker compose down
+	docker compose down -v
 	docker compose up -d
-	@echo "FHIR server restarted (in-memory DB cleared). Run 'make load-fhir-data' to reload."
+	@echo "FHIR server restarted (volume cleared). Run 'make load-fhir-data' to reload."
 
 load-fhir-data:
 	python -m prior_auth_demo.mock_healthcare_services.load_fhir_data

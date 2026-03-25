@@ -68,14 +68,20 @@ All statistics in the presentation have been verified against primary sources:
 
 ## Before Presenting -- Demo
 
-- [ ] Anthropic PA review skill installs successfully
-- [ ] `pip install anthropic` works
-- [ ] Mock data produces reasonable AI determinations
-- [ ] Demo walkthrough script practiced at least once
-- [ ] If Azure deployment: test the URL, confirm it responds
-- [ ] If local only: confirm laptop display setup for screen sharing
-- [ ] Run all mock cases -- verify 4 outcomes (approve, deny, pend, complex)
-- [ ] Check response times -- should be under 30 seconds per case
+### Infrastructure (10 minutes before)
+- [ ] Docker Desktop running (open it; takes ~30s to start)
+- [ ] `make setup-fhir` — starts HAPI FHIR container, waits for ready, loads Synthea data
+- [ ] `make fhir-status` — confirms "FHIR API: responding"
+- [ ] `make dev` — starts FastAPI server on `http://localhost:8000`
+- [ ] `.env` has valid `ANTHROPIC_API_KEY` and `FHIR_SERVER_URL=http://localhost:8080/fhir`
+
+### Smoke Test (5 minutes before)
+- [ ] `make review` — single case produces APPROVED determination
+- [ ] `make review-all` — all 5 cases produce expected outcomes (approve, deny, pend, complex, urgent)
+- [ ] Open `http://localhost:8000` — dashboard loads, case dropdown populated
+- [ ] Open `http://localhost:8000/docs` — Swagger UI renders all endpoints
+- [ ] Open `http://localhost:8080` — HAPI FHIR welcome page shows
+- [ ] Check response times — should be under 30 seconds per case
 - [ ] Verify confidence scores are in reasonable range (0.0-1.0)
 - [ ] Verify reasoning includes evidence citations
 - [ ] **Fallback plan**: If dashboard fails → demo via Swagger UI (`/docs`); if that fails → CLI (`make review`); if all fail → walk through architecture diagrams
@@ -89,7 +95,7 @@ All statistics in the presentation have been verified against primary sources:
 - [ ] **Test screen share resolution**: Start a Teams test call → Share screen → confirm text is crisp and readable
 - [ ] **Close distracting apps**: Slack, email, personal browser tabs, notifications (Focus Assist ON)
 - [ ] **Pre-load browser**: Open `http://localhost:8000` and `http://localhost:8000/docs` in separate tabs before the call
-- [ ] **`.env` verified**: Valid API key, Docker running, `make install` done, internet connected
+- [ ] **Services running**: Docker Desktop started, `make setup-fhir` done, `make dev` running, internet connected
 
 ---
 

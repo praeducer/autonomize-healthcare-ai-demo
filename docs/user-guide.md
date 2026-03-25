@@ -42,7 +42,13 @@ Output is color-coded: green (approved), red (denied), yellow (pended).
 ## 3. REST API + Swagger (Step 2+)
 
 ```bash
-make up          # Start HAPI FHIR server
+# First time — start FHIR server + load patient data:
+make setup-fhir  # Starts HAPI FHIR (Docker), waits for ready, loads 10 Synthea patients
+
+# Subsequent runs — data persists across restarts:
+make up          # Start HAPI FHIR server (data already loaded)
+
+# Then start the API:
 make dev         # Start FastAPI server
 ```
 
@@ -58,7 +64,7 @@ Open `http://localhost:8000/docs` for Swagger UI. Key endpoints:
 ## 4. Web Dashboard (Step 3+)
 
 ```bash
-make up          # Start HAPI FHIR server
+make up          # Start HAPI FHIR server (or make setup-fhir for first time)
 make dev         # Start FastAPI server
 ```
 
