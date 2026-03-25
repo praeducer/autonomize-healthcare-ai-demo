@@ -25,18 +25,18 @@ Each prompt below generates one slide. Use with the Claude for PowerPoint add-in
 
 ## Slide 04: Demo — Proof of Concept
 **Prompt:** "Create a slide titled 'Demo — Proof of Concept' using Slide 4 content from presentation.md. Show the demo architecture diagram (CLI/API/Dashboard → Engine → Claude tools → Output). Below it, two columns: 'Demo scope' (4 bullets) and 'Production differences' (4 bullets). Include a callout: 'LIVE DEMO follows this slide'. Clean, professional layout."
-**Diagram:** `../architecture/diagrams/demo-architecture.png`
+**Diagram:** `../architecture/diagrams/07-demo-architecture.png`
 
 ## Slide 05: System Context
 **Prompt:** "Create a slide titled 'System Context' using Slide 5 content from presentation.md. Insert the diagram image from ../architecture/diagrams/01-system-context.png on the left half. Place the 4-row actor/role/integration table on the right half."
 **Diagram:** `../architecture/diagrams/01-system-context.png`
 
 ## Slide 06: Solution Architecture
-**Prompt:** "Create a slide titled 'Solution Architecture' using Slide 6 from presentation.md. Insert ../architecture/diagrams/02-component-architecture.png as the main visual. Below or beside it, include the 8-row component/Azure service/purpose table."
+**Prompt:** "Create a slide titled 'Solution Architecture' using Slide 6 from presentation.md. Insert ../architecture/diagrams/02-component-architecture.png as the main visual. Below or beside it, include the 10-row component/Azure service/purpose table."
 **Diagram:** `../architecture/diagrams/02-component-architecture.png`
 
 ## Slide 07: Why This Architecture
-**Prompt:** "Create a slide titled 'Why This Architecture' using Slide 7 content from presentation.md. Four architectural choices with business benefits. Clean layout with choice/benefit pairs. Use the existing slide master."
+**Prompt:** "Create a slide titled 'Why This Architecture' using Slide 7 content from presentation.md. Five architectural choices with business benefits. Clean layout with choice/benefit pairs. Use the existing slide master."
 **Diagram:** None
 
 ## Slide 08: Top 3 Security Risks & Mitigations
@@ -67,4 +67,8 @@ The following slides were moved to the appendix. Generate only if time and conte
 
 ### Appendix C: Scaling to 20 LOBs
 **Prompt:** "Create an appendix slide titled 'Appendix C: Scaling to 20 LOBs' using the Appendix C content from presentation.md. Comparison table: Multi-tenant vs Multi-instance across Cost/Isolation/Complexity. Include the recommendation callout and honest unknowns note."
+**Diagram:** None
+
+### Sources & References
+**Prompt:** "Create a references slide titled 'Sources' using the Sources table at the end of presentation.md. Display as a compact numbered table with columns: #, Claim, Source (with hyperlinked title), and Notes. 15 rows total. Small font is fine — this is a reference slide, not a presentation slide. Use the existing slide master."
 **Diagram:** None

@@ -1,4 +1,4 @@
-.PHONY: install dev test clean lint format check review review-all download-synthea test-unit test-integration test-e2e test-data-quality test-all up down load-fhir-data fhir-reset fhir-status setup-fhir
+.PHONY: install dev test clean lint format check review review-all download-synthea test-unit test-integration test-e2e test-data-quality test-all up down load-fhir-data fhir-reset fhir-status setup-fhir diagrams deck
 
 install:
 	pip install -e ".[dev]"
@@ -88,3 +88,21 @@ setup-fhir: up load-fhir-data
 	@echo "HAPI FHIR server ready at http://localhost:8080"
 	@echo "FHIR endpoint: http://localhost:8080/fhir"
 	@echo "Synthea patient data loaded."
+
+DIAGRAM_DIR := docs/architecture/diagrams
+DIAGRAM_CFG := $(DIAGRAM_DIR)/mmdc-config.json
+MMD_FILES   := $(wildcard $(DIAGRAM_DIR)/*.mmd)
+
+diagrams:
+	@echo "Rendering $(words $(MMD_FILES)) diagrams..."
+	@for f in $(MMD_FILES); do \
+		base=$$(basename "$$f" .mmd); \
+		mmdc -i "$$f" -o "$(DIAGRAM_DIR)/$$base.png" --scale 2 --backgroundColor white --configFile $(DIAGRAM_CFG) && \
+		mmdc -i "$$f" -o "$(DIAGRAM_DIR)/$$base.svg" --backgroundColor white --configFile $(DIAGRAM_CFG) && \
+		echo "  $$base → .png + .svg" || \
+		echo "  $$base FAILED"; \
+	done
+	@echo "Done."
+
+deck: diagrams
+	npx tsx scripts/generate-deck.ts

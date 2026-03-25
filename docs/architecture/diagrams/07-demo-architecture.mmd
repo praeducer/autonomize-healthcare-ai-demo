@@ -1,0 +1,32 @@
+flowchart LR
+    subgraph "Interfaces"
+        CLI["CLI Terminal"]
+        API["REST API<br/>Swagger UI"]
+        DASH["Web Dashboard<br/>HTMX + Pico CSS"]
+    end
+
+    subgraph "Core Engine"
+        ENGINE["Clinical Review Engine<br/>Python + Anthropic SDK"]
+    end
+
+    subgraph "Claude Tool Use"
+        ICD["ICD-10 Lookup<br/>Local CDC Data"]
+        NPI["NPI Validation<br/>Luhn-10 Check"]
+        CMS["Coverage Criteria<br/>CMS LCD/NCD"]
+        CLIN["Clinical Data<br/>FHIR R4 Bundle"]
+    end
+
+    subgraph "Output"
+        RESULT["ClinicalReviewResult<br/>FHIR ClaimResponse"]
+        AUDIT["Audit Trail<br/>SQLite"]
+    end
+
+    CLI --> ENGINE
+    API --> ENGINE
+    DASH --> ENGINE
+    ENGINE --> ICD
+    ENGINE --> NPI
+    ENGINE --> CMS
+    ENGINE --> CLIN
+    ENGINE --> RESULT
+    RESULT --> AUDIT

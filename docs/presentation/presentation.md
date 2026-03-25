@@ -267,6 +267,13 @@ flowchart TB
     ROUTER -->|"Low Confidence"| DASH
     DASH --> RESP
     RESP --> AUDIT
+    COPILOT --> OBS
+    DASH -->|"Feedback"| OBS
+
+    subgraph "Observability"
+        OBS["`**LLMOps Pipeline**
+*Azure Monitor + Evals*`"]
+    end
 ```
 
 | Component | Azure Service | Purpose |
@@ -277,7 +284,9 @@ flowchart TB
 | Clinical Data Aggregation | Health Data Services (FHIR R4) | Unified clinical context |
 | PA Copilot | Genesis Platform + Claude | AI clinical review |
 | Determination Router | Functions + Rules | Confidence-based routing |
-| Clinical Review Dashboard | AI Studio | Human reviewer interface |
+| Clinical Review Dashboard | Autonomize AI Studio | Human reviewer interface |
+| Determination Response | Azure Functions | Payer Core writeback + provider notification |
+| LLMOps Pipeline | Azure Monitor + Evals | Performance monitoring + feedback loop |
 | Audit & Compliance | Immutable Blob Storage | Tamper-proof audit trail |
 
 ---

@@ -65,8 +65,8 @@ I'll take you through the architecture in tiers -- executive context, then techn
 **Don't elaborate**: Don't list all 10 components. Let the diagram speak.
 
 ### Slide 7: Why This Architecture
-**Core (30 sec)**: "Four specific choices, each with a business benefit. Azure-native, queue-based, confidence-routed, audit-complete."
-**Expanded**: Each architectural choice maps to a business outcome -- reliability, safety, compliance, cost.
+**Core (30 sec)**: "Five specific choices, each with a business benefit. Safety-first routing, configurable thresholds, CMS compliance, Azure-native, full audit trail."
+**Expanded**: Each architectural choice maps to a business outcome -- safety, adaptability, compliance, ecosystem fit, regulatory retention.
 **For Kris**: This answers "why these specific choices?" -- lead with business benefits.
 **Don't elaborate**: Don't dive into CAQH methodology or CMS rule details. If asked: "CAQH measures labor costs -- salaries, benefits, overhead -- per transaction via annual industry survey."
 
@@ -128,7 +128,7 @@ I'll take you through the architecture in tiers -- executive context, then techn
 
 ## Live Demo Walkthrough (5-6 minutes)
 
-> Use during the presentation after the architecture slides. Run all 5 cases in order 1->4->3->5->2.
+> Use during the presentation after Slide 4 (Demo slide), before the architecture deep-dive (Slides 5-9). Run all 5 cases in order 1->4->3->5->2.
 
 **Opening** (30 seconds):
 "To validate the architecture I'm proposing, I built a working proof-of-concept this morning. It demonstrates the core AI-driven PA review flow -- the same pattern that would integrate with Autonomize's PA Copilot in production."

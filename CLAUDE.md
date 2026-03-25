@@ -38,6 +38,7 @@ make test              # Run all tests
 make lint              # Ruff check + format check + mypy
 make download-synthea  # Download Synthea FHIR patients
 make diagrams          # Render all .mmd diagrams to PNG + SVG
+make deck              # Render diagrams + generate PPTX & DOCX
 ```
 
 PowerShell equivalents and full setup instructions: **[`docs/user-guide.md`](docs/user-guide.md)**

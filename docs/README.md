@@ -51,7 +51,7 @@
 | [requirements-traceability.md](architecture/requirements-traceability.md) | Assignment → slide mapping (27 requirements, 100% coverage) |
 | [email-draft.md](interview-prep/email-draft.md) | Interview email for panel |
 
-### Diagrams (6 progressive views, 3 formats each)
+### Diagrams (7 views, 3 formats each — re-render with `make diagrams`)
 | Diagram | .mmd | .svg | .png |
 |---------|------|------|------|
 | 01 System Context | [mmd](architecture/diagrams/01-system-context.mmd) | [svg](architecture/diagrams/01-system-context.svg) | [png](architecture/diagrams/01-system-context.png) |
@@ -60,6 +60,7 @@
 | 04 Clinical Data Access | [mmd](architecture/diagrams/04-clinical-data-access.mmd) | [svg](architecture/diagrams/04-clinical-data-access.svg) | [png](architecture/diagrams/04-clinical-data-access.png) |
 | 05 Security & Zero Trust | [mmd](architecture/diagrams/05-security-zero-trust.mmd) | [svg](architecture/diagrams/05-security-zero-trust.svg) | [png](architecture/diagrams/05-security-zero-trust.png) |
 | 06 LLMOps Pipeline | [mmd](architecture/diagrams/06-llmops-pipeline.mmd) | [svg](architecture/diagrams/06-llmops-pipeline.svg) | [png](architecture/diagrams/06-llmops-pipeline.png) |
+| 07 Demo Architecture | [mmd](architecture/diagrams/07-demo-architecture.mmd) | [svg](architecture/diagrams/07-demo-architecture.svg) | [png](architecture/diagrams/07-demo-architecture.png) |
 
 ### Inputs
 | File | Description |
