@@ -1,9 +1,14 @@
 """CLI entry point for prior authorization review demo.
 
+This is the first entry point to read — it's the simplest path through the
+system and demonstrates how sync CLI code bridges into the async AI engine.
+
 Usage:
     python -m prior_auth_demo.command_line_demo --case data/sample_pa_cases/01_lumbar_mri_clear_approval.json
     python -m prior_auth_demo.command_line_demo --all
     python -m prior_auth_demo.command_line_demo --inspect data/sample_pa_cases/01_lumbar_mri_clear_approval.json
+
+See README.md § 4 "CLI Entry Point" for the data flow diagram and pattern notes.
 """
 
 from __future__ import annotations

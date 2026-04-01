@@ -2,6 +2,9 @@
 
 Returns HTML via Jinja2 templates. The JSON API at /api/v1/... is separate.
 HTMX handles all interactivity — no custom JavaScript.
+
+See README.md § 9 "Web Dashboard" for Jinja2 setup, template rendering,
+and the HTMX fragment pattern.
 """
 
 from __future__ import annotations

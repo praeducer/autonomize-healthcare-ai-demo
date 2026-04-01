@@ -1,7 +1,11 @@
 """FastAPI REST API for prior authorization review.
 
 Provides endpoints for submitting PA requests, viewing determinations,
-browsing sample cases, and checking system health.
+browsing sample cases, and checking system health. This is the HTTP
+equivalent of the CLI — same engine, different entry point.
+
+See README.md § 6 "FastAPI REST API" for patterns: lifespan, lazy init,
+router composition, request validation, and path traversal prevention.
 """
 
 from __future__ import annotations

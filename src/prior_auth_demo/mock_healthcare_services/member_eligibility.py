@@ -1,7 +1,10 @@
 """Mock member eligibility service.
 
 Returns FHIR CoverageEligibilityResponse for demo PA cases.
-All members are eligible — production would connect to a Payer Core System.
+All members are eligible — production would connect to a Payer Core System
+(e.g., TriZetto Facets, QNXT).
+
+See README.md § 8 "Mock Healthcare Services" for the APIRouter pattern.
 """
 
 from __future__ import annotations

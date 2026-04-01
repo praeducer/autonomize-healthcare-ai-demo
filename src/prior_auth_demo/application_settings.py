@@ -1,7 +1,10 @@
 """Application configuration via environment variables.
 
-Uses pydantic-settings BaseSettings to load from .env file or environment.
-All external URLs, credentials, and thresholds are configured here.
+Uses pydantic-settings BaseSettings to load values from a .env file or
+the shell environment. This is the single source of truth for all external
+URLs, credentials, and tunable thresholds.
+
+See README.md § 3 "Configuration Layer" for a walkthrough of the patterns used here.
 """
 
 from pydantic import Field, SecretStr
@@ -9,10 +12,12 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class ApplicationSettings(BaseSettings):
-    """Central configuration for the prior authorization demo.
+    """Central configuration — loaded once, passed to every subsystem.
 
-    Loads from environment variables or .env file. ANTHROPIC_API_KEY is
-    the only required value — all others have sensible defaults.
+    Instantiate with ``ApplicationSettings()`` — pydantic-settings reads
+    env vars and .env automatically. ANTHROPIC_API_KEY is the only
+    required value (``Field(...)`` means required); everything else has
+    a sensible default.
     """
 
     model_config = SettingsConfigDict(
@@ -21,7 +26,9 @@ class ApplicationSettings(BaseSettings):
         case_sensitive=False,
     )
 
-    # Anthropic
+    # --- Anthropic ---
+    # SecretStr wraps the key so it won't leak in logs or .model_dump() output.
+    # Access the raw value with .get_secret_value() when calling the API.
     anthropic_api_key: SecretStr = Field(..., description="Anthropic API key for Claude access")
     claude_model_id: str = Field(
         default="claude-sonnet-4-6",
@@ -31,7 +38,9 @@ class ApplicationSettings(BaseSettings):
     # Application
     log_level: str = Field(default="INFO", description="Logging level")
 
-    # Confidence thresholds
+    # --- Confidence Thresholds ---
+    # Drive the routing logic in clinical_review_engine.apply_confidence_routing().
+    # ge/le constraints are validated by Pydantic at construction time.
     auto_approve_confidence_threshold: float = Field(
         default=0.85,
         ge=0.0,

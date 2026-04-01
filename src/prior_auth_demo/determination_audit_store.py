@@ -1,7 +1,11 @@
 """Append-only SQLite audit store for PA determinations.
 
 Every determination is recorded with full request/response data.
-No update or delete operations exist by design.
+No UPDATE or DELETE operations exist by design — this is a compliance
+requirement for healthcare AI audit trails.
+
+See README.md § 7 "Audit Store" for async SQLite patterns, UUID keys,
+and JSON column serialization.
 """
 
 from __future__ import annotations

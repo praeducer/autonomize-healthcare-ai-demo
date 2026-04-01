@@ -1,8 +1,11 @@
 """Load Synthea FHIR NDJSON data into a HAPI FHIR server.
 
 Reads all .ndjson files from data/synthea_fhir_patients/raw/,
-parses each line as a FHIR resource, and POSTs it to the FHIR server.
+parses each line as a FHIR resource, and PUTs it to the FHIR server.
 Loads in dependency order to satisfy reference integrity.
+
+See README.md § 8 "FHIR Data Loader" for NDJSON processing, dependency
+ordering, and the HTTP PUT upsert pattern.
 
 Usage:
     python -m prior_auth_demo.mock_healthcare_services.load_fhir_data

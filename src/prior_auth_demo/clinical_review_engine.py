@@ -2,6 +2,12 @@
 
 Orchestrates Claude tool use to evaluate prior authorization requests
 against clinical guidelines and produce structured determinations.
+
+This is the most important file in the codebase — the central business logic
+that all entry points (CLI, API, dashboard) funnel into.
+
+See README.md § 5 "The AI Engine" for a detailed walkthrough of the data flow,
+tool-use loop, and confidence routing patterns.
 """
 
 from __future__ import annotations
@@ -26,7 +32,9 @@ from prior_auth_demo.application_settings import ApplicationSettings
 logger = logging.getLogger(__name__)
 
 
-# --- Data Models ---
+# ──────────────────────────────────────────────────────────────────────
+# Data Models — see README.md § 5 "Data Models"
+# ──────────────────────────────────────────────────────────────────────
 
 
 class ClinicalReviewResult(BaseModel):
@@ -45,7 +53,12 @@ class ClinicalReviewResult(BaseModel):
     review_duration_seconds: float = Field(ge=0.0)
 
 
-# --- Tool Handler Functions ---
+# ──────────────────────────────────────────────────────────────────────
+# Tool Handler Functions — see README.md § 5 "Tool Handler Functions"
+#
+# These are the Python functions Claude can invoke during its analysis.
+# Each returns a plain dict — serialized to JSON and sent back to Claude.
+# ──────────────────────────────────────────────────────────────────────
 
 _DATA_DIR = Path(__file__).resolve().parent.parent.parent / "data"
 
@@ -201,7 +214,12 @@ async def retrieve_fhir_clinical_data(
     return result
 
 
-# --- Confidence Routing ---
+# ──────────────────────────────────────────────────────────────────────
+# Confidence Routing — see README.md § 5 "Confidence Routing"
+#
+# Healthcare AI safety rule: the system NEVER auto-denies.
+# Low-confidence approvals are downgraded to human review.
+# ──────────────────────────────────────────────────────────────────────
 
 
 def apply_confidence_routing(
@@ -231,7 +249,13 @@ def apply_confidence_routing(
     return "PENDED_FOR_REVIEW"
 
 
-# --- Claude Tool Definitions ---
+# ──────────────────────────────────────────────────────────────────────
+# Claude Tool Definitions — see README.md § 5 "Claude Tool Definitions"
+#
+# Anthropic API tool schema: each tool has a name, description, and
+# input_schema (JSON Schema). Claude reads these to decide which tools
+# to call and what arguments to pass.
+# ──────────────────────────────────────────────────────────────────────
 
 TOOL_DEFINITIONS: list[dict[str, Any]] = [
     {
@@ -306,7 +330,9 @@ TOOL_DEFINITIONS: list[dict[str, Any]] = [
 ]
 
 
-# --- System Prompt ---
+# ──────────────────────────────────────────────────────────────────────
+# System Prompt — instructs Claude's clinical reviewer persona
+# ──────────────────────────────────────────────────────────────────────
 
 SYSTEM_PROMPT = """\
 You are an AI clinical reviewer for a United States health insurance plan. \
@@ -363,7 +389,13 @@ After using the tools, provide your determination as a JSON object with these fi
 }"""
 
 
-# --- Main Engine ---
+# ──────────────────────────────────────────────────────────────────────
+# Main Engine — the orchestrator function
+#
+# This is the canonical Anthropic tool-use loop: send → check if Claude
+# wants a tool → execute → return result → repeat until final answer.
+# See README.md § 5 "The Main Engine Function" for the full flow diagram.
+# ──────────────────────────────────────────────────────────────────────
 
 
 async def review_prior_auth_request(
@@ -479,7 +511,9 @@ async def review_prior_auth_request(
     )
 
 
-# --- Private Helpers ---
+# ──────────────────────────────────────────────────────────────────────
+# Private Helpers
+# ──────────────────────────────────────────────────────────────────────
 
 
 def _dispatch_tool(
