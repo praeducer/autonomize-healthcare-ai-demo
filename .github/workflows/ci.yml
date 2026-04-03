@@ -18,20 +18,23 @@ jobs:
         with:
           python-version: "3.12"
 
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+
       - name: Install dependencies
-        run: pip install -e ".[dev]"
+        run: uv sync
 
       - name: Lint
-        run: ruff check src/prior_auth_demo/ tests/
+        run: uv run ruff check src/prior_auth_demo/ tests/
 
       - name: Format check
-        run: ruff format --check src/prior_auth_demo/ tests/
+        run: uv run ruff format --check src/prior_auth_demo/ tests/
 
       - name: Type check
-        run: mypy src/prior_auth_demo/
+        run: uv run mypy src/prior_auth_demo/
 
       - name: Unit tests
-        run: pytest -v -m unit
+        run: uv run pytest -v -m unit
 
       - name: Data quality tests
-        run: pytest -v -m unit tests/test_data_quality.py
+        run: uv run pytest -v -m unit tests/test_data_quality.py

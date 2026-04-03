@@ -127,7 +127,7 @@ cp .env.example .env             # Create config
 **PowerShell:**
 
 ```powershell
-pip install -e ".[dev]"          # Install dependencies
+uv sync                          # Install dependencies
 pre-commit install               # Install pre-commit hooks
 Copy-Item .env.example .env      # Create config
 # Edit .env — add your ANTHROPIC_API_KEY

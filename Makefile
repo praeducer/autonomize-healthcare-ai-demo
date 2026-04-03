@@ -33,7 +33,7 @@ test-all:
 
 clean:
 	find . -type d -name __pycache__ -exec rm -rf {} + 2>/dev/null || true
-	rm -rf .pytest_cache .mypy_cache .ruff_cache *.egg-info dist build
+	rm -rf .pytest_cache .mypy_cache .ruff_cache dist build
 
 lint:
 	uv run ruff check src/prior_auth_demo/ tests/

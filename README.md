@@ -45,7 +45,7 @@ The full enterprise architecture covers 10 components across 5 layers — ingest
 ## Quick Start
 
 ```bash
-make install        # Install dependencies (bash). PowerShell: pip install -e ".[dev]"
+make install        # Install dependencies (bash). PowerShell: uv sync
 make review         # Run a single PA case through AI review
 make review-all     # Run all 5 PA cases
 ```
