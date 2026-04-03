@@ -39,7 +39,7 @@ Full tool descriptions and acronym definitions: **[User Guide — Architecture](
 > File: `01_lumbar_mri_clear_approval.json`
 
 ```
-python -m prior_auth_demo.command_line_demo --case data/sample_pa_cases/01_lumbar_mri_clear_approval.json
+uv run python -m prior_auth_demo.command_line_demo --case data/sample_pa_cases/01_lumbar_mri_clear_approval.json
 ```
 
 > "This is a lumbar MRI request for radiculopathy. The patient has 12 sessions of physical therapy, tried NSAIDs with only partial improvement, and has documented radiculopathy. Watch how Claude uses tools — it validates the NPI, looks up the ICD-10 codes, checks CMS coverage criteria, then produces a determination."
@@ -53,7 +53,7 @@ python -m prior_auth_demo.command_line_demo --case data/sample_pa_cases/01_lumba
 > File: `04_humira_missing_documentation.json`
 
 ```
-python -m prior_auth_demo.command_line_demo --case data/sample_pa_cases/04_humira_missing_documentation.json
+uv run python -m prior_auth_demo.command_line_demo --case data/sample_pa_cases/04_humira_missing_documentation.json
 ```
 
 > "Now a Humira request for rheumatoid arthritis. The provider says the patient 'failed methotrexate' but doesn't include dose, duration, or reason for discontinuation."
@@ -67,7 +67,7 @@ python -m prior_auth_demo.command_line_demo --case data/sample_pa_cases/04_humir
 > File: `03_spinal_fusion_complex_review.json`
 
 ```
-python -m prior_auth_demo.command_line_demo --case data/sample_pa_cases/03_spinal_fusion_complex_review.json
+uv run python -m prior_auth_demo.command_line_demo --case data/sample_pa_cases/03_spinal_fusion_complex_review.json
 ```
 
 > "A spinal fusion with mixed signals — some criteria met, but only 8 PT sessions instead of 12, elevated A1C, no second epidural injection."
@@ -81,7 +81,7 @@ python -m prior_auth_demo.command_line_demo --case data/sample_pa_cases/03_spina
 > File: `05_keytruda_urgent_oncology.json`
 
 ```
-python -m prior_auth_demo.command_line_demo --case data/sample_pa_cases/05_keytruda_urgent_oncology.json
+uv run python -m prior_auth_demo.command_line_demo --case data/sample_pa_cases/05_keytruda_urgent_oncology.json
 ```
 
 > "Keytruda for stage IIIA lung cancer. PD-L1 at 65%, no EGFR or ALK mutations, ECOG 1. This is an NCCN Category 1 recommendation — the gold standard."
@@ -95,7 +95,7 @@ python -m prior_auth_demo.command_line_demo --case data/sample_pa_cases/05_keytr
 > File: `02_cosmetic_rhinoplasty_denial.json`
 
 ```
-python -m prior_auth_demo.command_line_demo --case data/sample_pa_cases/02_cosmetic_rhinoplasty_denial.json
+uv run python -m prior_auth_demo.command_line_demo --case data/sample_pa_cases/02_cosmetic_rhinoplasty_denial.json
 ```
 
 > "A rhinoplasty coded with a skin condition diagnosis — actinic keratosis. There's no functional indication, no nasal obstruction documented."

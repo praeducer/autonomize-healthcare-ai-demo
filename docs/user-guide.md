@@ -45,13 +45,13 @@ make review-all     # Run AI review on all 5 cases
 
 ```powershell
 # Inspect a case's clinical data (no AI, no API calls)
-python -m prior_auth_demo.command_line_demo --inspect data/sample_pa_cases/01_lumbar_mri_clear_approval.json
+uv run python -m prior_auth_demo.command_line_demo --inspect data/sample_pa_cases/01_lumbar_mri_clear_approval.json
 
 # Run AI review on a single case
-python -m prior_auth_demo.command_line_demo --case data/sample_pa_cases/01_lumbar_mri_clear_approval.json
+uv run python -m prior_auth_demo.command_line_demo --case data/sample_pa_cases/01_lumbar_mri_clear_approval.json
 
 # Run AI review on all 5 cases
-python -m prior_auth_demo.command_line_demo --all
+uv run python -m prior_auth_demo.command_line_demo --all
 ```
 
 Output is color-coded: green (approved), red (denied), yellow (pended).
@@ -71,13 +71,13 @@ make dev            # Start FastAPI server
 ```powershell
 # First time — start FHIR server + load patient data:
 docker compose up -d                                                    # Start HAPI FHIR (Docker)
-python -m prior_auth_demo.mock_healthcare_services.load_fhir_data       # Load 10 Synthea patients
+uv run python -m prior_auth_demo.mock_healthcare_services.load_fhir_data       # Load 10 Synthea patients
 
 # Subsequent runs — data persists across restarts:
 docker compose up -d                                                    # Start HAPI FHIR server
 
 # Then start the API:
-uvicorn prior_auth_demo.healthcare_api_server:app --reload --port 8000  # Start FastAPI server
+uv run uvicorn prior_auth_demo.healthcare_api_server:app --reload --port 8000  # Start FastAPI server
 ```
 
 Open `http://localhost:8000/docs` for Swagger UI. Endpoints are numbered in demo order:
@@ -105,7 +105,7 @@ make dev            # Start FastAPI server
 
 ```powershell
 docker compose up -d                                                    # Start HAPI FHIR server
-uvicorn prior_auth_demo.healthcare_api_server:app --reload --port 8000  # Start FastAPI server
+uv run uvicorn prior_auth_demo.healthcare_api_server:app --reload --port 8000  # Start FastAPI server
 ```
 
 Open `http://localhost:8000/dashboard` (or `http://localhost:8000/`). Select a case from the dropdown and click Submit.

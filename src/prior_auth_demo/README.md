@@ -195,7 +195,7 @@ src/prior_auth_demo/          ← installable package
     └── templates/            ← HTML templates
 ```
 
-The `src/` layout means the package isn't importable until installed. `pip install -e ".[dev]"` installs it in editable mode (see `pyproject.toml`'s `[tool.setuptools.packages.find]`).
+The `src/` layout means the package isn't importable until installed. `uv sync` installs all dependencies (including dev) and the project in editable mode (see `pyproject.toml`).
 
 ### Key `pyproject.toml` Sections
 
@@ -259,7 +259,7 @@ This is where a PA review starts in the CLI flow. Read it top to bottom — it's
 ### Data Flow: CLI Path
 
 ```
-User runs: python -m prior_auth_demo.command_line_demo --case <file.json>
+User runs: uv run python -m prior_auth_demo.command_line_demo --case <file.json>
   │
   ├─ main() parses args with argparse
   ├─ ApplicationSettings() loads config from .env

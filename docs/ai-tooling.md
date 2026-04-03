@@ -234,11 +234,11 @@ The PPTX and DOCX presentation files are generated from structured slide data, n
 | Tool | Version | Install |
 |------|---------|---------|
 | **Node.js** | 18+ | [nodejs.org](https://nodejs.org/) |
-| **Python** | 3.12+ | [python.org](https://www.python.org/downloads/) |
+| **Python** | 3.12+ | Managed by uv (`uv python install 3.12`) |
 | **Docker** | Latest | [docker.com](https://www.docker.com/products/docker-desktop/) |
 | **Git** | Latest | [git-scm.com](https://git-scm.com/) |
 | **GitHub CLI** | Latest | [cli.github.com](https://cli.github.com/) |
-| **uv** (optional) | Latest | `pip install uv` — needed for `docker-mcp` server (`uvx` command) |
+| **uv** | Latest | Already installed system-wide via `winget install astral-sh.uv` (or [standalone installer](https://docs.astral.sh/uv/getting-started/installation/)) |
 
 ### Step 1: Install Claude Code
 
@@ -260,7 +260,7 @@ claude auth login
 ```bash
 git clone https://github.com/praeducer/autonomize-healthcare-ai-demo.git
 cd autonomize-healthcare-ai-demo
-pip install -e ".[dev]"
+uv sync
 cp .env.example .env
 # Edit .env and set ANTHROPIC_API_KEY
 ```
@@ -336,12 +336,12 @@ make lint
 make test
 
 # Run tests (PowerShell)
-pip install -e ".[dev]"
+uv sync
 pre-commit install
-ruff check src/prior_auth_demo/ tests/
-ruff format --check src/prior_auth_demo/ tests/
-mypy src/prior_auth_demo/
-pytest -v
+uv run ruff check src/prior_auth_demo/ tests/
+uv run ruff format --check src/prior_auth_demo/ tests/
+uv run mypy src/prior_auth_demo/
+uv run pytest -v
 ```
 
 ### Step 8: Start Working
@@ -367,7 +367,7 @@ Use the exact Context7 ID from the table above. Example: `use context7 for /fast
 
 ### Ruff hook not running
 
-The hook is defined in `.claude/settings.json`. Verify JSON is valid: `python -m json.tool .claude/settings.json`. If the hook was modified during the session, open `/hooks` to reload.
+The hook is defined in `.claude/settings.json`. Verify JSON is valid: `uv run python -m json.tool .claude/settings.json`. If the hook was modified during the session, open `/hooks` to reload.
 
 ### Healthcare plugins not showing
 
