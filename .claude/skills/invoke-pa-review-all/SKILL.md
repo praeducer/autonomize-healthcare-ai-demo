@@ -6,7 +6,7 @@ description: Use when the user wants to review all PA cases, run all cases, or s
 Submit all prior authorization cases to the AI clinical review engine.
 
 ```
-python -m prior_auth_demo.command_line_demo --all
+uv run python -m prior_auth_demo.command_line_demo --all
 ```
 
 After the output, provide a conversational summary:

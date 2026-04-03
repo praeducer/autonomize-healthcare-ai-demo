@@ -12,7 +12,7 @@ List `data/sample_pa_cases/*.json` and match `$ARGUMENTS` against filenames. Mat
 **Step 2 — Run the review:**
 
 ```
-python -m prior_auth_demo.command_line_demo --case data/sample_pa_cases/<matched_file>
+uv run python -m prior_auth_demo.command_line_demo --case data/sample_pa_cases/<matched_file>
 ```
 
 **Step 3 — Summarize:**

@@ -87,7 +87,7 @@ Open `http://localhost:8000/docs` — Swagger UI should render with all endpoint
 After submitting cases via any interface, verify they appear in `GET /api/v1/prior-auth/determinations`. Check the SQLite database directly:
 
 - **Bash**: `sqlite3 data/audit_trail.db "SELECT determination, confidence_score FROM determinations;"`
-- **PowerShell**: `python -c "import sqlite3; conn = sqlite3.connect('data/audit_trail.db'); print(conn.execute('SELECT determination, confidence_score FROM determinations').fetchall())"`
+- **PowerShell**: `uv run python -c "import sqlite3; conn = sqlite3.connect('data/audit_trail.db'); print(conn.execute('SELECT determination, confidence_score FROM determinations').fetchall())"`
 
 Records should accumulate, never disappear.
 

@@ -12,7 +12,7 @@ List `data/sample_pa_cases/*.json` and match `$ARGUMENTS` against filenames. Mat
 **Step 2 — Show the clinical data:**
 
 ```
-python -m prior_auth_demo.command_line_demo --inspect data/sample_pa_cases/<matched_file>
+uv run python -m prior_auth_demo.command_line_demo --inspect data/sample_pa_cases/<matched_file>
 ```
 
 **Step 3 — Explain what the reviewer will see:**
